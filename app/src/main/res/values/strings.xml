@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">TripPLNR</string>
+    <string name="testLine">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="mapKey">AIzaSyAsSMYb29gSo5bq2Ip-3lwx5mhqToxd5W8</string>
+    <string name="see_more"><u> See More</u></string>
+    <string name="chip2">chip2</string>
+    <string name="chip1">chip1</string>
+    <string name="recommended"><u>Recommended</u></string>
+    <string name="prize_low_to_high"><u>Prize(Low to High)</u></string>
+    <string name="prize_high_to_low"><u>Prize(High to Low)</u></string>
+    <string name="reviews"><u>Reviews</u></string>
+    <string name="star_ratings_high_to_low"><u>Star Ratings(High to Low)</u></string>
+    <string name="distance_near_to_far"><u>Distance(Near to Far)</u></string>
+    <string name="apply"><u>Apply</u></string>
+</resources>
