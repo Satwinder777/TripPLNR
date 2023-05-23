@@ -1,5 +1,6 @@
 package com.example.tripplnr.navigationscreens.Home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -26,6 +27,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
     private lateinit var binding :FragmentHomeBinding
     private lateinit var rcTravelBlog :RecyclerView
     private lateinit var popularHotelRc :RecyclerView
+    private lateinit var adapter :TravelBlogAdapter
 
 
 
@@ -45,7 +47,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         rcTravelBlog = binding.rcTravelBlog
         popularHotelRc = binding.popularHotelRc
 
-            val adapter =  TravelBlogAdapter(datahandle(),this)
+            adapter =  TravelBlogAdapter(datahandle(),this)
             rcTravelBlog.adapter = adapter
 
         GlobalScope.launch {
@@ -56,7 +58,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         binding.viewHotelCard.setOnClickListener {
             findNavController().navigate(R.id.searchFragment )
         }
-
+//            FavorateFragment.myObject.doSomething(requireActivity().findViewById(R.id.bottom_navigation))
 
 
     }
@@ -100,11 +102,13 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         transaction.replace(R.id.nav_host_fragment, newFragment)
         transaction.addToBackStack(null)
         transaction.commit()
+
+
     }
 
     override fun onfavoratebtnClicks(position: Int) {
-//        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
-//        bottomNavigationView.menu.getItem(2).isVisible = true
+        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+        bottomNavigationView.menu.getItem(2).isVisible = true
 
 
 //        bottomNavigationView.menu.findItem(R.id.blogsFragment).setChecked(true)
@@ -118,6 +122,15 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         findNavController().navigate(R.id.favorateFragment)
 
     }
+
+    override fun showtext(position: Int) {
+
+    }
+//
+//    @SuppressLint("NotifyDataSetChanged")
+//    override fun showtext(position: Int) {
+////        adapter.data
+//    }
 
 
 }

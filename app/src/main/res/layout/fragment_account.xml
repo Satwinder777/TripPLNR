@@ -137,7 +137,7 @@
                     app:tint="@color/yellow" />
 
                 <TextView
-                    android:id="@+id/textView9"
+                    android:id="@+id/curenncyText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="10dp"
@@ -226,16 +226,18 @@
 
                      >
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chiKm"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="45dp"
                         android:text="Kms"
                         android:textStyle="bold"
                         android:textColor="@color/white"
                         app:chipBackgroundColor="@color/yellow"/>
 
                     <com.google.android.material.chip.Chip
+                        android:id="@+id/chipMile"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="45dp"
                         android:text="Miles"
                         app:chipBackgroundColor="@color/creame"
                         android:textStyle="bold"
@@ -386,6 +388,18 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
         </LinearLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:backgroundTint="@color/white"
+            android:textColor="@color/black"
+            app:icon="@drawable/logout_ic"
+            app:iconTint="@color/yellow"
+            app:iconGravity="textStart"
+            android:textAllCaps="false"
+            android:text="Log out" />
     </LinearLayout>
 
 </FrameLayout>

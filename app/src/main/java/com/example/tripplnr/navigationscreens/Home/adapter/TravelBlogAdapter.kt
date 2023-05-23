@@ -1,5 +1,6 @@
 package com.example.tripplnr.navigationscreens.Home.adapter
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,13 +29,38 @@ class TravelBlogAdapter(var list: List<homeItem>, var onItemClick1: onItemClick?
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
 
         holder.itemView.setOnClickListener {
-            onItemClick1!!.onclickItem(position)
+            onItemClick1?.onclickItem(position)
         }
 
         GlobalScope.launch {
             holder.bind(list)
             holder.favorateCardBtn.setOnClickListener {
                 onItemClick1?.onfavoratebtnClicks(position)
+            }
+            var sizeless:Boolean = true
+
+            holder.apply {
+
+                showMoretxt.setOnClickListener {
+
+                    if(sizeless==true){
+                        aboutText.maxLines = Int.MAX_VALUE
+//                        onItemClick1?.showtext(position)
+                        showMoretxt.setText("Show Less..")
+                        sizeless = false
+
+                    }
+                    else{
+                        aboutText.setLines(2)
+                        showMoretxt.setText("Show More..")
+//                        onItemClick1?.showtext(position)
+                        sizeless = true
+                    }
+
+                    onItemClick1?.showtext(position)
+
+                }
+
             }
         }
 
@@ -46,6 +72,7 @@ class TravelBlogAdapter(var list: List<homeItem>, var onItemClick1: onItemClick?
         var dateText = view.findViewById<TextView>(R.id.dateText)
         var viewedTime = view.findViewById<TextView>(R.id.viewedTime)
         var aboutText = view.findViewById<TextView>(R.id.aboutText)
+        var showMoretxt = view.findViewById<TextView>(R.id.showMoretxt)
         var favorateCardBtn = view.findViewById<CardView>(R.id.favorateCardBtn)
 
       //  var learnmoretxt = view.findViewById<TextView>(R.id.learnmoretxt)
@@ -65,5 +92,6 @@ class TravelBlogAdapter(var list: List<homeItem>, var onItemClick1: onItemClick?
     interface onItemClick{
         fun onclickItem(position: Int)
         fun onfavoratebtnClicks(position: Int)
+        fun showtext(position: Int)
     }
 }

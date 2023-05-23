@@ -2,6 +2,7 @@ package com.example.tripplnr.navigationscreens.Account
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.view.Gravity
 import androidx.fragment.app.Fragment
@@ -11,10 +12,13 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.PopupWindow
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentAccountBinding
 import com.example.tripplnr.navigationscreens.Account.activity.CreateUserActivity
+import com.example.tripplnr.navigationscreens.Account.activity.CurrencyActivity
 import com.example.tripplnr.navigationscreens.Account.activity.LegalinformatinActivity
+import com.example.tripplnr.navigationscreens.favorateFragment.FavorateFragment
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -72,6 +76,37 @@ class AccountFragment : Fragment() {
             }
 
         }
+//        FavorateFragment.myObject.doSomething(requireActivity().findViewById(R.id.bottom_navigation))
+
+
+        binding.curenncyText.setOnClickListener {
+            val intent = Intent(requireContext(), CurrencyActivity::class.java)
+            startActivity(intent)
+        }
+        chipclick(binding.chiKm)
+        chipclick(binding.chipMile)
+    }
+
+    private fun chipclick(view: View){
+
+        var chipkm = binding.chiKm
+        var chipMile = binding.chipMile
+        view.setOnClickListener {
+        when(view){
+           chipkm->{
+               chipkm.setChipBackgroundColorResource(R.color.yellow)
+               chipkm.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+               chipMile.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+               chipMile.setChipBackgroundColorResource(R.color.creame)
+           }
+           chipMile->{
+               chipMile.setChipBackgroundColorResource(R.color.yellow)
+               chipMile.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+               chipkm.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+               chipkm.setChipBackgroundColorResource(R.color.creame)
+           }
+        }
+    }
     }
 
 }

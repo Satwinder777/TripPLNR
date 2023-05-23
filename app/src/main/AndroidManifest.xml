@@ -16,6 +16,9 @@
         android:theme="@style/Theme.TripPLNR"
         tools:targetApi="31">
         <activity
+            android:name=".navigationscreens.Account.activity.CurrencyActivity"
+            android:exported="false" />
+        <activity
             android:name=".navigationscreens.Account.activity.CreateUserActivity"
             android:exported="false" />
         <activity

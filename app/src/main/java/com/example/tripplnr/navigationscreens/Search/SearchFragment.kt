@@ -20,6 +20,7 @@ import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
 import com.example.tripplnr.navigationscreens.Search.adapter.RecyclerAdapterSearchFr
 import com.example.tripplnr.navigationscreens.Search.adapter.ViewPagerAdapter
+import com.example.tripplnr.navigationscreens.favorateFragment.FavorateFragment
 import com.example.tripplnr.navigationscreens.hotelListFragment.HotelListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
@@ -159,6 +160,7 @@ class SearchFragment : Fragment() {
         }
 
 
+//        FavorateFragment.myObject.doSomething(requireActivity().findViewById(R.id.bottom_navigation))
 
 
     }

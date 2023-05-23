@@ -59,6 +59,10 @@ data class reviewData(
     val reviewText: String,
     val rate: Double,
 )
+data class currencyData(
+    val currency: String,
+
+)
 
 
 

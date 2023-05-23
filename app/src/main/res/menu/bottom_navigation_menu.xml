@@ -13,6 +13,7 @@
         android:id="@+id/favorateFragment"
         android:icon="@drawable/favoratep"
         android:title="Favorate"
+        android:visible="false"
         />
     <item
         android:id="@+id/accountFragment"
