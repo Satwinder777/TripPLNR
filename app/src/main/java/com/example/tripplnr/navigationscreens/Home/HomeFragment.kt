@@ -62,8 +62,8 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
 
     }
-    fun datahandle():List<homeItem>{
-        var list  = listOf<homeItem>(homeItem(R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",getString(R.string.testLine)),
+    fun datahandle():MutableList<homeItem>{
+        var list  = mutableListOf<homeItem>(homeItem(R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",getString(R.string.testLine)),
 
             homeItem(R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",getString(R.string.testLine)),
             homeItem(R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",getString(R.string.testLine)),

@@ -13,7 +13,7 @@ import com.example.tripplnr.navigationscreens.Home.dataclass.homeItem
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class TravelBlogAdapter(var list: List<homeItem>, var onItemClick1: onItemClick?):RecyclerView.Adapter<TravelBlogAdapter.InnerClass>() {
+class TravelBlogAdapter(var list: MutableList<homeItem>, var onItemClick1: onItemClick?):RecyclerView.Adapter<TravelBlogAdapter.InnerClass>() {
 
 
 

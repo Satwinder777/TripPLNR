@@ -72,22 +72,25 @@
                 android:textColor="@color/black" />
 
             <ImageView
+                android:id="@+id/roomsubbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/sub_ic_black" />
 
             <TextView
+                android:id="@+id/roomcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
-                android:text="1"
+                android:text="0"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <ImageView
+                android:id="@+id/roomaddbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -112,22 +115,25 @@
                 android:textColor="@color/black" />
 
             <ImageView
+                android:id="@+id/adultsubbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/sub_ic_black" />
 
             <TextView
+                android:id="@+id/adultcount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginHorizontal="10dp"
-                android:text="2"
+                android:text="0"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textStyle="bold" />
 
             <ImageView
+                android:id="@+id/adultaddbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -152,12 +158,14 @@
                 android:textColor="@color/black" />
 
             <ImageView
+                android:id="@+id/childrensubbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 app:srcCompat="@drawable/sub_ic_black" />
 
             <TextView
+                android:id="@+id/childrencount"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -168,6 +176,7 @@
                 android:textStyle="bold" />
 
             <ImageView
+                android:id="@+id/childrenaddbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -175,6 +184,7 @@
         </LinearLayout>
 
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/guestApply"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:backgroundTint="@color/yellow"

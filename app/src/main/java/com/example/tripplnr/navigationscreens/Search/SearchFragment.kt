@@ -27,6 +27,7 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
 import com.google.android.material.tabs.TabLayout
+import com.google.android.material.tabs.TabLayout.Tab
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -82,6 +83,9 @@ class SearchFragment : Fragment() {
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
+//                tabLayout.animationMode = TabLayout.AnimationMode.PADDLE
+
+
                 val tabIndex = tab?.position ?: return
 
                 val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -132,28 +136,40 @@ class SearchFragment : Fragment() {
 
             when (i) {
                 0 -> {
-                    val tab1 = layoutInflater.inflate(R.layout.chip, null)
-
-                    var chip = tab1.findViewById<Chip>(R.id.tab_chip)
+                    val tab0 = LayoutInflater.from(requireContext()).inflate(R.layout.chip, null)
+//                    layoutInflater.inflate(R.layout.chip, null)
+                    var chip = tab0.findViewById<Chip>(R.id.tab_chip)
                     chip.tag = R.string.chip1
                     chip.text = "Hotels "
                     var tab = tabLayout.getTabAt(0)
 //                val chip = layoutInflater.inflate(R.layout.chip, null)
                     tab?.customView = chip
-
+                    (tab?.customView as Chip?)?.setOnClickListener {
+                        val position = tabLayout.selectedTabPosition
+                        viewPager.currentItem = 0
+                    }
 
                 }
                 1 -> {
 
-                    val tab1 = layoutInflater.inflate(R.layout.chip, null)
-
+                    val tab1 = LayoutInflater.from(requireContext()).inflate(R.layout.chip, null)
                     var chip = tab1.findViewById<Chip>(R.id.tab_chip)
+//                    var chip = requireView().findViewById<Chip>(R.id.tab_chip)
                     chip.text = "Blogs"
                     chip.tag = R.string.chip2
 
-                    var tab = tabLayout.getTabAt(1)
+                    val tabPosition = tabLayout.getTabAt(1)
 
-                    tab?.customView = chip
+                    tabPosition?.customView = chip
+                    (tabPosition?.customView as Chip?)?.setOnClickListener {
+                        val position = tabLayout.selectedTabPosition
+                        viewPager.currentItem = 1
+
+                        Log.e("test24", "onViewCreated: clicked ", )}
+//                    chip.setOnClickListener {
+//
+//                    }
+
 
                 }
             }

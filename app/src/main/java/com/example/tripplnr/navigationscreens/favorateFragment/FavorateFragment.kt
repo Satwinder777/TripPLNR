@@ -60,8 +60,8 @@ class FavorateFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
     }
 
-    fun datahandle(): List<homeItem> {
-        var list = listOf<homeItem>(
+    fun datahandle(): MutableList<homeItem> {
+        var list = mutableListOf<homeItem>(
             homeItem(
                 R.drawable.explore2,
                 "the Golden Temple",
