@@ -2,16 +2,15 @@
 <androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".navigationscreens.Home.hotel.fragments.Deals.DealsFragment"
     android:background="@color/creame"
-
     >
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
         android:paddingVertical="10dp"
 
@@ -58,7 +57,7 @@
             android:inputType="textMultiLine" />
 
         <TextView
-            android:id="@+id/textView15"
+            android:id="@+id/readmoreTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Read More..."
@@ -91,22 +90,24 @@
             tools:listitem="@layout/amenities_item"
             app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
             app:spanCount="2"
+
             tools:itemCount="7"/>
 
         <TextView
-            android:id="@+id/textView17"
+            android:id="@+id/showmoretxt1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="See More"
             android:textColor="@color/yellow"/>
 
         <TextView
-            android:id="@+id/textView19"
+            android:id="@+id/offeringAmmen"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="Amenities offerings"
             android:textColor="@color/black"
+            android:visibility="gone"
             android:fontFamily="sans-serif-medium"/>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -114,6 +115,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:paddingVertical="10dp"
+            android:visibility="gone"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
              tools:itemCount="3">
 
@@ -122,6 +124,7 @@
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"
+            android:layout_marginVertical="5dp"
             android:background="?android:attr/listDivider" />
 
         <TextView

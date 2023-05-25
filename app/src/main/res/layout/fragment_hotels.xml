@@ -4,7 +4,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".navigationscreens.Search.hotel.HotelsFragment">
+    tools:context=".navigationscreens.Search.hotel.HotelsFragment"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -111,8 +112,9 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="15dp"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:paddingHorizontal="15dp"
+            android:background="@color/white">
 
 
             <TextView
@@ -120,38 +122,27 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Destination" />
+                android:text="Destination"
+                android:textColor="@color/black"/>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="8dp"
-                android:background="@drawable/card_background"
-                app:cardBackgroundColor="@color/creame">
+                app:cardCornerRadius="10dp"
+                android:layout_marginTop="6dp"
+                android:backgroundTint="@color/creame"
 
-                <LinearLayout
+
+                >
+                <SearchView
+                    android:id="@+id/searchView"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginVertical="5dp"
-                    android:orientation="horizontal">
+                    android:layout_height="match_parent"
 
-                    <ImageView
-                        android:id="@+id/imageView6"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="5dp"
-                        android:src="@drawable/search" />
 
-                    <EditText
-                        android:id="@+id/textView4"
-                        android:layout_width="wrap_content"
-                        android:layout_height="19dp"
-                        android:layout_gravity="center"
-                        android:layout_weight="1"
-                        android:background="@android:color/transparent"
-                        android:hint="Where would you like to go?."
-                        android:textSize="14sp" />
-                </LinearLayout>
+                    />
+
+
             </com.google.android.material.card.MaterialCardView>
 
             <LinearLayout

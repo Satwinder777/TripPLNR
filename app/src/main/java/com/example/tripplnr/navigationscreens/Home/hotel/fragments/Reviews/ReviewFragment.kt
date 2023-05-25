@@ -2,10 +2,13 @@ package com.example.tripplnr.navigationscreens.Home.hotel.fragments.Reviews
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentReviewBinding
@@ -24,6 +27,11 @@ class ReviewFragment : Fragment() {
 
     lateinit var reviewrc : RecyclerView
     lateinit var similarrc : RecyclerView
+    lateinit var reviewAdapter : ReviewAdapter
+    var isLessReview:Boolean = true
+    lateinit var seemore:TextView
+
+
 
 
     override fun onCreateView(
@@ -51,9 +59,17 @@ class ReviewFragment : Fragment() {
 
         reviewrc = binding.reviewRecyclerView
         GlobalScope.launch {
-            val adapter = ReviewAdapter(ReviewData1())
-            reviewrc.adapter = adapter
-            adapter.notifyDataSetChanged()
+
+            // Assuming you have a larger list of items
+
+
+// Create a smaller list containing a subset of items
+
+
+            var lessitem = ReviewData1().take(6)
+            reviewAdapter = ReviewAdapter(lessitem,requireContext())
+            reviewrc.adapter = reviewAdapter
+            reviewAdapter.notifyDataSetChanged()
         }
 
         similarrc = binding.similarHotelRecyclerview
@@ -62,7 +78,15 @@ class ReviewFragment : Fragment() {
             similarrc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
+seemore = binding.lessRev
+        seemore.setOnClickListener {
+//    dotask()
+            Toast.makeText(requireContext(), "hi lessRev", Toast.LENGTH_SHORT).show()
+}
+
     }
+
+
 
     private fun RatingData1():List<RatingData>{
         var list = listOf<RatingData>(
@@ -99,4 +123,28 @@ class ReviewFragment : Fragment() {
         )
         return list
     }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    private fun dotask() {
+        if (isLessReview==true){
+            reviewAdapter.list = ReviewData1().take(4)
+            reviewAdapter.notifyDataSetChanged()
+            binding.lessRev.setText(requireContext().getText(R.string.readless))
+            isLessReview = false
+            Toast.makeText(requireContext(), "true", Toast.LENGTH_SHORT).show()
+        }
+        else{
+            reviewAdapter.list = ReviewData1()
+            reviewAdapter.notifyDataSetChanged()
+            binding.lessRev.setText(requireContext().getText(R.string.readextra))
+
+            isLessReview = true
+
+            Toast.makeText(requireContext(), "false", Toast.LENGTH_SHORT).show()
+
+
+        }
+    }
+
 }

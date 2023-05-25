@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -7,184 +7,234 @@
     android:background="@color/creame"
     android:padding="20dp"
     tools:context=".navigationscreens.Home.hotel.HotelFragment"
-    android:fillViewport="true"
+
      >
+<!--    NestedScrollView-->
 
-    <!-- TODO: Update blank fragment layout -->
+<!--    app:layout_behavior="@string/appbar_scrolling_view_behavior"-->
 
 
-    <LinearLayout
+
+    <!-- Your content here -->
+
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.5">
+        android:background="@color/creame"
+>
+
+
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <ImageButton
-                android:id="@+id/backbtnhotlFragment"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:background="@drawable/stroke_bg"
-                android:backgroundTint="#ECE9E8"
-                android:src="@drawable/back_arrow_ic"
-                app:tint="@color/black"
+            android:orientation="vertical"
 
 
-                />
+            app:layout_scrollFlags="scroll|enterAlways|snap"
+
+
+
+
+
+
+            >
 
             <LinearLayout
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:orientation="vertical">
+                android:orientation="horizontal"
+                app:layout_scrollFlags="scroll|enterAlways|snap">
 
-                <TextView
-                    android:layout_width="match_parent"
+                <ImageButton
+                    android:id="@+id/backbtnhotlFragment"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Capital O Hotel Ocean te..."
-                    android:textAlignment="center"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="bottom"
+                    android:background="@drawable/stroke_bg"
+                    android:backgroundTint="#ECE9E8"
+                    android:src="@drawable/back_arrow_ic"
+                    app:tint="@color/black"
+
+
+                    />
 
                 <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Capital O Hotel Ocean te..."
+                        android:textAlignment="center"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:textStyle="bold" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_weight="1"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="10 Mar - 11 Mar"
+                            android:textAlignment="center" />
+
+                        <ImageView
+                            android:layout_width="10dp"
+                            android:layout_height="10dp"
+                            android:layout_gravity="center"
+                            android:layout_marginHorizontal="5dp"
+                            android:src="@drawable/dote_yellow_ic"
+                            app:tint="@color/black" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:text="2 Guests, 1 Room"
+                            android:textAlignment="center" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <ImageButton
+                    android:id="@+id/shareBtn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_weight="1"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="10 Mar - 11 Mar"
-                        android:textAlignment="center" />
-
-                    <ImageView
-                        android:layout_width="10dp"
-                        android:layout_height="10dp"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="5dp"
-                        android:src="@drawable/dote_yellow_ic"
-                        app:tint="@color/black" />
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="2 Guests, 1 Room"
-                        android:textAlignment="center" />
-                </LinearLayout>
+                    android:background="@android:color/transparent"
+                    android:src="@drawable/share" />
             </LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView9"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:src="@drawable/share" />
-        </LinearLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="220dp"
-            >
-
-            <com.denzcoskun.imageslider.ImageSlider
-                android:id="@+id/image_slider"
+            <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:forceHasOverlappingRendering="false"
-                app:iss_auto_cycle="true"
-                app:iss_delay="0"
-                app:iss_period="1000"
+                android:layout_height="220dp"
+                android:layout_marginVertical="5dp"
+                >
 
-                app:iss_placeholder="@drawable/placeholder"
-                app:iss_selected_dot="@drawable/default_selected_dot"
-                app:iss_title_background="@android:color/transparent"
-                app:iss_unselected_dot="@drawable/default_unselected_dot"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                tools:ignore="MissingClass,MissingConstraints" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                <com.denzcoskun.imageslider.ImageSlider
+                    android:id="@+id/image_slider"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:forceHasOverlappingRendering="true"
+                    app:iss_auto_cycle="true"
+                    app:iss_delay="0"
+                    app:iss_period="1000"
 
-        <TextView
-            android:id="@+id/textView13"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Capital O Hotel Ocean"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/textView14"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Milan, Italy" />
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <RatingBar
-                android:id="@+id/ratingBar2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="-50dp"
-                android:layout_marginTop="-15dp"
-                android:layout_weight=".0"
-                android:scaleX=".5"
-                android:scaleY=".5" />
+                    app:iss_placeholder="@drawable/placeholder"
+                    app:iss_selected_dot="@drawable/default_selected_dot"
+                    app:iss_title_background="@android:color/transparent"
+                    app:iss_unselected_dot="@drawable/default_unselected_dot"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:ignore="MissingClass,MissingConstraints" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView13"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="-50dp"
-                android:layout_marginTop="2dp"
-                android:text="8.5"
-
+                android:text="Capital O Hotel Ocean"
                 android:textColor="@color/black"
+                android:textSize="20sp"
                 android:textStyle="bold" />
 
             <TextView
-                android:layout_width="wrap_content"
+                android:id="@+id/textView14"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="2dp"
-                android:layout_weight="1"
-                android:text="Very Good" />
-        </LinearLayout>
+                android:text="Milan, Italy" />
 
-        <com.google.android.material.tabs.TabLayout
-            android:id="@+id/tabLayout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabSelectedTextColor="@color/yellow"
-            tools:ignore="MissingConstraints"
-            app:tabIndicatorColor="@color/yellow"
-            />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="5dp"
+
+                >
+
+                <RatingBar
+                    android:id="@+id/ratingBar2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-60dp"
+                    android:layout_marginTop="-15dp"
+                    android:layout_weight=".0"
+                    android:scaleX=".5"
+                    android:scaleY=".5"
+                    android:rating="4"/>
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="-50dp"
+                    android:layout_marginTop="2dp"
+                    android:text="8.5"
+
+                    android:textColor="@color/black"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="2dp"
+                    android:layout_weight="1"
+                    android:text="Very Good" />
+            </LinearLayout>
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tabLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:tabSelectedTextColor="@color/yellow"
+                tools:ignore="MissingConstraints"
+                app:tabIndicatorColor="@color/yellow"
+                android:layout_marginTop="-10dp"
+                android:background="@color/creame"
+                />
+
+            <View
+
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="?android:attr/listDivider"
+                android:backgroundTintMode="add"
+                android:backgroundTint="@color/brown"/>
+
+
+        </LinearLayout>
+    </com.google.android.material.appbar.AppBarLayout>
+
+
 
         <androidx.viewpager.widget.ViewPager
             android:id="@+id/viewPager"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_marginTop="5dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+
+
+            android:layout_weight="1"
 
 
 
             />
 
-    </LinearLayout>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+

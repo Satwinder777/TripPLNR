@@ -60,11 +60,13 @@
 
         />
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="See More"
-        android:textColor="@color/yellow"/>
+        <TextView
+            android:id="@+id/lessRev"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="See more"
+            android:textColor="@color/yellow"
+            />
 
     <TextView
         android:layout_width="match_parent"

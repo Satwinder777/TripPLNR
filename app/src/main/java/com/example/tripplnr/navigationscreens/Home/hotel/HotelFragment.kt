@@ -1,11 +1,15 @@
 package com.example.tripplnr.navigationscreens.Home.hotel
 
+import android.app.ActionBar.OnNavigationListener
+import android.content.Context
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
@@ -60,6 +64,15 @@ class HotelFragment : Fragment() {
 //            }
 //
 //        })
+
+        binding.shareBtn.setOnClickListener {
+            val textToShare = "Hello, this is the content to be shared."
+            val subject = "Shared Content"
+
+            shareContent(textToShare, subject, requireContext())
+
+        }
+
     }
     private fun sliderImageSet() {
         val imageList = ArrayList<SlideModel>()
@@ -78,4 +91,21 @@ class HotelFragment : Fragment() {
         binding.imageSlider.setImageList(imageList)
 
     }
+
+    fun shareContent(text: String, subject: String, context: Context) {
+        val intent = Intent(Intent.ACTION_SEND)
+        intent.type = "text/plain"
+        intent.putExtra(Intent.EXTRA_SUBJECT, subject)
+        intent.putExtra(Intent.EXTRA_TEXT, text)
+
+        val shareIntent = Intent.createChooser(intent, "Share via")
+        context.startActivity(shareIntent)
+    }
+
+//    @Deprecated("Deprecated in Java")
+//    override fun onNavigationItemSelected(itemPosition: Int, itemId: Long): Boolean {
+//        findNavController().navigateUp()
+//        findNavController().navigate(R.id.searchFragment)
+//        return true
+//    }
 }

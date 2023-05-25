@@ -58,23 +58,42 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/reviewtext"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:layout_marginStart="45dp"
-        android:layout_marginEnd="100dp"
-        android:text="textreview"
+
         android:layout_marginTop="20dp"
-        android:ellipsize="end"
-
-
+        android:layout_marginEnd="100dp"
+        android:orientation="vertical"
 
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/reviewButton"
         app:layout_constraintStart_toEndOf="@+id/cardView"
-        app:layout_constraintTop_toBottomOf="@+id/reviewtext"
-        tools:ignore="NotSibling" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/reviewtext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:ellipsize="end"
+            android:lines="2"
+            android:text="@string/testLine"
+            android:layout_weight="1"
+            tools:ignore="NotSibling" />
+
+        <TextView
+            android:id="@+id/seeMoreReviews"
+            android:layout_width="wrap_content"
+            android:layout_height="20dp"
+            android:text="@string/see_more"
+            android:layout_gravity="bottom|start"
+            android:layout_weight="1"
+            android:lines="1"
+            tools:ignore="NotSibling"
+            android:textColor="@color/yellow"/>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,4 +14,8 @@
     <string name="star_ratings_high_to_low"><u>Star Ratings(High to Low)</u></string>
     <string name="distance_near_to_far"><u>Distance(Near to Far)</u></string>
     <string name="apply"><u>Apply</u></string>
+    <string name="readextra"><u>Read more</u></string>
+    <string name="readless"><u> Read less </u></string>
+<!--    <string name="my_string">&lt;u>&lt;font color='#FF0000'>Read less&lt;/font>&lt;/u></string>-->
+
 </resources>

@@ -32,7 +32,7 @@ class DetailsFragment : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         // Inflate the layout for this fragment
          binding = FragmentDetailsBinding.inflate(layoutInflater)
 
@@ -74,7 +74,7 @@ class DetailsFragment : Fragment() {
 
         reviewrc = binding.reviewRecyclerView
         GlobalScope.launch {
-            val adapter = ReviewAdapter(ReviewData1())
+            val adapter = ReviewAdapter(ReviewData1(),requireContext())
             reviewrc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
@@ -85,6 +85,9 @@ class DetailsFragment : Fragment() {
             similarrc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
+        onclickreadmore(binding.showmoretxt1)
+        onclickreadmore(binding.readmoreTextView)
+        onclickreadmore(binding.seeMoreReviews)
     }
 
     private fun imanitiesData():List<ImanitiesData>{
@@ -171,5 +174,64 @@ class DetailsFragment : Fragment() {
         return list
     }
 
+    private fun onclickreadmore(view: View){
 
+        var newshowmore1 = binding.showmoretxt1
+        var showmore   = binding.readmoreTextView
+        var seeMoreReviews   = binding.seeMoreReviews
+
+        var sizeless :Boolean = true
+        var sizeless1 :Boolean = true
+        var isLessReview :Boolean = true
+        var multitext = binding.editTextTextMultiLine
+
+        var ammen = binding.offeringAmmen
+        var ammenofferrc = binding.amenitiesOfferRecycler
+        var reviewrc = binding.reviewRecyclerView
+        var devider = binding.dividerofferammen
+
+        view.setOnClickListener {
+
+            when(view){
+                showmore->{
+                    if(sizeless==true){
+                        multitext.maxLines = Int.MAX_VALUE
+
+                        showmore.setText("Show Less..")
+                        sizeless = false
+
+                    }
+                    else{
+                        multitext.setLines(4)
+                        showmore.setText("Show More..")
+                        sizeless = true
+                    }
+                }
+                newshowmore1->{
+                    if(sizeless1==true){
+
+                        ammen.visibility = View.VISIBLE
+                        ammenofferrc.visibility = View.VISIBLE
+                        devider.visibility = View.VISIBLE
+
+
+                        newshowmore1.setText("Show Less..")
+                        sizeless1 = false
+
+                    }
+                    else{
+                        ammen.visibility = View.GONE
+                        ammenofferrc.visibility = View.GONE
+                        devider.visibility = View.GONE
+
+                        newshowmore1.setText("Show More..")
+                        sizeless1 = true
+                    }
+                }
+            }
+
+
+        }
+
+    }
 }

@@ -6,6 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentDealsBinding
@@ -77,7 +78,7 @@ class DealsFragment : Fragment() {
 
         reviewrc = binding.reviewRecyclerView
         GlobalScope.launch {
-            val adapter = ReviewAdapter(ReviewData1())
+            val adapter = ReviewAdapter(ReviewData1(),requireContext())
             reviewrc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
@@ -88,7 +89,11 @@ class DealsFragment : Fragment() {
             similarrc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
+        GlobalScope.launch {
+            onclickreadmore(binding.readmoreTextView)
+            onclickreadmore(binding.showmoretxt1)
 
+        }
 
 
     }
@@ -184,6 +189,61 @@ class DealsFragment : Fragment() {
         )
         return list
     }
+    private fun onclickreadmore(view: View){
+
+        var newshowmore1 = binding.showmoretxt1
+        var showmore   = binding.readmoreTextView
+        var sizeless :Boolean = true
+        var sizeless1 :Boolean = true
+        var multitext = binding.editTextTextMultiLine
+
+        var ammen = binding.offeringAmmen
+        var ammenofferrc = binding.amenitiesOfferRecycler
+
+        view.setOnClickListener {
+
+            when(view){
+                showmore->{
+                    if(sizeless==true){
+                        multitext.maxLines = Int.MAX_VALUE
+
+                        showmore.setText("Show Less..")
+                        sizeless = false
+
+                    }
+                    else{
+                        multitext.setLines(4)
+                        showmore.setText("Show More..")
+                        sizeless = true
+                    }
+                }
+                newshowmore1->{
+                    if(sizeless1==true){
+
+                        ammen.visibility = View.VISIBLE
+                        ammenofferrc.visibility = View.VISIBLE
+
+                        newshowmore1.setText("Show Less..")
+                        sizeless1 = false
+
+                    }
+                    else{
+                        ammen.visibility = View.GONE
+                        ammenofferrc.visibility = View.GONE
+
+                        newshowmore1.setText("Show More..")
+                        sizeless1 = true
+                    }
+                }
+            }
+
+
+        }
+
+    }
+
+
+
 
 
 
