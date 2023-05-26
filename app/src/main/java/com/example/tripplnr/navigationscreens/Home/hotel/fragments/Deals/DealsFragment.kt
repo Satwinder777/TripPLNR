@@ -27,6 +27,7 @@ class DealsFragment : Fragment() {
 
     lateinit var reviewrc :RecyclerView
     lateinit var similarrc :RecyclerView
+    lateinit var adapter :ReviewAdapter
 
 
     override fun onCreateView(
@@ -78,7 +79,7 @@ class DealsFragment : Fragment() {
 
         reviewrc = binding.reviewRecyclerView
         GlobalScope.launch {
-            val adapter = ReviewAdapter(ReviewData1(),requireContext())
+            adapter = ReviewAdapter(ReviewData1().take(4),requireContext())
             reviewrc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
@@ -90,8 +91,9 @@ class DealsFragment : Fragment() {
             adapter.notifyDataSetChanged()
         }
         GlobalScope.launch {
-            onclickreadmore(binding.readmoreTextView)
-            onclickreadmore(binding.showmoretxt1)
+            onclickreadmore(binding.readmoreTextView,null)
+            onclickreadmore(binding.showmoretxt1,null)
+            onclickreadmore(binding.reviewRec,adapter)
 
         }
 
@@ -166,7 +168,7 @@ class DealsFragment : Fragment() {
     }
 
 
-   private fun ReviewData1():List<reviewData>{
+    private fun ReviewData1():List<reviewData>{
         var list = listOf<reviewData>(
             reviewData("Satwinder Singh","the numberOne on Top Hotel",8.9),
             reviewData("Punjab Singh","the numberOne on Top Hotel",9.34),
@@ -189,12 +191,15 @@ class DealsFragment : Fragment() {
         )
         return list
     }
-    private fun onclickreadmore(view: View){
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
+     fun onclickreadmore(view: View, adapter: ReviewAdapter?){
 
         var newshowmore1 = binding.showmoretxt1
         var showmore   = binding.readmoreTextView
+        var showmoreReview =  binding.reviewRec
         var sizeless :Boolean = true
         var sizeless1 :Boolean = true
+        var isLessreview:Boolean = true
         var multitext = binding.editTextTextMultiLine
 
         var ammen = binding.offeringAmmen
@@ -235,8 +240,21 @@ class DealsFragment : Fragment() {
                         sizeless1 = true
                     }
                 }
+                 showmoreReview->{
+                    if (isLessreview ==true){
+                        adapter?.list = ReviewData1()
+                        adapter?.notifyDataSetChanged()
+                        showmoreReview.setText("Read less")
+                        isLessreview = false
+                    }
+                    else{
+                        adapter?.list = ReviewData1().take(4)
+                        adapter?.notifyDataSetChanged()
+                        showmoreReview.setText("Read more")
+                        isLessreview = true
+                    }
+                }
             }
-
 
         }
 

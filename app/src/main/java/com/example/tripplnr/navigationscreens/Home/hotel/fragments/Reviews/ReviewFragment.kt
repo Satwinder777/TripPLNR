@@ -2,7 +2,6 @@ package com.example.tripplnr.navigationscreens.Home.hotel.fragments.Reviews
 
 import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,11 +9,11 @@ import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentReviewBinding
 import com.example.tripplnr.navigationscreens.Home.dataclass.RatingData
 import com.example.tripplnr.navigationscreens.Home.dataclass.reviewData
 import com.example.tripplnr.navigationscreens.Home.dataclass.similarHotel
+import com.example.tripplnr.navigationscreens.Home.hotel.fragments.Deals.DealsFragment
 import com.example.tripplnr.navigationscreens.Home.hotel.fragments.Deals.adapter.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -30,6 +29,7 @@ class ReviewFragment : Fragment() {
     lateinit var reviewAdapter : ReviewAdapter
     var isLessReview:Boolean = true
     lateinit var seemore:TextView
+
 
 
 
@@ -78,12 +78,9 @@ class ReviewFragment : Fragment() {
             similarrc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
-seemore = binding.lessRev
-        seemore.setOnClickListener {
-//    dotask()
-            Toast.makeText(requireContext(), "hi lessRev", Toast.LENGTH_SHORT).show()
-}
-
+        GlobalScope.launch {
+            onclickreadmore(binding.seemore1,reviewAdapter)
+        }
     }
 
 
@@ -124,27 +121,75 @@ seemore = binding.lessRev
         return list
     }
 
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
+    fun onclickreadmore(view: View, adapter: ReviewAdapter?){
 
-    @SuppressLint("NotifyDataSetChanged")
-    private fun dotask() {
-        if (isLessReview==true){
-            reviewAdapter.list = ReviewData1().take(4)
-            reviewAdapter.notifyDataSetChanged()
-            binding.lessRev.setText(requireContext().getText(R.string.readless))
-            isLessReview = false
-            Toast.makeText(requireContext(), "true", Toast.LENGTH_SHORT).show()
+        var seemorerc = binding.seemore1
+//        var showmore   = binding.readmoreTextView
+//        var showmoreReview =  binding.reviewRec
+//        var sizeless :Boolean = true
+//        var sizeless1 :Boolean = true
+        var isLessreview:Boolean = true
+//        var multitext = binding.editTextTextMultiLine
+//
+//        var ammen = binding.offeringAmmen
+//        var ammenofferrc = binding.amenitiesOfferRecycler
+
+        view.setOnClickListener {
+
+            when(view){
+//                showmore->{
+//                    if(sizeless==true){
+//                        multitext.maxLines = Int.MAX_VALUE
+//
+//                        showmore.setText("Show Less..")
+//                        sizeless = false
+//
+//                    }
+//                    else{
+//                        multitext.setLines(4)
+//                        showmore.setText("Show More..")
+//                        sizeless = true
+//                    }
+//                }
+//                newshowmore1->{
+//                    if(sizeless1==true){
+//
+//                        ammen.visibility = View.VISIBLE
+//                        ammenofferrc.visibility = View.VISIBLE
+//
+//                        newshowmore1.setText("Show Less..")
+//                        sizeless1 = false
+//
+//                    }
+//                    else{
+//                        ammen.visibility = View.GONE
+//                        ammenofferrc.visibility = View.GONE
+//
+//                        newshowmore1.setText("Show More..")
+//                        sizeless1 = true
+//                    }
+//                }
+                seemorerc->{
+                    if (isLessreview ==true){
+                        adapter?.list = ReviewData1()
+                        adapter?.notifyDataSetChanged()
+                        seemorerc.setText("Read less")
+                        isLessreview = false
+                    }
+                    else{
+                        adapter?.list = ReviewData1().take(4)
+                        adapter?.notifyDataSetChanged()
+                        seemorerc.setText("Read more")
+                        isLessreview = true
+                    }
+                }
+            }
+
         }
-        else{
-            reviewAdapter.list = ReviewData1()
-            reviewAdapter.notifyDataSetChanged()
-            binding.lessRev.setText(requireContext().getText(R.string.readextra))
 
-            isLessReview = true
-
-            Toast.makeText(requireContext(), "false", Toast.LENGTH_SHORT).show()
-
-
-        }
     }
+
+
 
 }

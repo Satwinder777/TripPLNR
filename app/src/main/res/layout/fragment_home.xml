@@ -63,16 +63,17 @@
             </LinearLayout>
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
         <com.google.android.material.card.MaterialCardView
-            android:id="@+id/viewHotelCard"
+
             android:layout_width="wrap_content"
             app:cardCornerRadius="20dp"
             android:layout_gravity="center_horizontal"
             app:cardBackgroundColor="@color/yellow"
-            android:layout_marginTop="-42dp"
+            android:layout_marginTop="-25dp"
+            padd
             android:layout_height="wrap_content"
-            app:cardUseCompatPadding="true"
-            app:cardElevation="9dp"
 
 
 
@@ -80,33 +81,44 @@
 
             >
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
+            <com.google.android.material.chip.Chip
+                android:id="@+id/viewHotelCard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="View Hotels"
+                app:closeIcon="@drawable/next_ic"
+                app:closeIconVisible="true"
+                app:chipIconTint="@color/yellow"
+                app:chipBackgroundColor="@color/yellow"
 
-                android:layout_margin="10dp"
+                />
+<!--            <LinearLayout-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="match_parent"-->
 
-                android:orientation="horizontal">
+<!--                android:layout_margin="10dp"-->
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginStart="8dp"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:layout_gravity="center"
-                    android:textStyle="bold"
-                    android:text="View Hotels" />
+<!--                android:orientation="horizontal">-->
 
-                <ImageView
-                    android:id="@+id/imageView5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:textAlignment="center"
-                    android:src="@drawable/next_ic" />
-            </LinearLayout>
+<!--                <TextView-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:layout_marginStart="8dp"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:textColor="@color/white"-->
+<!--                    android:layout_gravity="center"-->
+<!--                    android:textStyle="bold"-->
+<!--                    android:text="View Hotels" />-->
+
+<!--                <ImageView-->
+<!--                    android:id="@+id/imageView5"-->
+<!--                    android:layout_width="wrap_content"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    android:layout_weight="1"-->
+<!--                    android:textAlignment="center"-->
+<!--                    android:src="@drawable/next_ic" />-->
+<!--            </LinearLayout>-->
         </com.google.android.material.card.MaterialCardView>
 
         <androidx.core.widget.NestedScrollView

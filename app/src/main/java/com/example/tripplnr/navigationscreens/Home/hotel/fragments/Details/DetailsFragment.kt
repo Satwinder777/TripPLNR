@@ -27,6 +27,8 @@ class DetailsFragment : Fragment() {
 
     lateinit var reviewrc : RecyclerView
     lateinit var similarrc : RecyclerView
+    lateinit var adapter: ReviewAdapter
+
 
 
     override fun onCreateView(
@@ -74,7 +76,7 @@ class DetailsFragment : Fragment() {
 
         reviewrc = binding.reviewRecyclerView
         GlobalScope.launch {
-            val adapter = ReviewAdapter(ReviewData1(),requireContext())
+           adapter = ReviewAdapter(ReviewData1(),requireContext())
             reviewrc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
@@ -174,20 +176,20 @@ class DetailsFragment : Fragment() {
         return list
     }
 
+    @SuppressLint("NotifyDataSetChanged", "SetTextI18n")
     private fun onclickreadmore(view: View){
 
         var newshowmore1 = binding.showmoretxt1
         var showmore   = binding.readmoreTextView
-        var seeMoreReviews   = binding.seeMoreReviews
+        var showmoreReview   = binding.seeMoreReviews
 
         var sizeless :Boolean = true
         var sizeless1 :Boolean = true
-        var isLessReview :Boolean = true
+        var isLessreview :Boolean = true
         var multitext = binding.editTextTextMultiLine
 
         var ammen = binding.offeringAmmen
         var ammenofferrc = binding.amenitiesOfferRecycler
-        var reviewrc = binding.reviewRecyclerView
         var devider = binding.dividerofferammen
 
         view.setOnClickListener {
@@ -226,6 +228,21 @@ class DetailsFragment : Fragment() {
 
                         newshowmore1.setText("Show More..")
                         sizeless1 = true
+                    }
+                }
+
+                showmoreReview->{
+                    if (isLessreview ==true){
+                        adapter.list = ReviewData1()
+                        adapter.notifyDataSetChanged()
+                        showmoreReview.setText("Read less")
+                        isLessreview = false
+                    }
+                    else{
+                        adapter.list = ReviewData1().take(4)
+                        adapter.notifyDataSetChanged()
+                        showmoreReview.setText("Read more")
+                        isLessreview = true
                     }
                 }
             }

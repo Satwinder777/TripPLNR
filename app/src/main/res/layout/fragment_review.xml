@@ -61,12 +61,13 @@
         />
 
         <TextView
-            android:id="@+id/lessRev"
+            android:id="@+id/seemore1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="See more"
             android:textColor="@color/yellow"
-            />
+            android:clickable="true"
+            android:focusable="true" />
 
     <TextView
         android:layout_width="match_parent"
