@@ -1,5 +1,6 @@
 <resources>
     <string name="app_name">TripPLNR</string>
+    <string name="google_maps_key">AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg</string>
     <string name="testLine">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -16,6 +17,15 @@
     <string name="apply"><u>Apply</u></string>
     <string name="readextra"><u>Read more</u></string>
     <string name="readless"><u> Read less </u></string>
+    <string name="certificate">keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android</string>
+
+    <string name="book1"><font fgcolor='#253d7a'>Booking</font></string>
+    <string name="book2"><font fgcolor='#52aee5'>.com</font></string>
+    <string name="l1">you will be redirected to the affiliate \n s website to finish booking</string>
+    <string name="l2">SHA1: 12:32:94:8D:7A:22:2B:1C:7B:86:40:23:97:C1:0F:01:AC:52:50:9D</string>
+    <string name="l3">27:64:9C:F4:4B:33:46:47:5B:BD:8D:B8:19:DD:13:F1:18:9E:6F:C8:F4:9F:8B:FA:15:44:CE:40:15:07:FF:57</string>
+    <!--    <string name="status_error"><font fgcolor='#FFFF3B30'>Error</font></string>-->
 <!--    <string name="my_string">&lt;u>&lt;font color='#FF0000'>Read less&lt;/font>&lt;/u></string>-->
+
 
 </resources>

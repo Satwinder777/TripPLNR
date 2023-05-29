@@ -5,7 +5,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
-import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -21,8 +20,7 @@ import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentFavorateBinding
 import com.example.tripplnr.navigationscreens.Account.activity.CreateUserActivity
 import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
-import com.example.tripplnr.navigationscreens.Home.dataclass.homeItem
-import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
+import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
@@ -60,9 +58,9 @@ class FavorateFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
     }
 
-    fun datahandle(): MutableList<homeItem> {
-        var list = mutableListOf<homeItem>(
-            homeItem(
+    fun datahandle(): MutableList<travelBlogItem> {
+        var list = mutableListOf<travelBlogItem>(
+            travelBlogItem(
                 R.drawable.explore2,
                 "the Golden Temple",
                 "12 may 23 ",
@@ -70,28 +68,28 @@ class FavorateFragment : Fragment(), TravelBlogAdapter.onItemClick {
                 getString(R.string.testLine)
             ),
 
-            homeItem(
+            travelBlogItem(
                 R.drawable.exploreimg,
                 "the Royal Temple",
                 "12 may 23 ",
                 "1.35s",
                 getString(R.string.testLine)
             ),
-            homeItem(
+            travelBlogItem(
                 R.drawable.exploreimg,
                 "the Swanrana mandhir ",
                 "12 may 23 ",
                 "1.11s",
                 getString(R.string.testLine)
             ),
-            homeItem(
+            travelBlogItem(
                 R.drawable.explore2,
                 "the love city",
                 "12 may 23 ",
                 "12.32s",
                 R.string.testLine.toString()
             ),
-            homeItem(
+            travelBlogItem(
                 R.drawable.exploreimg,
                 "the Punjaab",
                 "12 may 23 ",

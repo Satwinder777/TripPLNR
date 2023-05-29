@@ -14,8 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentBlogsBinding
 import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
-import com.example.tripplnr.navigationscreens.Home.dataclass.currencyData
-import com.example.tripplnr.navigationscreens.Home.dataclass.homeItem
+import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
 
 class BlogsFragment : Fragment() {
     private lateinit var binding: FragmentBlogsBinding
@@ -67,14 +66,14 @@ class BlogsFragment : Fragment() {
 
     }
 
-    fun datahandle():MutableList<homeItem>{
-        var list  = mutableListOf<homeItem>(
-            homeItem(R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",getString(R.string.testLine)),
+    fun datahandle():MutableList<travelBlogItem>{
+        var list  = mutableListOf<travelBlogItem>(
+            travelBlogItem(R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",getString(R.string.testLine)),
 
-            homeItem(R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",getString(R.string.testLine)),
-            homeItem(R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",getString(R.string.testLine)),
-            homeItem(R.drawable.explore2,"the love city","12 may 23 ","12.32s",getString(R.string.testLine)),
-            homeItem(R.drawable.exploreimg,"the Punjaab","12 may 23 ","59.32s",getString(R.string.testLine)),
+            travelBlogItem(R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",getString(R.string.testLine)),
+            travelBlogItem(R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",getString(R.string.testLine)),
+            travelBlogItem(R.drawable.explore2,"the love city","12 may 23 ","12.32s",getString(R.string.testLine)),
+            travelBlogItem(R.drawable.exploreimg,"the Punjaab","12 may 23 ","59.32s",getString(R.string.testLine)),
 
             )
         return list
@@ -84,7 +83,7 @@ class BlogsFragment : Fragment() {
 
         var list11 = datahandle()
         // creating a new array list to filter our data.
-        val filteredlist:MutableList<homeItem> = mutableListOf()
+        val filteredlist:MutableList<travelBlogItem> = mutableListOf()
 
         // running a for loop to compare elements.
         for (item in list11) {

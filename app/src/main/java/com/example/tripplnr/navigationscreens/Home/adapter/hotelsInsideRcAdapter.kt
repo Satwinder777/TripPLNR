@@ -13,7 +13,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class hotelsInsideRcAdapter(var list : List<hotelchild>):RecyclerView.Adapter<hotelsInsideRcAdapter.InnerClass>() {
+class hotelsInsideRcAdapter(var list : MutableList<hotelchild>):RecyclerView.Adapter<hotelsInsideRcAdapter.InnerClass>() {
 
 
 
@@ -51,6 +51,7 @@ class hotelsInsideRcAdapter(var list : List<hotelchild>):RecyclerView.Adapter<ho
            hotelNametxt.setText(item.hotelNametxt)
            hotelLocation.setText(item.hotelLocation)
            ratingtxt.setText(item.ratingtxt)
+           R.string.readless
 
         }
 

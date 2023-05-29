@@ -1,6 +1,5 @@
 package com.example.tripplnr.navigationscreens.Home.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,11 +8,12 @@ import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
-import com.example.tripplnr.navigationscreens.Home.dataclass.homeItem
+import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
+import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class TravelBlogAdapter(var list: MutableList<homeItem>, var onItemClick1: onItemClick?):RecyclerView.Adapter<TravelBlogAdapter.InnerClass>() {
+class TravelBlogAdapter(var list: MutableList<travelBlogItem>, var onItemClick1: onItemClick?=null):RecyclerView.Adapter<TravelBlogAdapter.InnerClass>() {
 
 
 
@@ -26,6 +26,7 @@ class TravelBlogAdapter(var list: MutableList<homeItem>, var onItemClick1: onIte
         return list.size
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
 
         holder.itemView.setOnClickListener {
@@ -77,7 +78,7 @@ class TravelBlogAdapter(var list: MutableList<homeItem>, var onItemClick1: onIte
 
       //  var learnmoretxt = view.findViewById<TextView>(R.id.learnmoretxt)
 
-       suspend fun bind (list: List<homeItem>){
+       suspend fun bind (list: List<travelBlogItem>){
             var item = list[position]
 
             exploreImg.setImageResource(item.exploreImg)

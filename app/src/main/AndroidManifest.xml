@@ -25,9 +25,15 @@
             android:name=".navigationscreens.Account.activity.LegalinformatinActivity"
             android:exported="false" />
 
+        <!--        <meta-data-->
+        <!--            android:name="com.google.android.geo.API_KEY"-->
+        <!--            android:value="@string/mapKey" />-->
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/mapKey" />
+            android:value="@string/google_maps_key" />
 
         <activity
             android:name=".navigationscreens.Search.hotel.activity.HotelList2Activity"

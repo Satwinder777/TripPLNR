@@ -1,12 +1,15 @@
 package com.example.tripplnr.navigationscreens.Home.hotel.fragments.Deals
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
+import android.widget.PopupWindow
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentDealsBinding
@@ -14,10 +17,11 @@ import com.example.tripplnr.navigationscreens.Home.dataclass.*
 import com.example.tripplnr.navigationscreens.Home.hotel.fragments.Deals.adapter.*
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 
-class DealsFragment : Fragment() {
+class DealsFragment : Fragment(),bookingCardAdapter.onclickCard {
     private lateinit var binding : FragmentDealsBinding
     lateinit var rc :RecyclerView
     lateinit var imanirc :RecyclerView
@@ -46,7 +50,7 @@ class DealsFragment : Fragment() {
 
         rc = binding.recommendedDealRecycler
         GlobalScope.launch {
-            val adapter = bookingCardAdapter(cardData())
+            val adapter = bookingCardAdapter(cardData(),this@DealsFragment)
             rc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
@@ -260,9 +264,34 @@ class DealsFragment : Fragment() {
 
     }
 
+    override fun cardIsActive(position: Int) {
+
+//        GlobalScope.launch {
+            popCard()
+
+//            delay(5000)
 
 
+//        }
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse( "https://www.booking.com"))
+        requireContext().startActivity(intent)
 
+    }
+
+    @SuppressLint("InflateParams")
+    private fun popCard(){
+        var view = layoutInflater.inflate(R.layout.loading_page,null,false)
+
+        var pop = PopupWindow(view,
+            ViewGroup.LayoutParams.MATCH_PARENT,
+            ViewGroup.LayoutParams.WRAP_CONTENT,
+            true )
+//        pop.contentView = view
+        pop.showAtLocation(view,Gravity.CENTER,0,0)
+        view.setOnClickListener {
+            pop.dismiss()
+        }
+    }
 
 
 }

@@ -101,15 +101,15 @@ class HotelsFragment : Fragment() {
 
     }
 
-    fun hotelData(): List<hotelTitle> {
-        val hotelchildData = listOf<hotelchild>(
+    fun hotelData(): MutableList<hotelTitle> {
+        val hotelchildData = mutableListOf<hotelchild>(
             hotelchild(R.drawable.explore2, "Taj Hotel", "Amritsar", "3.3"),
             hotelchild(R.drawable.exploreimg, "The Bill Gates", "America,Us", "4.5"),
             hotelchild(R.drawable.explore2, "Punjab Hotel", "Amritsar,Punjab", "5.9"),
             hotelchild(R.drawable.exploreimg, "Chandighar Hotel", "Chandighar, India", "4.7"),
             hotelchild(R.drawable.explore2, "Us Hotel", "Us,Amercia", "4.8"),
         )
-        var list = listOf<hotelTitle>(
+        var list = mutableListOf<hotelTitle>(
             hotelTitle("Top Hotel", hotelchildData),
             hotelTitle("Best Hotel", hotelchildData),
             hotelTitle("Old Hotel", hotelchildData),

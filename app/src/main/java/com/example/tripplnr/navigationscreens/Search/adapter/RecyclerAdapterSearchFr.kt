@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.adapter.hotelsInsideRcAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
+import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -34,7 +35,8 @@ class RecyclerAdapterSearchFr(var list : List<hotelTitle>):RecyclerView.Adapter<
         }
 
         holder.apply {
-            var adapter = list[position].list?.let { hotelsInsideRcAdapter(it) }
+            var listhotelchild = list.get(0).list
+            var adapter = hotelsInsideRcAdapter(listhotelchild as MutableList<hotelchild>)
             itemRecyclerView.adapter = adapter
             adapter?.notifyDataSetChanged()
 
