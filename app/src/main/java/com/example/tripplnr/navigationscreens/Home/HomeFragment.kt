@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -19,15 +20,14 @@ import com.example.tripplnr.navigationscreens.DataCls.Massage
 import com.example.tripplnr.navigationscreens.Home.adapter.HotelRecyclerViewAdapter
 import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
-import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
-import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
 import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
 import com.example.tripplnr.navigationscreens.Repository.TripRepository
 import com.example.tripplnr.navigationscreens.ViewModel.MyViewModel
 import com.example.tripplnr.navigationscreens.ViewModel.ViewModelFactory
 
 
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.chip.Chip
+import com.google.android.material.chip.ChipDrawable
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.delay
@@ -38,6 +38,8 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
     private lateinit var rcTravelBlog :RecyclerView
     private lateinit var popularHotelRc :RecyclerView
     private lateinit var adapter :TravelBlogAdapter
+
+    var favorateList = mutableListOf<travelBlogItem>()
 
 
 
@@ -77,9 +79,23 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 //            val adapter = HotelRecyclerViewAdapter(hotelData())
 //            popularHotelRc.adapter = adapter
         }
+        val chip: Chip = binding.viewHotelCard as Chip
 
+        val outlineSpotShadowColor = ContextCompat.getColor(requireContext(), R.color.yellow)
+
+
+        val chipDrawable = chip.chipDrawable as? ChipDrawable
+//            chipDrawable?.setSpotShadowColor(outlineSpotShadowColor)
+//            chipDrawable?.setShadowColor(outlineSpotShadowColor)
+//            chip.outlineSpotShadowColor = outlineSpotShadowColor
+        chip.elevation = 90f
+        chip.setShadowLayer(10f,0f,50f,outlineSpotShadowColor)
+        chip.outlineSpotShadowColor = outlineSpotShadowColor
         binding.viewHotelCard.setOnClickListener {
             findNavController().navigate(R.id.searchFragment )
+
+
+//            chip.outlineAmbientShadowColor = outlineSpotShadowColor
         }
 
 
@@ -90,7 +106,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
                 viewmodel.datahandle()
 
                     viewmodel.getItemList().observe(viewLifecycleOwner, Observer { items ->
-                        var adapter = TravelBlogAdapter(items,this)
+                        var adapter = TravelBlogAdapter(items,this,favorateList)
 
                         rcTravelBlog.adapter = adapter
                         adapter.notifyDataSetChanged()
@@ -125,6 +141,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
             })
 //            popularHotelRc.adapter = adapter
+
 
 
 
@@ -187,8 +204,10 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
     }
 
     override fun onfavoratebtnClicks(position: Int) {
-        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
-        bottomNavigationView.menu.getItem(2).isVisible = true
+//        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+//        bottomNavigationView.menu.getItem(2).isVisible = true
+        //        findNavController().navigate(R.id.favorateFragment)
+
 
 
 //        bottomNavigationView.menu.findItem(R.id.blogsFragment).setChecked(true)
@@ -199,7 +218,6 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 //        transaction.replace(R.id.nav_host_fragment, newFragment)
 //        transaction.addToBackStack(null)
 //        transaction.commit()
-        findNavController().navigate(R.id.favorateFragment)
 
     }
 

@@ -6,6 +6,7 @@ data class travelBlogItem(
     var dateText: String? =null,
     var viewedTime:String? =null,
     var aboutText:String? =null,
+    var isfavorate:Boolean? =false
 
     )
 data class hotelchild(

@@ -134,13 +134,14 @@
 
 
                 >
-                <SearchView
+
+                <androidx.appcompat.widget.SearchView
                     android:id="@+id/searchView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:queryHint="Search for currency"
 
-
-                    />
+                     />
 
 
             </com.google.android.material.card.MaterialCardView>
@@ -179,6 +180,7 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/rangeDAteTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
@@ -221,10 +223,11 @@
                     </LinearLayout>
 
                     <TextView
+                        android:id="@+id/GuestTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="28 Jan - 29 Jan"
+                        android:text="3 Guest, 2 Rooms"
                         android:textColor="@color/black"
                         android:textStyle="bold" />
                 </LinearLayout>

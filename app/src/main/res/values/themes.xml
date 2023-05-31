@@ -43,9 +43,14 @@
 <!--        <item name="android:background">@drawable/bottomsheet_back</item>-->
 <!--    </style>-->
 
-    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
-        <item name="queryBackground">@android:color/transparent</item>
-    </style>
 
+
+
+
+    ////search view handling
+    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="android:background">@null</item>
+        <item name="android:paddingBottom">0dp</item>
+    </style>
 
 </resources>

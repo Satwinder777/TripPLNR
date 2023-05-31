@@ -20,6 +20,7 @@ class BlogsFragment : Fragment() {
     private lateinit var binding: FragmentBlogsBinding
     private lateinit var rc: RecyclerView
     private lateinit var adapter: TravelBlogAdapter
+    var favorateList = mutableListOf<travelBlogItem>()
 
 
 
@@ -40,7 +41,7 @@ class BlogsFragment : Fragment() {
 
         rc = binding.blogRecyclerView
         rc.layoutManager = LinearLayoutManager(requireContext())
-        adapter = TravelBlogAdapter(datahandle(),null)
+        adapter = TravelBlogAdapter(datahandle(), null, favorateList)
         rc.adapter = adapter
 
 

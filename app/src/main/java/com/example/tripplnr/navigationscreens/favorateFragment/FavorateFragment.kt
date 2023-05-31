@@ -29,6 +29,7 @@ class FavorateFragment : Fragment(), TravelBlogAdapter.onItemClick {
     private lateinit var rc: RecyclerView
     var TAG = "test23"
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
+    var favorateList = mutableListOf<travelBlogItem>()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -44,7 +45,7 @@ class FavorateFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
         rc = binding.favorateRecyclerView
         rc.layoutManager = LinearLayoutManager(requireContext())
-        var adapter = TravelBlogAdapter(datahandle(), this)
+        var adapter = TravelBlogAdapter(datahandle(), this, favorateList)
         rc.adapter = adapter
 
         binding.backbtnFavorateFragment.setOnClickListener {
@@ -176,7 +177,7 @@ class FavorateFragment : Fragment(), TravelBlogAdapter.onItemClick {
             pop.dismiss()
         }
 
-        var loginBtn = view.findViewById<MaterialButton>(R.id.loginUser)
+        var loginBtn = view.findViewById<MaterialButton>(R.id.loginMButton)
         loginBtn.setOnClickListener {
             checkLocationPermission()
             pop.dismiss()

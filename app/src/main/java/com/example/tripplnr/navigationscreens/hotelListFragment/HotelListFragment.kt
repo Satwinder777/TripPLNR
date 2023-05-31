@@ -7,6 +7,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.os.Binder
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -17,9 +18,11 @@ import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHotelListBinding
+import com.example.tripplnr.navigationscreens.DataCls.guestdatacls
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelListClass
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.HotelList2Activity
 import com.example.tripplnr.navigationscreens.hotelListFragment.adapter.Hotel_list_recyclerAdapter
@@ -38,6 +41,19 @@ class HotelListFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         binding = FragmentHotelListBinding.inflate(layoutInflater)
+//        var data = arguments?.getParcelable("guest", ) ?: ""
+
+//        var myParcelable = arguments?.getParcelable("myParcelable") as MyParcelable
+        val data  = arguments?.getParcelable<guestdatacls>("guest")
+            ?: throw IllegalArgumentException("myParcelable not found in arguments bundle")
+        binding.roomtextviewHotelList.setText("${data.rooms}")
+        binding.guestTexthotelList.setText("${ data.guest }")
+        var date = arguments?.getString("date","default" ) ?: ""
+        var query = arguments?.getString("query","default" ) ?: ""
+        Log.e("data12", "onCreateView: $data,$date", )
+        binding.dateTextviewHotelList.setText(date)
+        binding.queryTextViewHotelList.setText(query)
+
         return binding.root
     }
 
@@ -65,6 +81,9 @@ class HotelListFragment : Fragment() {
         }
         doTask(binding.filterList)
         doTask(binding.sortList)
+        binding.editDAtaIV.setOnClickListener {
+            parentFragmentManager.popBackStack()
+        }
 
     }
     private fun postData():List<hotelListClass>{

@@ -52,14 +52,26 @@
 
         </LinearLayout>
 
-        <CalendarView
-            android:id="@+id/calendarView"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:theme="@style/ThemeOverlay.MaterialComponents.MaterialCalendar"
-            android:scaleType="fitXY"
-            android:layout_weight="1"
-            tools:ignore="MissingClass" />
+<!--        <CalendarView-->
+<!--            android:id="@+id/calendarView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="1"-->
+<!--            android:scaleType="fitXY"-->
+<!--            android:theme="@style/ThemeOverlay.MaterialComponents.MaterialCalendar"-->
+
+<!--            tools:ignore="MissingClass" />-->
+        <DatePicker
+            android:id="@+id/datepicker"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:endYear="2023"
+            android:datePickerMode="calendar"
+            android:layout_gravity="center"
+
+            android:startYear="2000" >
+        </DatePicker>
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/selectCalenderData"
             android:layout_width="match_parent"

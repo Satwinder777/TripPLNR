@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "794842989592",
+    "project_id": "tripplnr-c6bf2",
+    "storage_bucket": "tripplnr-c6bf2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:794842989592:android:a1325d94da3034bf73ef6d",
+        "android_client_info": {
+          "package_name": "com.example.tripplnr"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "794842989592-o5plg1imr2ft9klbrjsl6gn7bghs9vi2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.tripplnr",
+            "certificate_hash": "1232948d7a222b1c7b86402397c10f01ac52509d"
+          }
+        },
+        {
+          "client_id": "794842989592-l9igqsvhcq9uo20q8ghpcjqhvbpg5ere.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB-h-PxhSrYsl3CDW-1S36pv6RbsnbDG00"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "794842989592-l9igqsvhcq9uo20q8ghpcjqhvbpg5ere.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

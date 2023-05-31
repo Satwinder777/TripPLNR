@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <dimen name="card_elevation">1000dp</dimen>
+    <dimen name="chip_elevation">24dp</dimen>
 </resources>
