@@ -65,7 +65,7 @@ class SearchFragment : Fragment() {
 
         binding.searchBackCard.setOnClickListener {
 
-            findNavController().navigate(R.id.homeFragment)
+            requireParentFragment().requireActivity().onBackPressed()
 
 
 

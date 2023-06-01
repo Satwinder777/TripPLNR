@@ -5,6 +5,7 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -13,94 +14,124 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentFavorateBinding
 import com.example.tripplnr.navigationscreens.Account.activity.CreateUserActivity
+import com.example.tripplnr.navigationscreens.Home.HomeFragment
 import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
+import com.example.tripplnr.navigationscreens.LiveDataVM.Live
+import com.example.tripplnr.navigationscreens.ViewModel.ViewModelFactory
+import com.example.tripplnr.navigationscreens.favorateFragment.Adapter.FavorateFragmentAdapter
+import com.example.tripplnr.navigationscreens.favorateFragment.ViewModel.FavorateViewModel
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
-class FavorateFragment : Fragment(), TravelBlogAdapter.onItemClick {
+class FavorateFragment : Fragment(), FavorateFragmentAdapter.onItemClick {
     private lateinit var binding: FragmentFavorateBinding
     private lateinit var rc: RecyclerView
     var TAG = "test23"
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
-    var favorateList = mutableListOf<travelBlogItem>()
+      var viewModelFavorate = viewModels<FavorateViewModel>()
+    val myRepository = HomeFragment().favorateList // Provide your repository instance
+    val viewModelpr = ViewModelFactory(null,myRepository)
+    private lateinit var adapter : FavorateFragmentAdapter
+//    val viewModelpr = ViewModelProvider(this, viewModelFactory)
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val finalviewmodel = ViewModelProvider(this,viewModelpr).get(FavorateViewModel::class.java)
+
         binding = FragmentFavorateBinding.inflate(layoutInflater)
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val finalviewmodel = ViewModelProvider(this,viewModelpr).get(FavorateViewModel::class.java)
+
+
+
 
         rc = binding.favorateRecyclerView
+
         rc.layoutManager = LinearLayoutManager(requireContext())
-        var adapter = TravelBlogAdapter(datahandle(), this, favorateList)
+
+        adapter =  FavorateFragmentAdapter( this, Live.data.value,requireContext())
+        Log.e(TAG, "onViewCreated: ${Live.data1}", )
         rc.adapter = adapter
 
         binding.backbtnFavorateFragment.setOnClickListener {
 //            childFragmentManager.popBackStack()
+            requireParentFragment().requireActivity().onBackPressed()
 //            parentFragmentManager.popBackStack()
-            val bottomNavigationView =
-                requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
-            bottomNavigationView.menu.getItem(2).isVisible = false
-            findNavController().navigateUp()
+//            val bottomNavigationView =
+//                requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+//            bottomNavigationView.menu.getItem(2).isVisible = false
+//            findNavController().navigateUp()
         }
 
+
+
+
+
     }
 
-    fun datahandle(): MutableList<travelBlogItem> {
-        var list = mutableListOf<travelBlogItem>(
-            travelBlogItem(
-                R.drawable.explore2,
-                "the Golden Temple",
-                "12 may 23 ",
-                "1.32s",
-                getString(R.string.testLine)
-            ),
-
-            travelBlogItem(
-                R.drawable.exploreimg,
-                "the Royal Temple",
-                "12 may 23 ",
-                "1.35s",
-                getString(R.string.testLine)
-            ),
-            travelBlogItem(
-                R.drawable.exploreimg,
-                "the Swanrana mandhir ",
-                "12 may 23 ",
-                "1.11s",
-                getString(R.string.testLine)
-            ),
-            travelBlogItem(
-                R.drawable.explore2,
-                "the love city",
-                "12 may 23 ",
-                "12.32s",
-                R.string.testLine.toString()
-            ),
-            travelBlogItem(
-                R.drawable.exploreimg,
-                "the Punjaab",
-                "12 may 23 ",
-                "59.32s",
-                R.string.testLine.toString()
-            ),
-
-            )
-        return list
-    }
+//    fun datahandle(): MutableList<travelBlogItem> {
+//        var list = mutableListOf<travelBlogItem>(
+//            travelBlogItem(
+//                R.drawable.explore2,
+//                "the Golden Temple",
+//                "12 may 23 ",
+//                "1.32s",
+//                getString(R.string.testLine)
+//            ),
+//
+//            travelBlogItem(
+//                R.drawable.exploreimg,
+//                "the Royal Temple",
+//                "12 may 23 ",
+//                "1.35s",
+//                getString(R.string.testLine)
+//            ),
+//            travelBlogItem(
+//                R.drawable.exploreimg,
+//                "the Swanrana mandhir ",
+//                "12 may 23 ",
+//                "1.11s",
+//                getString(R.string.testLine)
+//            ),
+//            travelBlogItem(
+//                R.drawable.explore2,
+//                "the love city",
+//                "12 may 23 ",
+//                "12.32s",
+//                R.string.testLine.toString()
+//            ),
+//            travelBlogItem(
+//                R.drawable.exploreimg,
+//                "the Punjaab",
+//                "12 may 23 ",
+//                "59.32s",
+//                R.string.testLine.toString()
+//            ),
+//
+//            )
+//        return list
+//    }
 
     override fun onclickItem(position: Int) {
 
@@ -114,6 +145,26 @@ class FavorateFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
         popupFavo()
 
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    override fun dltBlog(position: Int?) {
+
+        if (position != null) {
+            Live.data1?.removeAt(position)
+//            Live.data1.let { item->
+//                val currentItem = item?.get(position)
+//                currentItem?.isfavorate = false
+//            }
+            Live.data.observe(viewLifecycleOwner, Observer {
+                it[position].isfavorate = false
+            })
+            adapter.notifyItemRemoved(position)
+        }
+
+
+        adapter.notifyDataSetChanged()
+        Log.e(TAG, "dltBlog: ${Live.data1}", )
     }
 
 //override fun onDestroyView() {

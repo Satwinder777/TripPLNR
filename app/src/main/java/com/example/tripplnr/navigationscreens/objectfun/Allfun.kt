@@ -6,7 +6,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
+import android.widget.ImageView
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
+import com.example.tripplnr.R
+import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
+import com.example.tripplnr.navigationscreens.LiveDataVM.Live
 import com.google.android.gms.tasks.Task
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.AuthResult
@@ -146,6 +151,7 @@ object Allfun {
         val currentUser = auth.currentUser
         return currentUser != null
     }
+
 }
 object FirebaseUtils {
     val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()

@@ -1,32 +1,29 @@
-package com.example.tripplnr.navigationscreens.Home.adapter
+package com.example.tripplnr.navigationscreens.favorateFragment.Adapter
 
+import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
-import com.example.tripplnr.navigationscreens.LiveDataVM.Live
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class TravelBlogAdapter(
-    var list: MutableList<travelBlogItem>,
+class FavorateFragmentAdapter(
     var onItemClick1: onItemClick? = null,
-    var favorateList: MutableLiveData<MutableList<travelBlogItem>>,
-    private val lifecycleOwner: LifecycleOwner,
+    var favorateList:  MutableList<travelBlogItem>?=null,
+    val context: Context
+):RecyclerView.Adapter<FavorateFragmentAdapter.InnerClass>() {
 
-):RecyclerView.Adapter<TravelBlogAdapter.InnerClass>() {
-
-    val currentList = favorateList.value?.toMutableList() ?: mutableListOf()
-
+//    var livedataFavo = favorateList.value?.toMutableList() ?: mutableListOf()
 
 
 
@@ -36,59 +33,32 @@ class TravelBlogAdapter(
     }
 
     override fun getItemCount(): Int {
-        return list.size
+        var size = favorateList?.size
+       return size!!
     }
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
-        var itemposition = list[position]
 
-        val currentblog = travelBlogItem(itemposition.exploreImg,itemposition.placetextuser,itemposition.dateText,itemposition.viewedTime,itemposition.aboutText)
-//for (i in list){
-//    if (list[i].isfavorate == true){
-//        Log.e("condcheck", "onBindViewHolder: $position", )
-//    }
-//}
-       val mList = list.filter { it.isfavorate==true }
+        var itemposition = favorateList?.get(position)
 
-        Log.e("condcheck", "onBindViewHolder: ${mList}", )
-
-
-
-
-
-
-//        if () {
-//
-//            holder.favorateBtn.setImageResource(R.drawable.favo_ic)
-//            ml.add(currentblog)
-//        }
-//                else  {
-//                    Log.e("test3232", "else branch when : ${itemposition.isfavorate}", )
-//                }
-
-
-        Live.data.postValue(mList as MutableList<travelBlogItem>)
-        Log.e("mldata", "onBindViewHolder: ml :${Live.data1}", )
         holder.itemView.setOnClickListener {
             onItemClick1?.onclickItem(position)
         }
 
         GlobalScope.launch {
-            holder.bind(list)
+            favorateList.let {
+                if (it != null) {
+                    holder.bind(it)
+                }
+            }
             holder.favorateCardBtn.setOnClickListener {
                 onItemClick1?.onfavoratebtnClicks(position)
             }
             var sizeless:Boolean = true    //true    already setted!!
                 // false
 
-
             holder.apply {
-
-                onItemClick1?.addifFAv(itemposition,favorateBtn,currentblog,position,list)
-
-
-
 
                 var TAG="favorate"
                 showMoretxt.setOnClickListener {
@@ -110,29 +80,36 @@ class TravelBlogAdapter(
                     onItemClick1?.showtext(position)
 
                 }
+                favorateBtn.setImageResource(R.drawable.favo_ic)
+                        favorateBtn?.setOnClickListener {
 
-                favorateBtn.setOnClickListener {
-
-                            if (itemposition.isfavorate == true){
-                                favorateBtn.setImageResource(R.drawable.fav_empty_ic)
-                                Log.e(TAG, "onBindViewHolder: true call", )
-                                currentList.remove(currentblog)
-                                itemposition.isfavorate = false
-
-                            }
-                            else{
-                                favorateBtn.setImageResource(R.drawable.favo_ic)
-                                currentList.add(currentblog)
-                                itemposition.isfavorate =true
-                                Log.e(TAG, "onBindViewHolder: false call", )
-                            }
-
-                            favorateList.value = currentList
-                            Live.data1 = currentList
-
-//                            Log.e(TAG, "favorateList : ${favorateList.value} "   , )
+                            favorateList?.removeAt(position)
+                                onItemClick1?.dltBlog(position)
+//                            var currentblog = travelBlogItem(itemposition.exploreImg,itemposition.placetextuser,itemposition.dateText,itemposition.viewedTime,itemposition.aboutText)
+//                            if (itemposition.isfavorate == true){
+//                                favorateBtn.setImageResource(R.drawable.fav_empty_ic)
+//                                Log.e(TAG, "onBindViewHolder: true call", )
+//                                livedataFavo.remove(currentblog)
+//
+//                                itemposition.isfavorate = false
+//
+//                            }
+//                           else{
+//                                favorateBtn.setImageResource(R.drawable.favo_ic)
+//                                livedataFavo.add(currentblog)
+//                                itemposition.isfavorate =true
+//                                Log.e(TAG, "onBindViewHolder: false call", )
+//                            }
+//
+//
+//                            favorateList.value = livedataFavo
+//
+//                            Log.e(TAG, "favorateList : ${livedataFavo} "   , )
 //                            Log.e(TAG, " position : $itemposition,  :${itemposition.isfavorate}", )
 //                            Log.e(TAG, "----------------------------------------------------------------------------------------------------", )
+
+
+
                         }
             }
         }
@@ -162,7 +139,10 @@ class TravelBlogAdapter(
             dateText.setText(item.dateText)
             viewedTime.setText(item.viewedTime)
             aboutText.setText(item.aboutText)
+
+
         }
+
 
 
 
@@ -171,12 +151,6 @@ class TravelBlogAdapter(
         fun onclickItem(position: Int)
         fun onfavoratebtnClicks(position: Int)
         fun showtext(position: Int)
-        fun addifFAv(
-            itemposition: travelBlogItem,
-            favorateBtn: ImageView,
-            currentblog: travelBlogItem,
-            position: Int,
-            list: MutableList<travelBlogItem>
-        )
+        fun dltBlog(position: Int?)
     }
 }

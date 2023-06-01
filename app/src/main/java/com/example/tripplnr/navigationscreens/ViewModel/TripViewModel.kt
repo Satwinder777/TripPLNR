@@ -86,12 +86,12 @@ class MyViewModel(private val repository: TripRepository) : ViewModel() {
     // Method to fetch and update the list of items
 
     fun datahandle(){
-        var list  = mutableListOf<travelBlogItem>(travelBlogItem(R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",R.string.testLine.toString()),
+        var list  = mutableListOf<travelBlogItem>(travelBlogItem(R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",R.string.testLine.toString(), isfavorate = true),
 
-            travelBlogItem(R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",R.string.testLine.toString()),
-            travelBlogItem(R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",R.string.testLine.toString()),
-            travelBlogItem(R.drawable.explore2,"the love city","12 may 23 ","12.32s",R.string.testLine.toString()),
-            travelBlogItem(R.drawable.exploreimg,"the Punjaab","12 may 23 ","59.32s",R.string.testLine.toString()),
+            travelBlogItem(R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",R.string.testLine.toString(), isfavorate = false),
+            travelBlogItem(R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",R.string.testLine.toString(), isfavorate = true),
+            travelBlogItem(R.drawable.explore2,"the love city","12 may 23 ","12.32s",R.string.testLine.toString(), isfavorate = false),
+            travelBlogItem(R.drawable.exploreimg,"the Punjaab","12 may 23 ","59.32s",R.string.testLine.toString(), isfavorate = true),
 
             )
         itemList.value = list
@@ -132,7 +132,9 @@ class MyViewModel(private val repository: TripRepository) : ViewModel() {
         return rc2
     }
 
+    fun updateData() {
 
+    }
 
 }
 

@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
@@ -20,9 +21,9 @@ class BlogsFragment : Fragment() {
     private lateinit var binding: FragmentBlogsBinding
     private lateinit var rc: RecyclerView
     private lateinit var adapter: TravelBlogAdapter
-    var favorateList = mutableListOf<travelBlogItem>()
+    var favorateList = MutableLiveData<MutableList<travelBlogItem>>()
 
-
+    var livedataFavo = favorateList.value?.toMutableList() ?: mutableListOf()
 
 
     override fun onCreateView(
@@ -41,7 +42,7 @@ class BlogsFragment : Fragment() {
 
         rc = binding.blogRecyclerView
         rc.layoutManager = LinearLayoutManager(requireContext())
-        adapter = TravelBlogAdapter(datahandle(), null, favorateList)
+        adapter = TravelBlogAdapter(datahandle(), null, favorateList,this)
         rc.adapter = adapter
 
 
@@ -60,7 +61,6 @@ class BlogsFragment : Fragment() {
                 return false
             }
         })
-
 
 
 
@@ -89,7 +89,7 @@ class BlogsFragment : Fragment() {
         // running a for loop to compare elements.
         for (item in list11) {
             // checking if the entered string matched with any item of our recycler view.
-            if (item.placetextuser.toLowerCase().contains(text.toLowerCase())) {
+            if (item.placetextuser?.toLowerCase()?.contains(text.toLowerCase()) == true) {
                 // if the item is matched we are
                 // adding it to our filtered list.
                 filteredlist.add(item)

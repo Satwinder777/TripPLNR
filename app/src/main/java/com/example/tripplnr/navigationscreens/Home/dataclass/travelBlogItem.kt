@@ -1,8 +1,8 @@
 package com.example.tripplnr.navigationscreens.Home.dataclass
 
 data class travelBlogItem(
-    var exploreImg:Int,
-    var placetextuser:String,
+    var exploreImg:Int? =null,
+    var placetextuser:String? =null,
     var dateText: String? =null,
     var viewedTime:String? =null,
     var aboutText:String? =null,

@@ -9,18 +9,33 @@
         android:id="@+id/homeFragment"
         android:name="com.example.tripplnr.navigationscreens.Home.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_favorateFragment"
+            app:destination="@id/favorateFragment" />
+    </fragment>
     <fragment
         android:id="@+id/searchFragment"
         android:name="com.example.tripplnr.navigationscreens.Search.SearchFragment"
         android:label="fragment_search"
-        tools:layout="@layout/fragment_search" />
+        tools:layout="@layout/fragment_search" >
+        <action
+            android:id="@+id/action_searchFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
     <fragment
         android:id="@+id/favorateFragment"
         android:name="com.example.tripplnr.navigationscreens.favorateFragment.FavorateFragment"
         android:label="fragment_favorate"
         tools:layout="@layout/fragment_favorate"
-        />
+        >
+        <action
+            android:id="@+id/action_favorateFragment_to_homeFragment"
+            app:destination="@id/homeFragment" />
+    </fragment>
 
 <!--    <fragment-->
 <!--        android:id="@+id/blogsFragment"-->

@@ -8,8 +8,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -21,9 +24,11 @@ import com.example.tripplnr.navigationscreens.Home.adapter.HotelRecyclerViewAdap
 import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
 import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
+import com.example.tripplnr.navigationscreens.LiveDataVM.Live
 import com.example.tripplnr.navigationscreens.Repository.TripRepository
 import com.example.tripplnr.navigationscreens.ViewModel.MyViewModel
 import com.example.tripplnr.navigationscreens.ViewModel.ViewModelFactory
+import com.example.tripplnr.navigationscreens.favorateFragment.ViewModel.FavorateViewModel
 
 
 import com.google.android.material.chip.Chip
@@ -39,8 +44,8 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
     private lateinit var popularHotelRc :RecyclerView
     private lateinit var adapter :TravelBlogAdapter
 
-    var favorateList = mutableListOf<travelBlogItem>()
-
+    var favorateList = MutableLiveData<MutableList<travelBlogItem>>()
+    private val viewModelFavorate by viewModels<FavorateViewModel>()
 
 
 
@@ -48,7 +53,8 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 //    private val viewModel: MyViewModel by viewModels()
 //    val viewModelFactory = MyViewModelFactory(myParameter)
 //    viewModel = ViewModelProvider(this, viewModelFactory).get(MyViewModel::class.java)
-    val viewmodelfactory = ViewModelFactory(TripRepository(Massage("satwinderSherGillk")))
+    val viewmodelfactory = ViewModelFactory(TripRepository(Massage("satwinderSherGillk")),null)
+    val favorateFactory = ViewModelFactory(null,favorateList)
 
 
 
@@ -60,6 +66,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
     ): View? {
         // Inflate the layout for this fragment
         binding  = FragmentHomeBinding.inflate(layoutInflater)
+        Log.e("testqwer", "  test oncreate ", )
 
         return binding.root
     }
@@ -71,9 +78,11 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         super.onViewCreated(view, savedInstanceState)
         rcTravelBlog = binding.rcTravelBlog
         popularHotelRc = binding.popularHotelRc
+        Log.e("testqwer", "  onViewCreated  ", )
 
-//            adapter =  TravelBlogAdapter(datahandle(),this)
-//            rcTravelBlog.adapter = adapter
+
+        val finalviewmodel = ViewModelProvider(this,favorateFactory).get(FavorateViewModel::class.java)
+
 
         GlobalScope.launch {
 //            val adapter = HotelRecyclerViewAdapter(hotelData())
@@ -88,8 +97,8 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 //            chipDrawable?.setSpotShadowColor(outlineSpotShadowColor)
 //            chipDrawable?.setShadowColor(outlineSpotShadowColor)
 //            chip.outlineSpotShadowColor = outlineSpotShadowColor
-        chip.elevation = 90f
-        chip.setShadowLayer(10f,0f,50f,outlineSpotShadowColor)
+        chip.elevation = 900f
+        chip.setShadowLayer(0f,10f,50f,outlineSpotShadowColor)
         chip.outlineSpotShadowColor = outlineSpotShadowColor
         binding.viewHotelCard.setOnClickListener {
             findNavController().navigate(R.id.searchFragment )
@@ -106,7 +115,8 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
                 viewmodel.datahandle()
 
                     viewmodel.getItemList().observe(viewLifecycleOwner, Observer { items ->
-                        var adapter = TravelBlogAdapter(items,this,favorateList)
+                        var adapter = TravelBlogAdapter(items,this,favorateList,this)
+
 
                         rcTravelBlog.adapter = adapter
                         adapter.notifyDataSetChanged()
@@ -144,6 +154,9 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
 
 
+//        favorateList.observe(viewLifecycleOwner, Observer {
+//            Log.e("loveData", "dataFavorate : $it", )
+//        })
 
 
     }
@@ -224,6 +237,26 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
     override fun showtext(position: Int) {
 
     }
+
+    override fun addifFAv(
+        itemposition: travelBlogItem,
+        favorateBtn: ImageView,
+        currentblog: travelBlogItem,
+        position: Int,
+        list: MutableList<travelBlogItem>
+    ) {
+        if (list[position].isfavorate == true){
+            favorateBtn.setImageResource(R.drawable.favo_ic)
+            Live.data1?.add(currentblog)
+
+        }
+        else{
+            favorateBtn.setImageResource(R.drawable.fav_empty_ic)
+
+//                    currentList.add(currentblog)
+
+        }
+    }
 //
 //    @SuppressLint("NotifyDataSetChanged")
 //    override fun showtext(position: Int) {
@@ -231,4 +264,21 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 //    }
 
 
+    private fun showFavBlog(items: MutableList<travelBlogItem>?){
+
+//        if (items != null) {
+//            for (i in items){
+//
+//                if (items.contains(travelBlogItem(isfavorate = true)) == true){
+//                    items[0].isfavorate
+//                    var isFav = view?.findViewById<ImageView>(R.id.addtoFavorateIV)
+//
+//                }
+//            }
+//
+//        }
+    }
+//    private fun myfun(itemposition: travelBlogItem,favorateBtn: ImageView,item: travelBlogItem){
+//
+//    }
 }
