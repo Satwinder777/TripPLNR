@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
@@ -19,41 +18,46 @@ import kotlinx.coroutines.launch
 
 class FavorateFragmentAdapter(
     var onItemClick1: onItemClick? = null,
-    var favorateList:  MutableList<travelBlogItem>?=null,
-    val context: Context
-):RecyclerView.Adapter<FavorateFragmentAdapter.InnerClass>() {
 
-//    var livedataFavo = favorateList.value?.toMutableList() ?: mutableListOf()
+    val context: Context,
+    var favorateList1: MutableLiveData<MutableList<travelBlogItem>>,
+
+    ):RecyclerView.Adapter<FavorateFragmentAdapter.InnerClass>() {
+
+//    var livedataFavo = favorateList?.value?.toMutableList() ?: mutableListOf()
+//    var filter = favorateList?.value?.filter { it.isfavorate ==true }
 
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InnerClass {
-        var view = LayoutInflater.from(parent.context).inflate(R.layout.homerc_item,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.homerc_item,parent,false)
         return InnerClass(view)
     }
 
     override fun getItemCount(): Int {
-        var size = favorateList?.size
-       return size!!
+      return favorateList1.value?.size ?:0
     }
+
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
 
-        var itemposition = favorateList?.get(position)
+//        var itemposition = favorateList?.get(position)
+        Log.e("datacheckkkkkk", "onCreateViewHolder: $$favorateList1", )
+
+        var itemposition = favorateList1.value?.get(position)
+
 
         holder.itemView.setOnClickListener {
             onItemClick1?.onclickItem(position)
         }
 
         GlobalScope.launch {
-            favorateList.let {
-                if (it != null) {
-                    holder.bind(it)
-                }
-            }
+
+                holder.bind(favorateList1)
+
             holder.favorateCardBtn.setOnClickListener {
-                onItemClick1?.onfavoratebtnClicks(position)
+//                onItemClick1?.onfavoratebtnClicks(position)
             }
             var sizeless:Boolean = true    //true    already setted!!
                 // false
@@ -82,33 +86,7 @@ class FavorateFragmentAdapter(
                 }
                 favorateBtn.setImageResource(R.drawable.favo_ic)
                         favorateBtn?.setOnClickListener {
-
-                            favorateList?.removeAt(position)
-                                onItemClick1?.dltBlog(position)
-//                            var currentblog = travelBlogItem(itemposition.exploreImg,itemposition.placetextuser,itemposition.dateText,itemposition.viewedTime,itemposition.aboutText)
-//                            if (itemposition.isfavorate == true){
-//                                favorateBtn.setImageResource(R.drawable.fav_empty_ic)
-//                                Log.e(TAG, "onBindViewHolder: true call", )
-//                                livedataFavo.remove(currentblog)
-//
-//                                itemposition.isfavorate = false
-//
-//                            }
-//                           else{
-//                                favorateBtn.setImageResource(R.drawable.favo_ic)
-//                                livedataFavo.add(currentblog)
-//                                itemposition.isfavorate =true
-//                                Log.e(TAG, "onBindViewHolder: false call", )
-//                            }
-//
-//
-//                            favorateList.value = livedataFavo
-//
-//                            Log.e(TAG, "favorateList : ${livedataFavo} "   , )
-//                            Log.e(TAG, " position : $itemposition,  :${itemposition.isfavorate}", )
-//                            Log.e(TAG, "----------------------------------------------------------------------------------------------------", )
-
-
+                                onItemClick1?.dltBlog(position,itemposition)
 
                         }
             }
@@ -131,19 +109,21 @@ class FavorateFragmentAdapter(
 
       //  var learnmoretxt = view.findViewById<TextView>(R.id.learnmoretxt)
 
-       suspend fun bind (list: List<travelBlogItem>){
-            var item = list[position]
+       suspend fun bind (list: MutableLiveData<MutableList<travelBlogItem>>) {
+           val item = list.value!!.get(position)
 
-           item.exploreImg?.let { exploreImg.setImageResource(it) }
-            placetextuser.setText(item.placetextuser)
-            dateText.setText(item.dateText)
-            viewedTime.setText(item.viewedTime)
-            aboutText.setText(item.aboutText)
+                if (list.value?.get(position)?.isfavorate==true){
+                    item.exploreImg?.let { exploreImg.setImageResource(it) }
+                    placetextuser.setText(item.placetextuser)
+                    dateText.setText(item.dateText)
+                    viewedTime.setText(item.viewedTime)
+                    aboutText.setText(item.aboutText)
+                }
 
 
-        }
 
 
+       }
 
 
     }
@@ -151,6 +131,6 @@ class FavorateFragmentAdapter(
         fun onclickItem(position: Int)
         fun onfavoratebtnClicks(position: Int)
         fun showtext(position: Int)
-        fun dltBlog(position: Int?)
+        fun dltBlog(position: Int?, itemposition: travelBlogItem?)
     }
 }

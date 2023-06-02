@@ -1,6 +1,5 @@
 package com.example.tripplnr.navigationscreens.Home.adapter
 
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,7 +7,6 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
 import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
@@ -20,14 +18,10 @@ import kotlinx.coroutines.launch
 class TravelBlogAdapter(
     var list: MutableList<travelBlogItem>,
     var onItemClick1: onItemClick? = null,
-    var favorateList: MutableLiveData<MutableList<travelBlogItem>>,
+    var favorateList: MutableList<travelBlogItem>,
     private val lifecycleOwner: LifecycleOwner,
 
-):RecyclerView.Adapter<TravelBlogAdapter.InnerClass>() {
-
-    val currentList = favorateList.value?.toMutableList() ?: mutableListOf()
-
-
+    ):RecyclerView.Adapter<TravelBlogAdapter.InnerClass>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): InnerClass {
@@ -44,32 +38,10 @@ class TravelBlogAdapter(
         var itemposition = list[position]
 
         val currentblog = travelBlogItem(itemposition.exploreImg,itemposition.placetextuser,itemposition.dateText,itemposition.viewedTime,itemposition.aboutText)
-//for (i in list){
-//    if (list[i].isfavorate == true){
-//        Log.e("condcheck", "onBindViewHolder: $position", )
-//    }
-//}
+
        val mList = list.filter { it.isfavorate==true }
 
-        Log.e("condcheck", "onBindViewHolder: ${mList}", )
-
-
-
-
-
-
-//        if () {
-//
-//            holder.favorateBtn.setImageResource(R.drawable.favo_ic)
-//            ml.add(currentblog)
-//        }
-//                else  {
-//                    Log.e("test3232", "else branch when : ${itemposition.isfavorate}", )
-//                }
-
-
         Live.data.postValue(mList as MutableList<travelBlogItem>)
-        Log.e("mldata", "onBindViewHolder: ml :${Live.data1}", )
         holder.itemView.setOnClickListener {
             onItemClick1?.onclickItem(position)
         }
@@ -80,17 +52,15 @@ class TravelBlogAdapter(
                 onItemClick1?.onfavoratebtnClicks(position)
             }
             var sizeless:Boolean = true    //true    already setted!!
-                // false
 
 
             holder.apply {
 
-                onItemClick1?.addifFAv(itemposition,favorateBtn,currentblog,position,list)
 
 
 
 
-                var TAG="favorate"
+
                 showMoretxt.setOnClickListener {
 
                     if(sizeless==true){
@@ -107,28 +77,32 @@ class TravelBlogAdapter(
                         sizeless = true
                     }
 
-                    onItemClick1?.showtext(position)
+//                    onItemClick1?.showtext(position)
 
                 }
 
                 favorateBtn.setOnClickListener {
 
+
                             if (itemposition.isfavorate == true){
                                 favorateBtn.setImageResource(R.drawable.fav_empty_ic)
-                                Log.e(TAG, "onBindViewHolder: true call", )
-                                currentList.remove(currentblog)
+                                onItemClick1?.addOrDlt(true,position,favorateBtn,itemposition)
                                 itemposition.isfavorate = false
+//                                onItemClick1?.removeblogfromfavo(true,itemposition)
+
+
 
                             }
                             else{
                                 favorateBtn.setImageResource(R.drawable.favo_ic)
-                                currentList.add(currentblog)
+//                                favorateList.add(currentblog)
+                                onItemClick1?.addOrDlt(false, position, favorateBtn, itemposition)
                                 itemposition.isfavorate =true
-                                Log.e(TAG, "onBindViewHolder: false call", )
+//                                onItemClick1?.addblogtofavorate(false,itemposition)
                             }
 
-                            favorateList.value = currentList
-                            Live.data1 = currentList
+//                            favorateList.value = currentList
+//                            Live.data1 = currentList
 
 //                            Log.e(TAG, "favorateList : ${favorateList.value} "   , )
 //                            Log.e(TAG, " position : $itemposition,  :${itemposition.isfavorate}", )
@@ -157,6 +131,11 @@ class TravelBlogAdapter(
        suspend fun bind (list: List<travelBlogItem>){
             var item = list[position]
 
+           if (item.isfavorate==true){
+               favorateBtn.setImageResource(R.drawable.favo_ic)
+           }else{
+               favorateBtn.setImageResource(R.drawable.fav_empty_ic)
+           }
            item.exploreImg?.let { exploreImg.setImageResource(it) }
             placetextuser.setText(item.placetextuser)
             dateText.setText(item.dateText)
@@ -170,13 +149,22 @@ class TravelBlogAdapter(
     interface onItemClick{
         fun onclickItem(position: Int)
         fun onfavoratebtnClicks(position: Int)
-        fun showtext(position: Int)
-        fun addifFAv(
-            itemposition: travelBlogItem,
-            favorateBtn: ImageView,
-            currentblog: travelBlogItem,
+
+        fun addOrDlt(
+            like: Boolean,
             position: Int,
-            list: MutableList<travelBlogItem>
+            favorateBtn: ImageView,
+            itemposition: travelBlogItem
         )
+       fun  addifFAv(
+        itemposition: travelBlogItem,
+        favorateBtn: ImageView,
+        currentblog: travelBlogItem,
+        position: Int,
+        list: MutableList<travelBlogItem>
+        )
+       fun addblogtofavorate( blogItem: travelBlogItem)
+        fun removeblogfromfavo(blogItem1: Boolean, blogItem: travelBlogItem)
+
     }
 }

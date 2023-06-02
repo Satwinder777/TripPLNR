@@ -14,25 +14,15 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentFavorateBinding
 import com.example.tripplnr.navigationscreens.Account.activity.CreateUserActivity
-import com.example.tripplnr.navigationscreens.Home.HomeFragment
-import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
-import com.example.tripplnr.navigationscreens.LiveDataVM.Live
-import com.example.tripplnr.navigationscreens.ViewModel.ViewModelFactory
+import com.example.tripplnr.navigationscreens.ViewModel.HomeViewModel
 import com.example.tripplnr.navigationscreens.favorateFragment.Adapter.FavorateFragmentAdapter
-import com.example.tripplnr.navigationscreens.favorateFragment.ViewModel.FavorateViewModel
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 
 class FavorateFragment : Fragment(), FavorateFragmentAdapter.onItemClick {
@@ -40,10 +30,10 @@ class FavorateFragment : Fragment(), FavorateFragmentAdapter.onItemClick {
     private lateinit var rc: RecyclerView
     var TAG = "test23"
     private val LOCATION_PERMISSION_REQUEST_CODE = 100
-      var viewModelFavorate = viewModels<FavorateViewModel>()
-    val myRepository = HomeFragment().favorateList // Provide your repository instance
-    val viewModelpr = ViewModelFactory(null,myRepository)
-    private lateinit var adapter : FavorateFragmentAdapter
+    lateinit var homeViewModel: HomeViewModel
+//    val myRepository = HomeFragment().favorateList // Provide your repository instance
+
+    private lateinit var adapter: FavorateFragmentAdapter
 //    val viewModelpr = ViewModelProvider(this, viewModelFactory)
 
     override fun onCreateView(
@@ -51,7 +41,7 @@ class FavorateFragment : Fragment(), FavorateFragmentAdapter.onItemClick {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        val finalviewmodel = ViewModelProvider(this,viewModelpr).get(FavorateViewModel::class.java)
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         binding = FragmentFavorateBinding.inflate(layoutInflater)
 
@@ -61,18 +51,31 @@ class FavorateFragment : Fragment(), FavorateFragmentAdapter.onItemClick {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val finalviewmodel = ViewModelProvider(this,viewModelpr).get(FavorateViewModel::class.java)
+//        val finalviewmodel = ViewModelProvider(this,viewModelpr).get(FavorateViewModel::class.java)
 
-
+        homeViewModel = ViewModelProvider(this).get(HomeViewModel::class.java)
+        homeViewModel.initLiveData(viewLifecycleOwner)
 
 
         rc = binding.favorateRecyclerView
 
         rc.layoutManager = LinearLayoutManager(requireContext())
 
-        adapter =  FavorateFragmentAdapter( this, Live.data.value,requireContext())
-        Log.e(TAG, "onViewCreated: ${Live.data1}", )
+        adapter = FavorateFragmentAdapter(
+            this,
+            requireContext(),
+            homeViewModel.favoriteItems
+        )
+
+
+
         rc.adapter = adapter
+
+        homeViewModel.favoriteItems.value?.forEach { Log.e(TAG, "onViewCreated:  ${it.placetextuser}", ) }
+        Log.e(
+            "datacheckkkkkk",
+            "onCreateViewHolder: $${homeViewModel.favoriteItems.value?.size},  : "
+        )
 
         binding.backbtnFavorateFragment.setOnClickListener {
 //            childFragmentManager.popBackStack()
@@ -85,53 +88,7 @@ class FavorateFragment : Fragment(), FavorateFragmentAdapter.onItemClick {
         }
 
 
-
-
-
     }
-
-//    fun datahandle(): MutableList<travelBlogItem> {
-//        var list = mutableListOf<travelBlogItem>(
-//            travelBlogItem(
-//                R.drawable.explore2,
-//                "the Golden Temple",
-//                "12 may 23 ",
-//                "1.32s",
-//                getString(R.string.testLine)
-//            ),
-//
-//            travelBlogItem(
-//                R.drawable.exploreimg,
-//                "the Royal Temple",
-//                "12 may 23 ",
-//                "1.35s",
-//                getString(R.string.testLine)
-//            ),
-//            travelBlogItem(
-//                R.drawable.exploreimg,
-//                "the Swanrana mandhir ",
-//                "12 may 23 ",
-//                "1.11s",
-//                getString(R.string.testLine)
-//            ),
-//            travelBlogItem(
-//                R.drawable.explore2,
-//                "the love city",
-//                "12 may 23 ",
-//                "12.32s",
-//                R.string.testLine.toString()
-//            ),
-//            travelBlogItem(
-//                R.drawable.exploreimg,
-//                "the Punjaab",
-//                "12 may 23 ",
-//                "59.32s",
-//                R.string.testLine.toString()
-//            ),
-//
-//            )
-//        return list
-//    }
 
     override fun onclickItem(position: Int) {
 
@@ -147,51 +104,46 @@ class FavorateFragment : Fragment(), FavorateFragmentAdapter.onItemClick {
 
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    override fun dltBlog(position: Int?) {
+    override fun dltBlog(position: Int?, itemposition: travelBlogItem?) {
 
-        if (position != null) {
-            Live.data1?.removeAt(position)
-//            Live.data1.let { item->
-//                val currentItem = item?.get(position)
-//                currentItem?.isfavorate = false
-//            }
-            Live.data.observe(viewLifecycleOwner, Observer {
-                it[position].isfavorate = false
-            })
-            adapter.notifyItemRemoved(position)
+        when(position){
+            null->{
+                Log.e(TAG, "dltBlog: null", )
+            }
+            else-> {
+                homeViewModel.favoriteItems.value?.removeAt(position)
+
+                adapter.notifyItemRemoved(position)
+                adapter.notifyDataSetChanged()
+
+//              homeViewModel.favoriteItems.value?.forEach{
+//                   it->
+//                   if (itemposition==it){
+//                       it.isfavorate = false
+//                   }
+
+
+               }
+            }
         }
-
-
-        adapter.notifyDataSetChanged()
-        Log.e(TAG, "dltBlog: ${Live.data1}", )
-    }
-
-//override fun onDestroyView() {
-//    super.onDestroyView()
-//    val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
-//    bottomNavigationView.menu.getItem(2).isVisible = false
-//}
-
-
-//    override fun onclickItem(position: Int) {
-//       try{
 //
-//       }
-//       catch (e:Exception){
-//           Log.e(TAG, "onclickItem: ${e.message}", )
-//       }
-//    }
-//
-//    override fun onfavoratebtnClicks(position: Int) {
-////        Log.e(TAG, "onclickItem: testing2" )
-//
-//    }
 
-//    override fun showtext(position: Int) {
-////        Log.e(TAG, "onclickItem: testing3" )
-//
-//    }
+           
+//            val indexinhome = homeViewModel.favoriteItems.value!!.indexOf(travelBlogItem())
+//        Log.e(TAG, "dltBlog: $indexinhome", )
+//            if (homeViewModel.favoriteItems.value?.contains(itemposition) == true){
+//                homeViewModel.favoriteItems.value!![indexinhome].isfavorate = false
+//                itemposition?.isfavorate = false
+//            homeViewModel.favoriteItems.value!!.get(indexinhome).isfavorate = false
+////            }
+            
+//        }
+//        catch (e:ArrayIndexOutOfBoundsException){
+//            adapter.", )
+//        }
+
+
+
 
     @SuppressLint("MissingInflatedId", "InflateParams")
     private fun popupFavo(){

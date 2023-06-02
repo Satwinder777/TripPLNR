@@ -42,7 +42,7 @@ class BlogsFragment : Fragment() {
 
         rc = binding.blogRecyclerView
         rc.layoutManager = LinearLayoutManager(requireContext())
-        adapter = TravelBlogAdapter(datahandle(), null, favorateList,this)
+        adapter = TravelBlogAdapter(datahandle(), null, livedataFavo,this)
         rc.adapter = adapter
 
 
