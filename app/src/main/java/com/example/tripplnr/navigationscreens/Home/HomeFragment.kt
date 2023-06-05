@@ -26,6 +26,8 @@ import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
 import com.example.tripplnr.navigationscreens.LiveDataVM.Live
 import com.example.tripplnr.navigationscreens.ViewModel.HomeViewModel
 import com.example.tripplnr.navigationscreens.favorateFragment.ViewModel.FavorateViewModel
+import com.example.tripplnr.navigationscreens.objectfun.Allfun
+import com.example.tripplnr.navigationscreens.objectfun.mLive
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 
@@ -37,7 +39,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
     private lateinit var viewmodelhome: HomeViewModel
 
 
-    private val viewModelFavorate by viewModels<FavorateViewModel>()
+//    private val viewModelFavorate by viewModels<FavorateViewModel>()
 
 
 //    private var viewModel : MyViewModel by viewModels()
@@ -59,6 +61,9 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         return binding.root
     }
 
+
+
+
     @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation")
     @RequiresApi(Build.VERSION_CODES.P)
 
@@ -68,7 +73,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         popularHotelRc = binding.popularHotelRc
 
         viewmodelhome = ViewModelProvider(this).get(HomeViewModel::class.java)
-        viewmodelhome.initLiveData(viewLifecycleOwner)
+//        viewmodelhome.initData()
 
         val chip: Chip = binding.viewHotelCard as Chip
 
@@ -87,27 +92,36 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
         }
 
-            viewmodelhome.favoriteItems.observe(viewLifecycleOwner, Observer { items ->
-                val adapter = TravelBlogAdapter(items, this,
-                    items , this)
+//            viewmodelhome.favoriteItems.observe(viewLifecycleOwner, Observer { items ->
+//                val adapter = TravelBlogAdapter(items, this,
+//                    items , this)
+//
+//
+
+//            })
+
+        var mt = listOf<travelBlogItem>()
+
+        mt = mLive.data.value!!
+//        mt = viewmodelhome.itemList.value!!
+
+//       mt = viewmodelhome.itemList.value!!
+       adapter = TravelBlogAdapter(
+                          mt,
+           this,
+                     )
+        rcTravelBlog.adapter = adapter
+        adapter.notifyDataSetChanged()
+//        Log.e("testdata12", "onViewCreated: ${viewmodelhome.itemList  },${viewmodelhome.itemList.value}", )
 
 
-                rcTravelBlog.adapter = adapter
-                adapter.notifyDataSetChanged()
-            })
 
-
-
-
-
+//        viewmodelhome.hotelData()
         viewmodelhome.hotelData()
-        viewmodelhome.rc2List().observe(viewLifecycleOwner, Observer { items ->
-            val adapter = HotelRecyclerViewAdapter(items)
-            popularHotelRc.adapter = adapter
-            adapter.notifyDataSetChanged()
-
-
-        })
+       var datarc2 =  viewmodelhome.rc2.value
+        val adapter = HotelRecyclerViewAdapter(datarc2!!)
+        popularHotelRc.adapter = adapter
+        adapter.notifyDataSetChanged()
 
     }
 
@@ -146,32 +160,15 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         favorateBtn: ImageView,
         blog: travelBlogItem
     ) {
-        if (like == true) {
-            Live.data1?.remove(blog)
-        } else {
-            Live.data1?.add(blog)
-        }
-    }
-
-
-    override fun addifFAv(
-        itemposition: travelBlogItem,
-        favorateBtn: ImageView,
-        currentblog: travelBlogItem,
-        position: Int,
-        list: MutableList<travelBlogItem>
-    ) {
+//        if (like == true) {
+//            Live.data1?.remove()
 
     }
 
-    override fun addblogtofavorate( blogItem: travelBlogItem) {
-        viewmodelhome.favoriteItems.value?.add(blogItem)
-    }
 
-    override fun removeblogfromfavo(blogItem1: Boolean, blogItem: travelBlogItem) {
-        Live.data1?.add(blogItem)
-        viewmodelhome.favoriteItems.value?.remove(blogItem)
-    }
+
+
+
 
 }
 

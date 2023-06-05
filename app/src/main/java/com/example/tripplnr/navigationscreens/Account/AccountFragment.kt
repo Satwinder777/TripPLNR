@@ -41,7 +41,7 @@ class AccountFragment : Fragment() {
 //    private var user = Firebase.auth.currentUser
         var auth = Firebase.auth
 
-
+    val user = FirebaseAuth.getInstance().currentUser
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -49,6 +49,7 @@ class AccountFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentAccountBinding.inflate(layoutInflater)
+        Toast.makeText(requireContext(), "${user?.displayName}", Toast.LENGTH_SHORT).show()
         return binding.root
 
 
@@ -69,8 +70,8 @@ class AccountFragment : Fragment() {
 
             var pop = PopupWindow(
                 view,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.MATCH_PARENT,
                 true
             )
 
@@ -104,6 +105,7 @@ class AccountFragment : Fragment() {
                         if (task.isSuccessful) {
                             // Sign in success, update UI with the signed-in user's information
                             Log.d(TAG, "createUserWithEmail:success")
+                            Toast.makeText(requireContext(), "welcome ${auth.currentUser?.displayName}", Toast.LENGTH_SHORT).show()
                             Toast.makeText(requireContext(), "successfully logged", Toast.LENGTH_SHORT).show()
                              var user = auth.currentUser?.displayName
                             if (user != null) {

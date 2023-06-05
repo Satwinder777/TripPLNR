@@ -10,12 +10,14 @@ import android.view.ViewGroup
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentBlogsBinding
 import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
+import com.example.tripplnr.navigationscreens.ViewModel.HomeViewModel
 
 class BlogsFragment : Fragment() {
     private lateinit var binding: FragmentBlogsBinding
@@ -23,7 +25,9 @@ class BlogsFragment : Fragment() {
     private lateinit var adapter: TravelBlogAdapter
     var favorateList = MutableLiveData<MutableList<travelBlogItem>>()
 
-    var livedataFavo = favorateList.value?.toMutableList() ?: mutableListOf()
+//    var livedataFavo = favorateList.value?.toMutableList() ?: mutableListOf()
+//    private lateinit var viewModel: HomeViewModel
+
 
 
     override fun onCreateView(
@@ -33,6 +37,7 @@ class BlogsFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentBlogsBinding.inflate(layoutInflater)
 //        view.findViewById<>()
+//        viewModel= ViewModelProvider(this).get(HomeViewModel::class.java)
         return binding.root
     }
 
@@ -40,9 +45,11 @@ class BlogsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        findNavController().navigate(R.id.blogsFragment)
 
+//        var mt = listOf<travelBlogItem>()
         rc = binding.blogRecyclerView
         rc.layoutManager = LinearLayoutManager(requireContext())
-        adapter = TravelBlogAdapter(datahandle(), null, livedataFavo,this)
+//        mt = viewModel.itemList.value!!
+        adapter = TravelBlogAdapter(datahandle(), null )
         rc.adapter = adapter
 
 

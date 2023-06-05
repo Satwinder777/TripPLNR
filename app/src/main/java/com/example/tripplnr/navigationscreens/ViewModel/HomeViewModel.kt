@@ -15,11 +15,26 @@ class HomeViewModel : ViewModel() {
     interface MyRepository {
         fun getData(): MutableList<travelBlogItem>
     }
-    private val rc2: MutableLiveData<MutableList<hotelTitle>> = MutableLiveData()
+   val rc2: MutableLiveData<MutableList<hotelTitle>> = MutableLiveData()
 
 
-    private val itemList: MutableLiveData<MutableList<travelBlogItem>> = MutableLiveData( )
-    val favoriteItems: MutableLiveData<MutableList<travelBlogItem>> = itemList
+     val itemList: MutableLiveData<MutableList<travelBlogItem>> = MutableLiveData( )
+
+//    fun setNotfav(item: travelBlogItem){
+//        itemList.value?.forEach {
+//            if (it == item){
+//                it.isfavorate = false
+//            }
+//        }
+//    }
+//    fun setfav(item: travelBlogItem){
+//        itemList.value?.forEach {
+//            if (it == item){
+//                it.isfavorate = true
+//            }
+//        }
+//    }
+
 
 
     // seePreviewTemplate
@@ -33,12 +48,7 @@ class HomeViewModel : ViewModel() {
 
 
 
-    fun initLiveData(lifecycleOwner: LifecycleOwner){
-      val data = data11()
-        itemList.value = data
-        lifecycleowner =lifecycleOwner
 
-    }
 
 
 
@@ -64,7 +74,9 @@ class HomeViewModel : ViewModel() {
     fun rc2List(): MutableLiveData<MutableList<hotelTitle>> {
         return rc2
     }
-
+fun initData(){
+    itemList.value = data11()
+}
      fun data11(): MutableList<travelBlogItem> {
         val  list  = mutableListOf<travelBlogItem>(
             travelBlogItem(
@@ -99,15 +111,15 @@ class HomeViewModel : ViewModel() {
 
     fun removeItemFromFavorites(item: travelBlogItem, position: Int?) {
         val favorites = itemList.value ?: return
-        if (favoriteItems.value?.contains(item) == true){
-
-            val index=favoriteItems.value!!.indexOf(item)
-            favorites[index].isfavorate = false
-
-        }
-        else{
-            Log.e("test34", "removeItemFromFavorites: ${itemList.value}   esle", )
-        }
+//        if (favoriteItems.value?.contains(item) == true){
+//
+//            val index=favoriteItems.value!!.indexOf(item)
+//            favorites[index].isfavorate = false
+//
+//        }
+//        else{
+//            Log.e("test34", "removeItemFromFavorites: ${itemList.value}   esle", )
+//        }
         itemList.value = favorites
         Log.e("test34", "removeItemFromFavorites: ${itemList.value}", )
     }

@@ -12,6 +12,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
 import com.example.tripplnr.navigationscreens.LiveDataVM.Live
+import com.example.tripplnr.navigationscreens.favorateFragment.Adapter.FavorateFragmentAdapter
 import com.google.android.gms.tasks.Task
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.AuthResult
@@ -156,4 +157,61 @@ object Allfun {
 object FirebaseUtils {
     val firebaseAuth: FirebaseAuth = FirebaseAuth.getInstance()
     val firebaseUser: FirebaseUser? = firebaseAuth.currentUser
+}
+object mLive{
+    var data = MutableLiveData<List<travelBlogItem>>()
+
+    init {
+        initlizeData()
+    }
+    fun initlizeData(){
+        data.value = dataformLive()
+    }
+
+    fun addtofavorate(item: travelBlogItem) {
+        data.value?.forEach {
+            if (it == item) {
+                it.isfavorate = true
+            }
+        }
+    }
+
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun removefromfavorate(item: travelBlogItem) {
+        data.value?.forEach {
+            if (it == item) {
+
+                it.isfavorate = false
+
+//                adapter.notifyDataSetChanged()
+            }
+
+
+        }
+
+    }
+
+    fun dataformLive():List<travelBlogItem>{
+        val  list  = listOf<travelBlogItem>(
+            travelBlogItem(
+                R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",
+                R.string.testLine.toString(), isfavorate = true),
+
+            travelBlogItem(
+                R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",
+                R.string.testLine.toString(), isfavorate = false),
+            travelBlogItem(
+                R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",
+                R.string.testLine.toString(), isfavorate = true),
+            travelBlogItem(
+                R.drawable.explore2,"the love city","12 may 23 ","12.32s",
+                R.string.testLine.toString(), isfavorate = false),
+            travelBlogItem(
+                R.drawable.exploreimg,"the Punjaab","12 may 23 ","59.32s",
+                R.string.testLine.toString(), isfavorate = true),
+
+            )
+        return list
+    }
 }

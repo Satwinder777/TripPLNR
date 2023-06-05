@@ -1,5 +1,6 @@
 package com.example.tripplnr.navigationscreens.favorateFragment.Adapter
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,7 +9,6 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
@@ -20,12 +20,14 @@ class FavorateFragmentAdapter(
     var onItemClick1: onItemClick? = null,
 
     val context: Context,
-    var favorateList1: MutableLiveData<MutableList<travelBlogItem>>,
+    var favorateList1: List<travelBlogItem>?,
 
     ):RecyclerView.Adapter<FavorateFragmentAdapter.InnerClass>() {
+    var filterList: MutableList<travelBlogItem>? = favorateList1?.filter { it.isfavorate==true }?.toMutableList()
 
 //    var livedataFavo = favorateList?.value?.toMutableList() ?: mutableListOf()
 //    var filter = favorateList?.value?.filter { it.isfavorate ==true }
+
 
 
 
@@ -35,36 +37,36 @@ class FavorateFragmentAdapter(
     }
 
     override fun getItemCount(): Int {
-      return favorateList1.value?.size ?:0
+      return favorateList1?.filter { it.isfavorate==true }?.size ?:0
     }
 
 
     @OptIn(DelicateCoroutinesApi::class)
-    override fun onBindViewHolder(holder: InnerClass, position: Int) {
+    override fun onBindViewHolder(holder: InnerClass,position: Int) {
 
 //        var itemposition = favorateList?.get(position)
-        Log.e("datacheckkkkkk", "onCreateViewHolder: $$favorateList1", )
+        Log.e("filterlist", "onBindViewHolder: $filterList", )
 
-        var itemposition = favorateList1.value?.get(position)
+        if (filterList?.get(position)?.isfavorate !=false){
 
+                val pointerList = filterList?.get(position)
 
-        holder.itemView.setOnClickListener {
-            onItemClick1?.onclickItem(position)
-        }
+//        holder.itemView.setOnClickListener {
+//            onItemClick1?.onclickItem(position)
+//        }
 
         GlobalScope.launch {
 
-                holder.bind(favorateList1)
+            filterList?.let { holder.bind(it) }
 
-            holder.favorateCardBtn.setOnClickListener {
-//                onItemClick1?.onfavoratebtnClicks(position)
-            }
+//            holder.favorateCardBtn.setOnClickListener {
+////                onItemClick1?.onfavoratebtnClicks(position)
+//            }
             var sizeless:Boolean = true    //true    already setted!!
                 // false
 
             holder.apply {
 
-                var TAG="favorate"
                 showMoretxt.setOnClickListener {
 
                     if(sizeless==true){
@@ -84,15 +86,27 @@ class FavorateFragmentAdapter(
                     onItemClick1?.showtext(position)
 
                 }
+
+
+
                 favorateBtn.setImageResource(R.drawable.favo_ic)
                         favorateBtn?.setOnClickListener {
-                                onItemClick1?.dltBlog(position,itemposition)
+                            filterList?.let { it1 ->
+                                onItemClick1?.dltBlog(
+                                    position,
+                                    pointerList,
+                                    it1
+                                )
+
+
+                            }
 
                         }
             }
         }
 
 
+        }
 
 
     }
@@ -109,15 +123,17 @@ class FavorateFragmentAdapter(
 
       //  var learnmoretxt = view.findViewById<TextView>(R.id.learnmoretxt)
 
-       suspend fun bind (list: MutableLiveData<MutableList<travelBlogItem>>) {
-           val item = list.value!!.get(position)
+       @SuppressLint("SuspiciousIndentation")
+       suspend fun bind (list: MutableList<travelBlogItem>) {
+           val item = list.get(position)
 
-                if (list.value?.get(position)?.isfavorate==true){
+                if (item.isfavorate==true){
                     item.exploreImg?.let { exploreImg.setImageResource(it) }
                     placetextuser.setText(item.placetextuser)
                     dateText.setText(item.dateText)
                     viewedTime.setText(item.viewedTime)
                     aboutText.setText(item.aboutText)
+
                 }
 
 
@@ -129,8 +145,7 @@ class FavorateFragmentAdapter(
     }
     interface onItemClick{
         fun onclickItem(position: Int)
-        fun onfavoratebtnClicks(position: Int)
         fun showtext(position: Int)
-        fun dltBlog(position: Int?, itemposition: travelBlogItem?)
+        fun dltBlog(position: Int, itemposition: travelBlogItem?, filterList: MutableList<travelBlogItem>)
     }
 }

@@ -16,10 +16,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class TravelBlogAdapter(
-    var list: MutableList<travelBlogItem>,
+    var list: List<travelBlogItem>,
     var onItemClick1: onItemClick? = null,
-    var favorateList: MutableList<travelBlogItem>,
-    private val lifecycleOwner: LifecycleOwner,
 
     ):RecyclerView.Adapter<TravelBlogAdapter.InnerClass>() {
 
@@ -39,11 +37,11 @@ class TravelBlogAdapter(
 
         val currentblog = travelBlogItem(itemposition.exploreImg,itemposition.placetextuser,itemposition.dateText,itemposition.viewedTime,itemposition.aboutText)
 
-       val mList = list.filter { it.isfavorate==true }
 
-        Live.data.postValue(mList as MutableList<travelBlogItem>)
+
+
         holder.itemView.setOnClickListener {
-            onItemClick1?.onclickItem(position)
+//            onItemClick1?.onclickItem(position)
         }
 
         GlobalScope.launch {
@@ -156,15 +154,8 @@ class TravelBlogAdapter(
             favorateBtn: ImageView,
             itemposition: travelBlogItem
         )
-       fun  addifFAv(
-        itemposition: travelBlogItem,
-        favorateBtn: ImageView,
-        currentblog: travelBlogItem,
-        position: Int,
-        list: MutableList<travelBlogItem>
-        )
-       fun addblogtofavorate( blogItem: travelBlogItem)
-        fun removeblogfromfavo(blogItem1: Boolean, blogItem: travelBlogItem)
+
+
 
     }
 }
