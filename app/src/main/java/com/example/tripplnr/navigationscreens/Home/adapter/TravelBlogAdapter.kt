@@ -41,7 +41,7 @@ class TravelBlogAdapter(
 
 
         holder.itemView.setOnClickListener {
-//            onItemClick1?.onclickItem(position)
+            onItemClick1?.onclickItem(position)
         }
 
         GlobalScope.launch {
@@ -63,7 +63,6 @@ class TravelBlogAdapter(
 
                     if(sizeless==true){
                         aboutText.maxLines = Int.MAX_VALUE
-//                        onItemClick1?.showtext(position)
                         showMoretxt.setText("Show Less..")
                         sizeless = false
 
@@ -71,11 +70,9 @@ class TravelBlogAdapter(
                     else{
                         aboutText.setLines(2)
                         showMoretxt.setText("Show More..")
-//                        onItemClick1?.showtext(position)
                         sizeless = true
                     }
 
-//                    onItemClick1?.showtext(position)
 
                 }
 
@@ -86,7 +83,6 @@ class TravelBlogAdapter(
                                 favorateBtn.setImageResource(R.drawable.fav_empty_ic)
                                 onItemClick1?.addOrDlt(true,position,favorateBtn,itemposition)
                                 itemposition.isfavorate = false
-//                                onItemClick1?.removeblogfromfavo(true,itemposition)
 
 
 
@@ -96,15 +92,9 @@ class TravelBlogAdapter(
 //                                favorateList.add(currentblog)
                                 onItemClick1?.addOrDlt(false, position, favorateBtn, itemposition)
                                 itemposition.isfavorate =true
-//                                onItemClick1?.addblogtofavorate(false,itemposition)
                             }
 
-//                            favorateList.value = currentList
-//                            Live.data1 = currentList
 
-//                            Log.e(TAG, "favorateList : ${favorateList.value} "   , )
-//                            Log.e(TAG, " position : $itemposition,  :${itemposition.isfavorate}", )
-//                            Log.e(TAG, "----------------------------------------------------------------------------------------------------", )
                         }
             }
         }
@@ -124,7 +114,6 @@ class TravelBlogAdapter(
         var favorateCardBtn = view.findViewById<CardView>(R.id.favorateCardBtn)
         var favorateBtn = view.findViewById<ImageView>(R.id.addtoFavorateIV)
 
-      //  var learnmoretxt = view.findViewById<TextView>(R.id.learnmoretxt)
 
        suspend fun bind (list: List<travelBlogItem>){
             var item = list[position]

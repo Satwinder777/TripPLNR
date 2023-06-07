@@ -12,26 +12,28 @@ import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHomeBinding
 import com.example.tripplnr.navigationscreens.Home.adapter.HotelRecyclerViewAdapter
 import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
 import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
-import com.example.tripplnr.navigationscreens.LiveDataVM.Live
+import com.example.tripplnr.navigationscreens.Search.SearchFragment
+import com.example.tripplnr.navigationscreens.Search.adapter.ViewPagerAdapter
 import com.example.tripplnr.navigationscreens.ViewModel.HomeViewModel
-import com.example.tripplnr.navigationscreens.favorateFragment.ViewModel.FavorateViewModel
-import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.example.tripplnr.navigationscreens.objectfun.mLive
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
+import com.google.android.material.tabs.TabLayout
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
-class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
+class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     private lateinit var binding: FragmentHomeBinding
     private lateinit var rcTravelBlog: RecyclerView
     private lateinit var popularHotelRc: RecyclerView
@@ -64,7 +66,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
 
 
-    @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation")
+    @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation", "ResourceType")
     @RequiresApi(Build.VERSION_CODES.P)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -92,20 +94,11 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 
         }
 
-//            viewmodelhome.favoriteItems.observe(viewLifecycleOwner, Observer { items ->
-//                val adapter = TravelBlogAdapter(items, this,
-//                    items , this)
-//
-//
-
-//            })
 
         var mt = listOf<travelBlogItem>()
 
         mt = mLive.data.value!!
-//        mt = viewmodelhome.itemList.value!!
 
-//       mt = viewmodelhome.itemList.value!!
        adapter = TravelBlogAdapter(
                           mt,
            this,
@@ -122,6 +115,42 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
         val adapter = HotelRecyclerViewAdapter(datarc2!!)
         popularHotelRc.adapter = adapter
         adapter.notifyDataSetChanged()
+        binding.SeeAllBlog.setOnClickListener {
+
+//            val tl =  requireParentFragment().requireActivity().requireViewById<TabLayout>(R.id.tabLayout1)
+//            viewpagerinstance.currentItem = 1
+//            var vp =  sF?.requireActivity()?.findViewById<ViewPager>(R.id.viewPager1)
+//            var tl =  sF?.requireActivity()?.findViewById<TabLayout>(R.id.tabLayout1)
+
+
+            val newFragment = SearchFragment(1)
+//            val targetFragment = TargetFragment()
+            val fragmentManager = requireParentFragment().parentFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.nav_host_fragment, newFragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+
+
+
+            // Set up the adapter and associate with the TabLayout
+//            val viewAdapter = ViewPagerAdapter(requireContext(),childFragmentManager,lifecycle)
+//            vp?.adapter = viewAdapter
+//            tl?.setupWithViewPager(vp)
+
+            // Set the desired tab position in the TabLayout and ViewPager
+//                vp?.currentItem = 1
+//            tl?.setupWithViewPager(vp)
+
+
+        }
+        GlobalScope.launch {
+            delay(2000)
+            binding.shimmerFrameLayout.stopShimmer()
+            binding.rcTravelBlog.visibility = View.VISIBLE
+            binding.shimmerFrameLayout.visibility = View.GONE
+
+        }
 
     }
 
@@ -164,8 +193,6 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick {
 //            Live.data1?.remove()
 
     }
-
-
 
 
 

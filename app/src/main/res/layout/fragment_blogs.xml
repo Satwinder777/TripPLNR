@@ -25,10 +25,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:iconifiedByDefault="false"
-                android:queryHint="Search for currency"
+                android:queryHint="Search Hotel"
+                android:textSize="16sp"
 
 
-                android:backgroundTintMode="multiply"
+
+
+
 
                 tools:ignore="MissingConstraints" />
 

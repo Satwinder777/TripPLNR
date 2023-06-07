@@ -1,36 +1,25 @@
 package com.example.tripplnr.navigationscreens.Search
 
 import android.annotation.SuppressLint
-import android.content.ClipData.Item
+import android.content.Context
+import android.icu.text.Transliterator.Position
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
-import androidx.core.view.get
-import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.RecyclerView
+import androidx.viewpager.widget.ViewPager
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentSearchBinding
-import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
-import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
-import com.example.tripplnr.navigationscreens.Search.adapter.RecyclerAdapterSearchFr
 import com.example.tripplnr.navigationscreens.Search.adapter.ViewPagerAdapter
-import com.example.tripplnr.navigationscreens.favorateFragment.FavorateFragment
-import com.example.tripplnr.navigationscreens.hotelListFragment.HotelListFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.material.bottomsheet.BottomSheetDialog
-import com.google.android.material.card.MaterialCardView
 import com.google.android.material.chip.Chip
+import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import com.google.android.material.tabs.TabLayout
-import com.google.android.material.tabs.TabLayout.Tab
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 /**
@@ -38,8 +27,11 @@ import kotlinx.coroutines.launch
  * Use the [SearchFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchFragment : Fragment() {
+class SearchFragment(var tabpos:Int?=0) : Fragment() {
     private lateinit var binding :FragmentSearchBinding
+    private lateinit var tabLayout :TabLayout
+    private lateinit var viewPager :ViewPager
+
 
 
     override fun onCreateView(
@@ -47,32 +39,44 @@ class SearchFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSearchBinding.inflate(layoutInflater)
+
         return binding.root
     }
+
 
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("NotifyDataSetChanged", "SetTextI18n", "InflateParams", "ResourceType")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        var tabLayout = binding.tabLayout
-        var viewPager = binding.viewPager
+        tabLayout = binding.tabLayout1
+        viewPager = binding.viewPager1
         viewPager.adapter = ViewPagerAdapter(requireContext(),childFragmentManager,lifecycle)
 
-        viewPager.currentItem = 0
+        viewPager.currentItem = tabpos!!
+
         tabLayout.setupWithViewPager(viewPager)
-
-
-        binding.searchBackCard.setOnClickListener {
-
-            requireParentFragment().requireActivity().onBackPressed()
-
-
-
-
-
+             binding.searchBackCard.setOnClickListener {
+                    requireParentFragment().requireActivity().onBackPressed()
 
         }
+//        var hotel =  view.findViewWithTag<Chip>(R.string.chip1)
+//        var blogs =  view.findViewWithTag<Chip>(R.string.chip2)
+//         when(tabLayout.selectedTabPosition){
+//             0->{
+//                 hotel.setChipBackgroundColorResource(ContextCompat.getColor(requireContext(), R.color.yellow) )
+//                 hotel.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+//                 blogs.setChipBackgroundColorResource(ContextCompat.getColor(requireContext(), R.color.light_yellow) )
+//                 blogs.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+//             }
+//             1->{
+//                 blogs.setChipBackgroundColorResource(R.color.yellow)
+//                 blogs.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+//
+//                 hotel.setChipBackgroundColorResource(R.color.light_yellow)
+//                 hotel.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+//             }
+//         }
 
 
 
@@ -83,12 +87,13 @@ class SearchFragment : Fragment() {
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
+
 //                tabLayout.animationMode = TabLayout.AnimationMode.PADDLE
 
 
                 val tabIndex = tab?.position ?: return
 
-                val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+//                val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
                 var hotel =  view.findViewWithTag<Chip>(R.string.chip1)
                 var blogs =  view.findViewWithTag<Chip>(R.string.chip2)
 
@@ -144,8 +149,9 @@ class SearchFragment : Fragment() {
                     var tab = tabLayout.getTabAt(0)
 //                val chip = layoutInflater.inflate(R.layout.chip, null)
                     tab?.customView = chip
+
                     (tab?.customView as Chip?)?.setOnClickListener {
-                        val position = tabLayout.selectedTabPosition
+
                         viewPager.currentItem = 0
                     }
 
@@ -161,23 +167,46 @@ class SearchFragment : Fragment() {
                     val tabPosition = tabLayout.getTabAt(1)
 
                     tabPosition?.customView = chip
+
                     (tabPosition?.customView as Chip?)?.setOnClickListener {
-                        val position = tabLayout.selectedTabPosition
                         viewPager.currentItem = 1
 
                         Log.e("test24", "onViewCreated: clicked ", )}
-//                    chip.setOnClickListener {
-//
-//                    }
-
 
                 }
             }
         }
 
+        setbg()
+}
 
-//        FavorateFragment.myObject.doSomething(requireActivity().findViewById(R.id.bottom_navigation))
 
+//     fun changeTab(position: Int){
+//         tabPosition = position
+////        var vp =  view?.findViewById<ViewPager>(R.id.viewPager1)
+////        var tl =  view?.findViewById<TabLayout>(R.id.tabLayout1)
+////        vp?.currentItem = position
+////        tl?.setupWithViewPager(vp)
+//         Log.e("tabpos", "changeTab: $position", )
+//    }
+
+
+    private fun setbg(){
+        var hotel =  view?.findViewWithTag<Chip>(R.string.chip1)
+        var blogs =  view?.findViewWithTag<Chip>(R.string.chip2)
+        if (tabLayout.selectedTabPosition==0){
+            hotel?.setChipBackgroundColorResource(R.color.yellow)
+            hotel?.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+            blogs?.setChipBackgroundColorResource(R.color.light_yellow)
+            blogs?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
+        else{
+            blogs?.setChipBackgroundColorResource(R.color.yellow)
+            blogs?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+            hotel?.setChipBackgroundColorResource(R.color.light_yellow)
+            hotel?.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
+        }
 
     }
 }

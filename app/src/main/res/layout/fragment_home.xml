@@ -9,9 +9,11 @@
 
 
     <LinearLayout
+        android:id="@+id/mainhomesrc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        >
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -155,7 +157,7 @@
                         android:textStyle="bold" />
 
                     <TextView
-                        android:id="@+id/textView2"
+                        android:id="@+id/SeeAllBlog"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -171,7 +173,23 @@
                 </LinearLayout>
 
 
+                <com.facebook.shimmer.ShimmerFrameLayout
+                    android:id="@+id/shimmerFrameLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
 
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/etSearch">
+                <include
+                    android:id="@+id/simmmerscr"
+                    layout="@layout/simmerhome"
+                    android:visibility="visible"
+                    tools:ignore="false"
+                    />
+                </com.facebook.shimmer.ShimmerFrameLayout>
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rcTravelBlog"
                     android:layout_width="match_parent"
@@ -179,7 +197,8 @@
                     android:orientation="horizontal"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:itemCount="3"
-                    tools:listitem="@layout/homerc_item" />
+                    tools:listitem="@layout/homerc_item"
+                    android:visibility="gone"/>
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/popularHotelRc"
@@ -187,6 +206,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
                     android:orientation="vertical"
+                    android:visibility="gone"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/userrecycleritem_2"
                      />
@@ -196,4 +216,6 @@
         </androidx.core.widget.NestedScrollView>
 
     </LinearLayout>
+
+
 </FrameLayout>

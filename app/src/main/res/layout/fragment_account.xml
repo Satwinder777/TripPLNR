@@ -49,6 +49,7 @@
             android:padding="20dp">
 
             <TextView
+                android:id="@+id/alphaText"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:text="SS"
@@ -64,11 +65,12 @@
                 app:layout_constraintVertical_bias="0.5" />
 
             <TextView
+                android:id="@+id/userText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Satwinder Singh"
+                android:text="login"
                 android:textColor="@color/black"
-                android:textSize="20sp"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 android:layout_marginStart="60dp"
                 android:fontFamily="@font/poppin_regular"

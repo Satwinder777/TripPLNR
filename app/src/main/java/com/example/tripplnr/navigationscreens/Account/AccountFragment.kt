@@ -1,6 +1,7 @@
 package com.example.tripplnr.navigationscreens.Account
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
@@ -20,10 +21,16 @@ import com.example.tripplnr.navigationscreens.Account.activity.LegalinformatinAc
 import com.example.tripplnr.navigationscreens.favorateFragment.FavorateFragment
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.example.tripplnr.navigationscreens.objectfun.FirebaseUtils
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.gms.common.api.ApiException
 import com.google.android.material.button.MaterialButton
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
 // TODO: Rename parameter arguments, choose names that match
@@ -38,8 +45,13 @@ private const val ARG_PARAM2 = "param2"
  */
 class AccountFragment : Fragment() {
     private lateinit var binding : FragmentAccountBinding
+    private lateinit var google :GoogleSignInOptions
+    private lateinit var firestoreDatabase: FirebaseFirestore
+
+
 //    private var user = Firebase.auth.currentUser
         var auth = Firebase.auth
+
 
     val user = FirebaseAuth.getInstance().currentUser
 
@@ -49,6 +61,7 @@ class AccountFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentAccountBinding.inflate(layoutInflater)
+
         Toast.makeText(requireContext(), "${user?.displayName}", Toast.LENGTH_SHORT).show()
         return binding.root
 
@@ -64,14 +77,17 @@ class AccountFragment : Fragment() {
             startActivity(intent)
         }
 
+
+              var gclient =   getGoogleSignInClient(requireContext())
+
         binding.logintxt.setOnClickListener {
 
             var view = layoutInflater.inflate(R.layout.login_display, null, false)
-
+            checkuserisLogged()
             var pop = PopupWindow(
                 view,
                 ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.MATCH_PARENT,
+                ViewGroup.LayoutParams.WRAP_CONTENT,
                 true
             )
 
@@ -103,11 +119,22 @@ class AccountFragment : Fragment() {
                 auth.createUserWithEmailAndPassword(userName, password)
                     .addOnCompleteListener { task ->
                         if (task.isSuccessful) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success")
-                            Toast.makeText(requireContext(), "welcome ${auth.currentUser?.displayName}", Toast.LENGTH_SHORT).show()
-                            Toast.makeText(requireContext(), "successfully logged", Toast.LENGTH_SHORT).show()
-                             var user = auth.currentUser?.displayName
+
+
+
+
+
+                            startActivityForResult(gclient.signInIntent  ,13)
+                            val user1 = FirebaseAuth.getInstance().currentUser
+                            Toast.makeText(requireContext(), "${user1?.displayName}", Toast.LENGTH_SHORT).show()
+                             var user = auth.currentUser?.email
+                            binding.userText.setText(user)
+                            var alphabetfirst = user?.get(0).toString()
+                            binding.alphaText.setText(alphabetfirst)
+                            binding.signOrlogOut.visibility = View.VISIBLE
+                            binding.signOrlogOut.setText("Logout")
+
+
                             if (user != null) {
                                 Allfun.textfChar("the sher gill Production").forEach{
                                     Log.e(TAG, "onViewCreated: $user,$it", )
@@ -124,6 +151,7 @@ class AccountFragment : Fragment() {
                                 "Authentication failed.",
                                 Toast.LENGTH_SHORT,
                             ).show()
+                            binding.signOrlogOut.visibility = View.GONE
                         }
                     }
 
@@ -151,6 +179,16 @@ R.string.readless
         }
             chipclick(binding.chiKm)
             chipclick(binding.chipMile)
+
+
+
+        binding.signOrlogOut.setOnClickListener{
+            auth.signOut()
+            binding.userText.setText("Login")
+//            var alphabetfirst = user?.get(0).toString()
+            binding.alphaText.visibility = View.INVISIBLE
+        }
+
         }
 
         private fun chipclick(view: View) {
@@ -208,6 +246,68 @@ R.string.readless
 //    }
 //}
 
+    fun getGoogleSignInClient(context: Context): GoogleSignInClient {
+        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+            .requestEmail()
+            .build()
+
+        return GoogleSignIn.getClient(context, gso)
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
 
 
+        if(requestCode ==13 && resultCode==resultCode){
+            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val account = task.getResult(ApiException::class.java)
+//            firebaseAuthWithGoogle(account.idToken!!)
+
+
+        }
+    }
+//    private fun updateUI(user: FirebaseUser?) {
+//
+//    }
+//
+//    companion object {
+//        private const val TAG = "GoogleActivity"
+//        private const val RC_SIGN_IN = 9001}
+//
+//    private fun firebaseAuthWithGoogle(idToken:String){
+//        val credential = GoogleAuthProvider.getCredential(idToken, null)
+//        auth.signInWithCredential(credential)
+//            .addOnCompleteListener { task ->
+//                if (task.isSuccessful) {
+//                    // Sign in success, update UI with the signed-in user's information
+//                    val user = auth.currentUser
+//                    Toast.makeText(requireContext(), "${user?.displayName}", Toast.LENGTH_SHORT).show()
+//                    // ...
+//                } else {
+//                    // Sign in failed, display a message to the user
+//                    // ...
+//                }
+//            }.addOnFailureListener {
+//                Toast.makeText(requireContext(), it.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
+//            }
+//    }
+
+    private fun checkuserisLogged()
+    {
+        val currentUser = auth.currentUser
+
+        if (currentUser != null) {
+            // User is logged in
+            val uid = currentUser.uid
+            val email = currentUser.email
+
+            println("User is logged in")
+            println("UID: $uid")
+            println("Email: $email")
+            Toast.makeText(requireContext(), "$uid,$email", Toast.LENGTH_SHORT).show()
+        } else {
+            // User is not logged in
+            Log.e("abc123", "not present user", )
+        }
+    }
 }

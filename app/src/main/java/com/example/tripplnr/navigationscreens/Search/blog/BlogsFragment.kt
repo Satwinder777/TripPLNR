@@ -18,6 +18,7 @@ import com.example.tripplnr.databinding.FragmentBlogsBinding
 import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
 import com.example.tripplnr.navigationscreens.ViewModel.HomeViewModel
+import com.example.tripplnr.navigationscreens.objectfun.mLive
 
 class BlogsFragment : Fragment() {
     private lateinit var binding: FragmentBlogsBinding
@@ -29,7 +30,7 @@ class BlogsFragment : Fragment() {
 //    private lateinit var viewModel: HomeViewModel
 
 
-
+    var mt = listOf<travelBlogItem>()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -45,15 +46,17 @@ class BlogsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 //        findNavController().navigate(R.id.blogsFragment)
 
-//        var mt = listOf<travelBlogItem>()
+
         rc = binding.blogRecyclerView
         rc.layoutManager = LinearLayoutManager(requireContext())
-//        mt = viewModel.itemList.value!!
-        adapter = TravelBlogAdapter(datahandle(), null )
+        mt = mLive.data.value!!
+
+        adapter = TravelBlogAdapter(mt, null )
         rc.adapter = adapter
 
 
         var searchView = binding.searchView1
+
 
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
@@ -74,22 +77,22 @@ class BlogsFragment : Fragment() {
 
     }
 
-    fun datahandle():MutableList<travelBlogItem>{
-        var list  = mutableListOf<travelBlogItem>(
-            travelBlogItem(R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",getString(R.string.testLine)),
-
-            travelBlogItem(R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",getString(R.string.testLine)),
-            travelBlogItem(R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",getString(R.string.testLine)),
-            travelBlogItem(R.drawable.explore2,"the love city","12 may 23 ","12.32s",getString(R.string.testLine)),
-            travelBlogItem(R.drawable.exploreimg,"the Punjaab","12 may 23 ","59.32s",getString(R.string.testLine)),
-
-            )
-        return list
-    }
+//    fun datahandle():MutableList<travelBlogItem>{
+//        var list  = mutableListOf<travelBlogItem>(
+//            travelBlogItem(R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",getString(R.string.testLine)),
+//
+//            travelBlogItem(R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",getString(R.string.testLine)),
+//            travelBlogItem(R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",getString(R.string.testLine)),
+//            travelBlogItem(R.drawable.explore2,"the love city","12 may 23 ","12.32s",getString(R.string.testLine)),
+//            travelBlogItem(R.drawable.exploreimg,"the Punjaab","12 may 23 ","59.32s",getString(R.string.testLine)),
+//
+//            )
+//        return list
+//    }
     @SuppressLint("NotifyDataSetChanged")
     private fun filter(text: String) {
 
-        var list11 = datahandle()
+        var list11 = mt
         // creating a new array list to filter our data.
         val filteredlist:MutableList<travelBlogItem> = mutableListOf()
 
