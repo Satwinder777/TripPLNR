@@ -13,7 +13,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class hotelsInsideRcAdapter(var list : MutableList<hotelchild>):RecyclerView.Adapter<hotelsInsideRcAdapter.InnerClass>() {
+class hotelsInsideRcAdapter(var list : MutableList<hotelchild>, var onItemClick1: TravelBlogAdapter.onItemClick? = null):RecyclerView.Adapter<hotelsInsideRcAdapter.InnerClass>() {
 
 
 
@@ -30,6 +30,7 @@ class hotelsInsideRcAdapter(var list : MutableList<hotelchild>):RecyclerView.Ada
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
         GlobalScope.launch {
             holder.bind(list)
+            holder.itemView.setOnClickListener { onItemClick1?.onclickItem(position) }
         }
 
     }

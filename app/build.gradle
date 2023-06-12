@@ -60,6 +60,30 @@ dependencies {
     implementation 'com.google.android.gms:play-services-location:21.0.1'
 
     implementation 'com.google.firebase:firebase-firestore-ktx:24.6.1'   //firebase firestore
+    implementation 'com.google.firebase:firebase-auth-ktx:22.0.0'
+    implementation 'com.google.android.gms:play-services-auth:20.5.0'
+
+
+    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+
+    // Declare the dependencies for the desired Firebase products without specifying versions
+    // For example, declare the dependencies for Firebase Authentication and Cloud Firestore
+    implementation 'com.google.firebase:firebase-auth:21.1.0'
+    implementation 'com.google.firebase:firebase-firestore:24.4.4'
+
+    // Import the BoM for the Firebase platform (learn more)
+    implementation platform('com.google.firebase:firebase-bom:31.2.3')
+
+    // Declare the base library
+    implementation 'com.google.firebase:firebase-analytics'
+
+    // Declare the KTX library instead (which automatically has a dependency on the base library)
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+    implementation 'com.google.android.gms:play-services-auth:20.4.1'
+    implementation 'com.google.firebase:firebase-auth-ktx:21.1.0'
+
+    implementation 'com.firebaseui:firebase-ui-auth:7.2.0'
 
 
 

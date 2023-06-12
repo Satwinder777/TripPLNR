@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="@drawable/card_shape"
     android:backgroundTint="#E0E0E3"
-    android:padding="10dp">
+    android:padding="10dp"
+     >
 
     <LinearLayout
         android:layout_width="match_parent"

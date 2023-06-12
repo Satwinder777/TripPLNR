@@ -4,13 +4,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.currencyData
+import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class CurrencyRecyclerAdapter(var list: MutableList<currencyData> ):RecyclerView.Adapter<CurrencyRecyclerAdapter.InnerClass>() {
+class CurrencyRecyclerAdapter(var list: MutableList<currencyData> ,var callfun0:callfun ):RecyclerView.Adapter<CurrencyRecyclerAdapter.InnerClass>() {
 
 
 
@@ -29,6 +31,12 @@ class CurrencyRecyclerAdapter(var list: MutableList<currencyData> ):RecyclerView
 
         GlobalScope.launch {
             holder.bind(list)
+            holder.apply {
+                itemView.setOnClickListener {
+                    Toast.makeText(itemView.context, list[position].currency, Toast.LENGTH_SHORT).show()
+                    Allfun.currencyData.value = list[position].currency
+                }
+            }
             }
         }
 
@@ -50,6 +58,9 @@ class CurrencyRecyclerAdapter(var list: MutableList<currencyData> ):RecyclerView
 
         }
 
+    }
+    interface callfun{
+        fun showcurrency(currency: String)
     }
 }
 

@@ -47,7 +47,7 @@ class TravelBlogAdapter(
         GlobalScope.launch {
             holder.bind(list)
             holder.favorateCardBtn.setOnClickListener {
-                onItemClick1?.onfavoratebtnClicks(position)
+//                onItemClick1?.onfavoratebtnClicks(position)
             }
             var sizeless:Boolean = true    //true    already setted!!
 
@@ -81,7 +81,7 @@ class TravelBlogAdapter(
 
                             if (itemposition.isfavorate == true){
                                 favorateBtn.setImageResource(R.drawable.fav_empty_ic)
-                                onItemClick1?.addOrDlt(true,position,favorateBtn,itemposition)
+//                                onItemClick1?.addOrDlt(true,position,favorateBtn,itemposition)
                                 itemposition.isfavorate = false
 
 
@@ -90,7 +90,7 @@ class TravelBlogAdapter(
                             else{
                                 favorateBtn.setImageResource(R.drawable.favo_ic)
 //                                favorateList.add(currentblog)
-                                onItemClick1?.addOrDlt(false, position, favorateBtn, itemposition)
+//                                onItemClick1?.addOrDlt(false, position, favorateBtn, itemposition)
                                 itemposition.isfavorate =true
                             }
 
@@ -135,16 +135,5 @@ class TravelBlogAdapter(
     }
     interface onItemClick{
         fun onclickItem(position: Int)
-        fun onfavoratebtnClicks(position: Int)
-
-        fun addOrDlt(
-            like: Boolean,
-            position: Int,
-            favorateBtn: ImageView,
-            itemposition: travelBlogItem
-        )
-
-
-
     }
 }

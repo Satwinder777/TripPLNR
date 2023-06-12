@@ -1,5 +1,6 @@
 package com.example.tripplnr.navigationscreens.ViewModel
 
+import android.content.Context
 import android.util.Log
 import android.widget.ImageView
 import androidx.lifecycle.*
@@ -54,11 +55,11 @@ class HomeViewModel : ViewModel() {
 
    fun hotelData(){
         val hotelchildData  = mutableListOf<hotelchild>(
-            hotelchild(R.drawable.explore2,"Taj Hotel","Amritsar","3.3"),
-            hotelchild(R.drawable.exploreimg,"The Bill Gates","America,Us","4.5"),
-            hotelchild(R.drawable.explore2,"Punjab Hotel","Amritsar,Punjab","5.9"),
-            hotelchild(R.drawable.exploreimg,"Chandighar Hotel","Chandighar, India","4.7"),
-            hotelchild(R.drawable.explore2,"Us Hotel","Us,Amercia","4.8"),
+            hotelchild(R.drawable.blog1,"Taj Hotel","Amritsar","3.3"),
+            hotelchild(R.drawable.blog2,"The Bill Gates","America,Us","4.5"),
+            hotelchild(R.drawable.blog3,"Punjab Hotel","Amritsar,Punjab","5.9"),
+            hotelchild(R.drawable.blog4,"Chandighar Hotel","Chandighar, India","4.7"),
+            hotelchild(R.drawable.blog5,"Us Hotel","Us,Amercia","4.8"),
         )
         var list  = mutableListOf<hotelTitle>(
             hotelTitle("Top Hotel",hotelchildData),
@@ -80,21 +81,21 @@ fun initData(){
      fun data11(): MutableList<travelBlogItem> {
         val  list  = mutableListOf<travelBlogItem>(
             travelBlogItem(
-                R.drawable.explore2,"the Golden Temple","12 may 23 ","1.32s",
-                R.string.testLine.toString(), isfavorate = true),
+                R.drawable.blog3,"the Golden Temple","12 may 23 ","1.32s",
+                "The Golden Temple, also known as Sri Harmandir Sahib or Darbar Sahib, is a prominent Sikh gurdwara (place of worship) located in Amritsar, Punjab, India. It is one of the most important and spiritually significant pilgrimage sites for Sikhs worldwide.", isfavorate = true),
 
             travelBlogItem(
-                R.drawable.exploreimg,"the Royal Temple","12 may 23 ","1.35s",
-                R.string.testLine.toString(), isfavorate = false),
+                R.drawable.blog2,"the Royal Temple","12 may 23 ","1.35s",
+                "Wat Phra Kaew (Temple of the Emerald Buddha) - Located within the Grand Palace complex in Bangkok, Thailand, this temple is considered one of the most sacred sites in Thai Buddhism and is closely associated with the Thai royal family.", isfavorate = false),
             travelBlogItem(
-                R.drawable.exploreimg,"the Swanrana mandhir ","12 may 23 ","1.11s",
-                R.string.testLine.toString(), isfavorate = true),
+                R.drawable.blog1,"the Swanrana mandhir ","12 may 23 ","1.11s",
+                " \"Swarana Mandhir\" or \"Swarna Mandir\" in relation to a royal temple. It's possible that the term may refer to a temple with a golden or gilded appearance, as \"Swarana\" or \"Swarna\" means \"golden\" in certain languages.", isfavorate = true),
             travelBlogItem(
-                R.drawable.explore2,"the love city","12 may 23 ","12.32s",
-                R.string.testLine.toString(), isfavorate = false),
+                R.drawable.blog4,"the love city","12 may 23 ","12.32s",
+                "The term \"Love City\" is a general term that can refer to different cities around the world known for their association with love, romance, or a romantic atmosphere. There are several cities that are often referred to as \"Love Cities\" due to their romantic ambiance, scenic beauty, or historical connections to love and romance.", isfavorate = false),
             travelBlogItem(
-                R.drawable.exploreimg,"the Punjaab","12 may 23 ","59.32s",
-                R.string.testLine.toString(), isfavorate = true),
+                R.drawable.blog4,"the Punjaab","12 may 23 ","59.32s",
+                "Punjab is a region in South Asia that is divided between two countries: India and Pakistan. It is a culturally rich and historically significant region known for its vibrant traditions, agricultural prosperity, and religious diversity.", isfavorate = true),
 
             )
         return list

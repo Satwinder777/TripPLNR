@@ -8,14 +8,12 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager.widget.ViewPager
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHomeBinding
 import com.example.tripplnr.navigationscreens.Home.adapter.HotelRecyclerViewAdapter
@@ -23,15 +21,11 @@ import com.example.tripplnr.navigationscreens.Home.adapter.TravelBlogAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
 import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
 import com.example.tripplnr.navigationscreens.Search.SearchFragment
-import com.example.tripplnr.navigationscreens.Search.adapter.ViewPagerAdapter
 import com.example.tripplnr.navigationscreens.ViewModel.HomeViewModel
 import com.example.tripplnr.navigationscreens.objectfun.mLive
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
-import com.google.android.material.tabs.TabLayout
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 
 class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     private lateinit var binding: FragmentHomeBinding
@@ -66,6 +60,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 
 
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation", "ResourceType")
     @RequiresApi(Build.VERSION_CODES.P)
 
@@ -112,7 +107,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 //        viewmodelhome.hotelData()
         viewmodelhome.hotelData()
        var datarc2 =  viewmodelhome.rc2.value
-        val adapter = HotelRecyclerViewAdapter(datarc2!!)
+        val adapter = HotelRecyclerViewAdapter(datarc2!! )
         popularHotelRc.adapter = adapter
         adapter.notifyDataSetChanged()
         binding.SeeAllBlog.setOnClickListener {
@@ -144,11 +139,14 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 
 
         }
-        GlobalScope.launch {
-            delay(2000)
+        GlobalScope.launch(Dispatchers.Main){
+            binding.shimmerFrameLayout.startShimmer()
+            delay(4000)
             binding.shimmerFrameLayout.stopShimmer()
             binding.rcTravelBlog.visibility = View.VISIBLE
             binding.shimmerFrameLayout.visibility = View.GONE
+            binding.popularHotelRc.visibility = View.VISIBLE
+
 
         }
 
@@ -166,33 +164,24 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 
     }
 
-    override fun onfavoratebtnClicks(position: Int) {
-//        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
-//        bottomNavigationView.menu.getItem(2).isVisible = true
-        //        findNavController().navigate(R.id.favorateFragment)
+//    override fun onfavoratebtnClicks(position: Int) {
+////        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
+////        bottomNavigationView.menu.getItem(2).isVisible = true
+//        //        findNavController().navigate(R.id.favorateFragment)
+//
+//
+////        bottomNavigationView.menu.findItem(R.id.blogsFragment).setChecked(true)
+////        val newFragment = FavorateFragment()
+//////            val targetFragment = TargetFragment()
+////        val fragmentManager = requireParentFragment().parentFragmentManager
+////        val transaction = fragmentManager.beginTransaction()
+////        transaction.replace(R.id.nav_host_fragment, newFragment)
+////        transaction.addToBackStack(null)
+////        transaction.commit()
+//
+//    }
 
 
-//        bottomNavigationView.menu.findItem(R.id.blogsFragment).setChecked(true)
-//        val newFragment = FavorateFragment()
-////            val targetFragment = TargetFragment()
-//        val fragmentManager = requireParentFragment().parentFragmentManager
-//        val transaction = fragmentManager.beginTransaction()
-//        transaction.replace(R.id.nav_host_fragment, newFragment)
-//        transaction.addToBackStack(null)
-//        transaction.commit()
-
-    }
-
-    override fun addOrDlt(
-        like: Boolean,
-        position: Int,
-        favorateBtn: ImageView,
-        blog: travelBlogItem
-    ) {
-//        if (like == true) {
-//            Live.data1?.remove()
-
-    }
 
 
 

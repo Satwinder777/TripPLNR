@@ -1,21 +1,25 @@
 package com.example.tripplnr.navigationscreens.Search.hotel
 
 import android.annotation.SuppressLint
+import android.app.SearchManager
+import android.content.ComponentName
+import android.content.Context
+import android.content.SearchRecentSuggestionsProvider
+import android.database.Cursor
+import android.database.MatrixCursor
 import android.icu.util.Calendar
 import android.os.Build
 import android.os.Bundle
+import android.provider.BaseColumns
+import android.provider.SearchRecentSuggestions
 import android.util.Log
 import android.util.TimeUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CalendarView
-import android.widget.DatePicker
-import android.widget.ImageView
-import android.widget.SearchView
-import android.widget.TextView
-import android.widget.Toast
+import android.widget.*
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -32,11 +36,14 @@ import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
 import com.example.tripplnr.navigationscreens.Search.adapter.RecyclerAdapterSearchFr
 import com.example.tripplnr.navigationscreens.hotelListFragment.HotelListFragment
+import com.google.android.gms.common.api.Status
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.LocalDate
 import com.google.android.libraries.places.api.model.Place
 import com.google.android.libraries.places.api.net.PlacesClient
 import com.google.android.libraries.places.widget.Autocomplete
+import com.google.android.libraries.places.widget.AutocompleteSupportFragment
+import com.google.android.libraries.places.widget.listener.PlaceSelectionListener
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
@@ -48,6 +55,8 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
+import androidx.cursoradapter.widget.CursorAdapter
+import com.google.android.material.internal.ViewUtils.hideKeyboard
 
 
 class HotelsFragment : Fragment(){
@@ -59,6 +68,7 @@ class HotelsFragment : Fragment(){
     private val guestLiveData =  MutableLiveData<guestdatacls>()
     private val dateLiveData =  MutableLiveData<String>()
     private lateinit var placesClient: PlacesClient
+    private lateinit var suggestionAdapter: SuggestionAdapter
 
 
 
@@ -69,8 +79,10 @@ class HotelsFragment : Fragment(){
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHotelsBinding.inflate(layoutInflater)
+
         val Guest = "$adultc Guests, $roomc Rooms"
         checklivedata(guestLiveData,dateLiveData)
+
 
         binding.GuestTextView.setText(Guest)
 //        binding.GuestTextView.setText(guestLiveData.value?.guest)
@@ -84,13 +96,20 @@ class HotelsFragment : Fragment(){
     @RequiresApi(Build.VERSION_CODES.O)
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("NotifyDataSetChanged", "InflateParams")
+    companion object {
+        const val AUTHORITY = "com.example.yourapp.YourSearchSuggestionProvider"
+        const val MODE = SearchRecentSuggestionsProvider.DATABASE_MODE_QUERIES
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
 //        rc = binding.searchFrRecycler1
 //        GlobalScope.launch {
 
-        initView()
+//        initView()
+
         rc = binding.searchFrRecycler1
         rc.layoutManager = LinearLayoutManager(requireContext())
 
@@ -111,18 +130,16 @@ class HotelsFragment : Fragment(){
 //                guestDataHandler(item1)
 //                Log.e("test24", "bottomTask: clicked", )
 //            }
-
         }
-
         val search = binding.searhhotel
         search.setOnClickListener {
 //            if ( it is SearchView){
 //                it.setBackground()
 //                it.setPadding(0, 0, 0, 0)
 //            }
+//            addAddress()
 
-
-            addAddress()
+//            addAddress()
             if (binding.searchView.query.isNullOrEmpty().not() && guestLiveData.value!=null && dateLiveData.value!=null ){
                 val newFragment = HotelListFragment()
 
@@ -417,16 +434,38 @@ fun checklivedata(m1:MutableLiveData<guestdatacls>?,m2:MutableLiveData<String>?)
         Log.e(TAG, "checklivedata: null ${guestLiveData.value},${dateLiveData.value}  ", )
     }
 }
+    @SuppressLint("ResourceType")
     private fun addAddress() {
 
 try {
     val fields = listOf(Place.Field.ID, Place.Field.NAME)
 
-    val intent = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+    val intent1 = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
         .build(requireActivity())
-    startActivityForResult(intent, AllConstants.REQUEST_CODE.AUTOCOMPLETE_REQUEST_CODE)
+    startActivityForResult(intent1, AllConstants.REQUEST_CODE.AUTOCOMPLETE_REQUEST_CODE)
 
     Log.e("field12", "addAddress: ${      fields[1].name  }", )
+
+
+//    val autocompleteFragment = fragmentManager?.findFragmentById(R.layout.fragment_hotel) as AutocompleteSupportFragment
+//
+//// Specify the types of place data to return.
+//    autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
+
+//    intent.setOnPlaceSelectedListener(object : PlaceSelectionListener {
+//        override fun onPlaceSelected(place: Place) {
+//            // Handle the selected place.
+//            val placeName = place.name
+//            Log.e("test23", "onPlaceSelected: $placeName", )
+//            // Do something with the place name.
+//        }
+//
+//        override fun onError(status: Status) {
+//            // Handle the error.
+//            Log.e("test23", "onError: ${status.status}", )
+//        }
+//    })
+
 }
 catch (e:Exception){
     Log.e("exp", "addAddress: ${e.message}", )
@@ -453,9 +492,35 @@ catch (e:Exception){
             )
         }
         placesClient = Places.createClient(requireActivity())
-    }
+
+        }
+//    private fun updateSearchSuggestions(query: String) {
+//        val suggestions = arrayOf("_id", SearchManager.SUGGEST_COLUMN_TEXT_1)
+//        val cursor = SearchRecentSuggestions(
+//            requireContext(),
+//            HotelsFragment.AUTHORITY,
+//            HotelsFragment.MODE
+//        ).saveRecentQuery(query,query)
+//
+//        suggestionAdapter.changeCursor(cursor)
+//    }
     }
 
 //}
+
+class SuggestionAdapter(context: Context, cursor: Cursor) : CursorAdapter(context, cursor, 0) {
+    override fun newView(context: Context, cursor: Cursor, parent: ViewGroup): View {
+        return LayoutInflater.from(context).inflate(android.R.layout.simple_list_item_1, parent, false)
+    }
+
+    override fun bindView(view: View, context: Context, cursor: Cursor) {
+        val suggestionTextView: TextView = view.findViewById(android.R.id.text1)
+        suggestionTextView.text = cursor.getString(cursor.getColumnIndexOrThrow("column_name"))
+    }
+
+    override fun getCursor(): Cursor {
+        return super.getCursor()
+    }
+}
 
 

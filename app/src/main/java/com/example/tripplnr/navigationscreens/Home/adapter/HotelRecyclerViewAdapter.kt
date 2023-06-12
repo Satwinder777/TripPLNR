@@ -9,11 +9,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
+import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class HotelRecyclerViewAdapter(var list : MutableList<hotelTitle>):RecyclerView.Adapter<HotelRecyclerViewAdapter.InnerClass>() {
+class HotelRecyclerViewAdapter(
+    var list: MutableList<hotelTitle>
+
+):RecyclerView.Adapter<HotelRecyclerViewAdapter.InnerClass>(){
 
 
 
@@ -35,12 +39,13 @@ class HotelRecyclerViewAdapter(var list : MutableList<hotelTitle>):RecyclerView.
         }
 
         holder.apply {
-            var adapter = list[position].list?.let { hotelsInsideRcAdapter(list[0].list as MutableList<hotelchild>) }
+            var adapter = list[position].list?.let { hotelsInsideRcAdapter(list[0].list as MutableList<hotelchild> ) }
             itemRecyclerView.adapter = adapter
             adapter?.notifyDataSetChanged()
+
         }
     }
-    class InnerClass(view: View):RecyclerView.ViewHolder(view) {
+    class InnerClass(view: View ):RecyclerView.ViewHolder(view) {
 
 //        var exploreImg = view.findViewById<ImageView>(R.id.exploreImg)
         var popularhoteltxt = view.findViewById<TextView>(R.id.popularhoteltxt)
@@ -58,4 +63,6 @@ class HotelRecyclerViewAdapter(var list : MutableList<hotelTitle>):RecyclerView.
         }
 
     }
+
+
 }

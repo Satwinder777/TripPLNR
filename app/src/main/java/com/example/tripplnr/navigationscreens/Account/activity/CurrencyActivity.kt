@@ -11,11 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.ActivityCurrencyBinding
+import com.example.tripplnr.navigationscreens.Account.AccountFragment
 import com.example.tripplnr.navigationscreens.Home.adapter.CurrencyRecyclerAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.currencyData
+import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import java.util.*
 
-class CurrencyActivity : AppCompatActivity() {
+class CurrencyActivity : AppCompatActivity(),CurrencyRecyclerAdapter.callfun {
     private lateinit var binding :ActivityCurrencyBinding
     private lateinit var rcCurr :RecyclerView
     private lateinit var adapter :CurrencyRecyclerAdapter
@@ -27,7 +29,7 @@ class CurrencyActivity : AppCompatActivity() {
 
         rcCurr = binding.currencyRecyclerView
         rcCurr.layoutManager = LinearLayoutManager(this)
-       adapter = CurrencyRecyclerAdapter(emptylist())
+       adapter = CurrencyRecyclerAdapter(emptylist(),this)
         rcCurr.adapter = adapter
 
 
@@ -47,18 +49,38 @@ class CurrencyActivity : AppCompatActivity() {
             }
         })
 
+
         binding.backbtncurrencyActivity.setOnClickListener { onBackPressed() }
     }
     private fun currenData():MutableList<currencyData>{
         var list = mutableListOf<currencyData>(
 
-            currencyData("DirHam"),
-            currencyData("Rupay"),
-            currencyData("Pakistani Currency"),
-            currencyData("UAE"),
-            currencyData("Dollar"),
-            currencyData("Dinar"),
-            currencyData("Indian Coin"),
+            currencyData("US Dollar (USD)"),
+            currencyData("Euro (EUR)"),
+            currencyData("British Pound (GBP)"),
+            currencyData("Japanese Yen (JPY)"),
+            currencyData("Swiss Franc (CHF)"),
+            currencyData("Canadian Dollar (CAD)"),
+            currencyData("Australian Dollar (AUD)"),
+            currencyData("New Zealand Dollar (NZD)"),
+            currencyData("Chinese Yuan (CNY)"),
+            currencyData("Indian Rupee (INR)"),
+            currencyData("Russian Ruble (RUB)"),
+            currencyData("Brazilian Real (BRL)"),
+            currencyData("South African Rand (ZAR)"),
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         )
 
@@ -101,6 +123,12 @@ class CurrencyActivity : AppCompatActivity() {
 
         )
        return list
+    }
+
+    override fun showcurrency(currency: String) {
+        Allfun.currencyData.value = currency
+        var activity = AccountFragment()
+        activity.onCreate(null)
     }
 
 
