@@ -50,36 +50,61 @@
 
 
 
+<!--        <com.google.android.material.card.MaterialCardView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            app:cardCornerRadius="20dp"-->
+<!--            app:strokeColor="@color/default_color"-->
+<!--            app:strokeWidth="1dp"-->
+<!--            android:layout_marginVertical="10dp"-->
+<!--            android:layout_marginHorizontal="30dp"-->
+
+<!--            >-->
+<!--            <SearchView-->
+<!--                android:id="@+id/searchView"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:iconifiedByDefault="false"-->
+<!--                android:queryHint="Search for currency"-->
+
+
+<!--                android:backgroundTintMode="multiply"-->
+
+<!--                tools:ignore="MissingConstraints" />-->
+
+<!--        </com.google.android.material.card.MaterialCardView>-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/currencyRecyclerView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="match_parent"-->
+<!--            tools:listitem="@layout/currency_item"-->
+<!--            android:layout_marginHorizontal="30dp"/>-->
+
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:cardCornerRadius="20dp"
-            app:strokeColor="@color/default_color"
+            app:cardCornerRadius="10dp"
+            android:layout_marginTop="6dp"
+            app:strokeColor="@color/black"
             app:strokeWidth="1dp"
-            android:layout_marginVertical="10dp"
-            android:layout_marginHorizontal="30dp"
+            android:layout_marginHorizontal="20sp"
+
 
             >
-            <SearchView
-                android:id="@+id/searchView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:iconifiedByDefault="false"
-                android:queryHint="Search for currency"
 
-
-                android:backgroundTintMode="multiply"
-
-                tools:ignore="MissingConstraints" />
-
-        </com.google.android.material.card.MaterialCardView>
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/currencyRecyclerView"
+        <AutoCompleteTextView
+            android:id="@+id/currencyPicker"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:listitem="@layout/currency_item"
-            android:layout_marginHorizontal="30dp"/>
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/search"
+            android:background="@android:color/transparent"
+            android:paddingVertical="8dp"
+            android:paddingStart="10dp"
+            android:hint="Search Currency"
+            android:drawablePadding="10dp"
+            />
+        </com.google.android.material.card.MaterialCardView>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

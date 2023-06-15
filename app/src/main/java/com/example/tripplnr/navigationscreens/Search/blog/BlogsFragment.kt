@@ -7,8 +7,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
+import android.widget.EditText
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -55,22 +58,13 @@ class BlogsFragment : Fragment() {
         rc.adapter = adapter
 
 
-        var searchView = binding.searchView1
+//        var searchView = binding.searchView1
 
+        binding.searchView1.addTextChangedListener {
+            val query = binding.searchView1.text.toString()
+            filter(query)
+        }
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // Perform search based on query
-
-                return false
-            }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                // Perform search as query text changes (optional)
-                filter(newText)
-                return false
-            }
-        })
 
 
 

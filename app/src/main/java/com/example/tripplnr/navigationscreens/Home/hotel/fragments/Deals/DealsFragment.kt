@@ -31,7 +31,7 @@ class DealsFragment : Fragment(),bookingCardAdapter.onclickCard {
 
     lateinit var reviewrc :RecyclerView
     lateinit var similarrc :RecyclerView
-    lateinit var adapter :ReviewAdapter
+    lateinit var reviewAdapter: ReviewAdapter
 
 
     override fun onCreateView(
@@ -83,9 +83,9 @@ class DealsFragment : Fragment(),bookingCardAdapter.onclickCard {
 
         reviewrc = binding.reviewRecyclerView
         GlobalScope.launch {
-            adapter = ReviewAdapter(ReviewData1().take(4),requireContext())
-            reviewrc.adapter = adapter
-            adapter.notifyDataSetChanged()
+            reviewAdapter = ReviewAdapter(ReviewData1().take(4),requireContext())
+            reviewrc.adapter = reviewAdapter
+            reviewAdapter.notifyDataSetChanged()
         }
 
         similarrc = binding.similarHotelRecyclerview
@@ -97,7 +97,7 @@ class DealsFragment : Fragment(),bookingCardAdapter.onclickCard {
         GlobalScope.launch {
             onclickreadmore(binding.readmoreTextView,null)
             onclickreadmore(binding.showmoretxt1,null)
-            onclickreadmore(binding.reviewRec,adapter)
+            onclickreadmore(binding.reviewRec,reviewAdapter)
 
         }
 

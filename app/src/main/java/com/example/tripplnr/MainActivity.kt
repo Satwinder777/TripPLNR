@@ -12,6 +12,7 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.tripplnr.databinding.ActivityMainBinding
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.firebase.FirebaseApp
 
 class MainActivity : AppCompatActivity() {
     private lateinit var navController: NavController
@@ -31,6 +32,7 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = binding.bottomNavigation
         bottomNavigationView.setBackgroundResource(R.drawable.bg_botton_nav)
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
+        FirebaseApp.initializeApp(this)
 
 
 //        val selectedColor = ColorStateList.valueOf(R.color.yellow)

@@ -40,3 +40,5 @@ data class guestdatacls(
         }
     }
 }
+data class userData(var first :String,var second:String)
+data class User1(val username: String? = null, val email: String? = null)

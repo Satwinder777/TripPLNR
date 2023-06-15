@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
@@ -18,9 +19,12 @@ import com.example.tripplnr.databinding.FragmentAccountBinding
 import com.example.tripplnr.navigationscreens.Account.activity.CreateUserActivity
 import com.example.tripplnr.navigationscreens.Account.activity.CurrencyActivity
 import com.example.tripplnr.navigationscreens.Account.activity.LegalinformatinActivity
+import com.example.tripplnr.navigationscreens.DataCls.User1
+import com.example.tripplnr.navigationscreens.DataCls.userData
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
+import com.firebase.ui.auth.data.model.User
 import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.auth.api.identity.BeginSignInRequest
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -33,6 +37,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
 
@@ -49,8 +57,10 @@ private const val ARG_PARAM2 = "param2"
 class AccountFragment : Fragment() {
     private lateinit var binding : FragmentAccountBinding
     private lateinit var googleSignInClient: GoogleSignInClient
+    private lateinit var intent: Intent
 
 
+    val currentUser = FirebaseAuth.getInstance().currentUser
 
 
 
@@ -62,6 +72,7 @@ class AccountFragment : Fragment() {
 
     val user = FirebaseAuth.getInstance().currentUser
 
+    @SuppressLint("RestrictedApi")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -75,22 +86,40 @@ class AccountFragment : Fragment() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-        binding.userText.setText("Login")
+
+        if (currentUser?.isAnonymous == true) {
+            // User is anonymous
+            // Perform the necessary actions for anonymous users
+            // For example, show a different UI or restrict certain functionalities
+            Toast.makeText(requireContext(), "anonymous", Toast.LENGTH_SHORT).show()
+        } else {
+            // User is not anonymous
+            // Perform the necessary actions for authenticated users
+            // For example, allow access to restricted features or show personalized content
+            var name = currentUser?.displayName
+            var email = currentUser?.email
+            Toast.makeText(requireContext(), "not anonymous", Toast.LENGTH_SHORT).show()
+            Log.e("c123", "onCreateView: $name,$email", )
+            if (email != null) {
+                WordStartchar(email)
+            }
+
+        }
 
 
 
         Toast.makeText(requireContext(), "${user?.displayName}", Toast.LENGTH_SHORT).show()
-        binding.userText.setText(user?.displayName)
-        binding.alphaText.visibility = View.VISIBLE
 
-        setcurrency()
+
+
 
         return binding.root
 
 
+
     }
 
-    @SuppressLint("MissingInflatedId", "InflateParams")
+    @SuppressLint("MissingInflatedId", "InflateParams", "SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -98,89 +127,154 @@ class AccountFragment : Fragment() {
             val intent = Intent(requireContext(), LegalinformatinActivity::class.java)
             startActivity(intent)
         }
+        var imgUrl =  "android.resource://" + requireContext() + "/" + R.drawable.account_ic
+        val database = FirebaseDatabase.getInstance().getReference()
+        database.child("users").child("userId").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val user = dataSnapshot.getValue(User::class.java)
+                // Do something with the user object
+                Log.e("dbase", "onDataChange: $user", )
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                // Handle errors here
+                Log.e("dbase", "onCancelled: ${databaseError.message}", )
+            }
+        })
+//              var gclient =   getGoogleSignInClient(requireContext())
+          // show currency
 
 
-              var gclient =   getGoogleSignInClient(requireContext())
-        setcurrency()   // show currency
+     
 
 
         binding.logintxt.setOnClickListener {
 
-            var view = layoutInflater.inflate(R.layout.login_display, null, false)
+            val account = GoogleSignIn.getLastSignedInAccount(requireContext())
+
+            if (account != null && currentUser!=null) {
+                // User is logged in with Google
+                // You can access the user's information via the account object
+                val displayName = account.displayName
+                val email = account.email
+                // Perform actions for a logged-in user
+                Toast.makeText(requireContext(), "already logged!", Toast.LENGTH_SHORT).show()
+            } else {
+                // User is not logged in with Google
+                // Perform actions for a logged-out user
+                Toast.makeText(requireContext(), "login require!", Toast.LENGTH_SHORT).show()
+
+                var view = layoutInflater.inflate(R.layout.login_display, null, false)
 //            checkuserisLogged()
-            var pop = PopupWindow(
-                view,
-                ViewGroup.LayoutParams.MATCH_PARENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT,
-                true
-            )
+                var pop = PopupWindow(
+                    view,
+                    ViewGroup.LayoutParams.MATCH_PARENT,
+                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                    true
+                )
 
 //            pop.contentView = view
-            pop.showAtLocation(view, Gravity.CENTER, 0, 0)
-            var closebtn = view.findViewById<ImageView>(R.id.closeLogin)
-            closebtn.setOnClickListener {
-                pop.dismiss()
-            }
-            var createAcc = view.findViewById<TextView>(R.id.createAccount)
-            createAcc.setOnClickListener {
-                val intent = Intent(requireContext(), CreateUserActivity::class.java)
-                startActivity(intent)
-            }
-            var email = view.findViewById<EditText>(R.id.emailEditText)
-            var password0 = view.findViewById<EditText>(R.id.passwordEditText)
-            var loginbtn = view.findViewById<MaterialButton>(R.id.loginMButton)
-           var googlelogin =  view.findViewById<MaterialButton>(R.id.btn_login_google)
-            googlelogin.setOnClickListener{
+                pop.showAtLocation(view, Gravity.CENTER, 0, 0)
+                var closebtn = view.findViewById<ImageView>(R.id.closeLogin)
+                closebtn.setOnClickListener {
+                    pop.dismiss()
+                }                                               //close btn
 
-                googleloginintent()
-                pop.dismiss()
-            }
+                var createAcc = view.findViewById<TextView>(R.id.createAccount)
+                createAcc.setOnClickListener {
+                    val intent = Intent(requireContext(), CreateUserActivity::class.java)
+                    startActivity(intent)
+                }                                               //create acc
 
-            loginbtn.setOnClickListener {
+                var email = view.findViewById<EditText>(R.id.emailEditText)
+                var password0 = view.findViewById<EditText>(R.id.passwordEditText)
+                var loginbtn = view.findViewById<MaterialButton>(R.id.loginMButton)
+                var googlelogin =  view.findViewById<MaterialButton>(R.id.btn_login_google)
+                googlelogin.setOnClickListener{
 
-                val userName = email.text.toString().trim()
-                val password = password0.text.toString().trim()
+                    googleloginintent()
+                    
+                    pop.dismiss()
+                }
 
-                var TAG = "test30"
-                auth.createUserWithEmailAndPassword(userName, password)
-                    .addOnCompleteListener { task ->
-                        if (task.isSuccessful) {
+                loginbtn.setOnClickListener {
 
+                    val userName = email.text.toString().trim()
+                    val password = password0.text.toString().trim()
 
+                    var TAG = "test30"
 
-
-
-                            val user1 = FirebaseAuth.getInstance().currentUser
-                            Toast.makeText(requireContext(), "${user1?.displayName}", Toast.LENGTH_SHORT).show()
-                             var user = auth.currentUser?.email
-                            binding.userText.setText(user)
-                            var alphabetfirst = user?.get(0)?.toUpperCase().toString()
-                            binding.alphaText.setText(alphabetfirst)
-                            binding.alphaText.visibility = View.VISIBLE
-                            binding.logoutBtn.visibility = View.VISIBLE
-                            binding.logoutBtn.setText("Logout")
+                    auth.createUserWithEmailAndPassword(userName, password)
+                        .addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
 
 
 
-                            pop.dismiss()
-                        } else {
-                            Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                            Toast.makeText(
-                                requireContext(),
-                                "Authentication failed.",
-                                Toast.LENGTH_SHORT,
-                            ).show()
-                            binding.logoutBtn.visibility = View.GONE
+
+
+                                val user1 = FirebaseAuth.getInstance().currentUser
+                                Toast.makeText(requireContext(), "${user1?.displayName}", Toast.LENGTH_SHORT).show()
+                                var user = auth.currentUser?.email
+                                binding.userText.setText(user)
+                                var alphabetfirst = user?.get(0)?.toUpperCase().toString()
+                                binding.alphaText.setText(alphabetfirst)
+                                binding.alphaText.visibility = View.VISIBLE
+                                binding.logoutBtn.visibility = View.VISIBLE
+                                binding.logoutBtn.setText("Logout")
+
+
+
+                                pop.dismiss()
+                            } else {
+                                Log.w(TAG, "createUserWithEmail:failure", task.exception)
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Authentication failed.",
+                                    Toast.LENGTH_SHORT,
+                                ).show()
+                                binding.logoutBtn.visibility = View.GONE
+                            }
                         }
+                    if (auth.currentUser!=null){
+                       var email = auth.currentUser?.email
+                       var name = auth.currentUser?.displayName
+                       var anony = auth.currentUser?.isAnonymous
+                        Log.e("check2312", "onViewCreated: $email,$name,$anony", )
+                    }
+                    else{
+                        Log.e("check2312", "onViewCreated: usernull", )
+
                     }
 
-            }
-            }
+                }
 
+            
+            }
+//            val currentUser = FirebaseAuth.getInstance().currentUser
+//            if (currentUser != null) {
+//                Toast.makeText(requireContext(), "user logged!", Toast.LENGTH_SHORT).show()
+//
+//            } else {
+//                // User is not logged in
+//                // Perform actions for a logged-out user
+//
+//
+//            }
+
+
+        }
+
+
+
+
+        intent = Intent(requireContext(), CurrencyActivity::class.java)                                         //current activity
 
             binding.curenncyText.setOnClickListener {
-                val intent = Intent(requireContext(), CurrencyActivity::class.java)
-                startActivity(intent)
+
+//                setcurrency()
+                val requestCode = 1
+                startActivityForResult(intent, requestCode)
+
             }
         binding.logoutBtn.setOnClickListener{
 
@@ -210,6 +304,8 @@ class AccountFragment : Fragment() {
 ////            loginTask()
 //
 //        }
+
+
 
 
     }
@@ -282,11 +378,13 @@ class AccountFragment : Fragment() {
     companion object {
         private const val TAG = "GoogleActivity"
         private const val RC_SIGN_IN = 9001}
+
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
+        super.onActivityResult(requestCode, resultCode, data)                                                                           ///activity result
 
-
-try {
+           try {
     if(requestCode ==13 && resultCode==resultCode){
         val task = GoogleSignIn.getSignedInAccountFromIntent(data)
         val account = task.getResult(ApiException::class.java)
@@ -301,28 +399,43 @@ try {
     }
 
 }
-catch (e:Exception){
+           catch (e:Exception){
     Log.e(TAG, "onActivityResult: ${e.message}", )
 
 }
+        if (requestCode == 1 && resultCode == Activity.RESULT_OK) {                                                                     /// setting currency 
+            val value = data?.getStringExtra("key") // Replace "key" with the key you used in the child activity
+            // Use the retrieved value as needed
+            Toast.makeText(requireContext(), "$value", Toast.LENGTH_SHORT).show()
+            Log.e("valuedata", "onActivityResult: $value", )
+            binding.currencyType.setText(value)
 
+
+
+        }
+
+        val username = GoogleSignIn.getLastSignedInAccount(requireContext())
 
         if (requestCode == RC_SIGN_IN) {
             val response = IdpResponse.fromResultIntent(data)
 
             if (resultCode == Activity.RESULT_OK) {
                 // User successfully signed in
-                val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
 
                 // Get the user's display name (username)
-                val username = user?.displayName
+
 
                 // Use the username as needed
                 if (username != null) {
                     // Do something with the username
 //                        Log.d("MainActivity", "Username: $username")
-                    binding.userText.setText(username)
+                    Log.e(TAG, "onActivityResult: $username", )
+//                    binding.userText.setText(username.givenName)
+//                    WordStartchar(username.givenName)
+
+
                     binding.alphaText.visibility = View.VISIBLE
+                    Log.e("username", "onActivityResult:$username ", )
                 }else{
                     Log.e("testuser", "onActivityResult: null", )
                 }
@@ -352,6 +465,7 @@ catch (e:Exception){
 //                Log.e("statususer", "onActivityResult: ${e.message}", )
 //            }
 //        }
+
     }
 //    private fun updateUI(user: FirebaseUser?) {
 //
@@ -367,8 +481,16 @@ catch (e:Exception){
                     // Sign in success, update UI with the signed-in user's information
                     val user = auth.currentUser
                     Toast.makeText(requireContext(), "${user?.displayName}", Toast.LENGTH_SHORT).show()
-                    binding.userText.setText(user?.displayName)
-                    binding.alphaText.visibility = View.VISIBLE
+
+                    if(user?.displayName.isNullOrEmpty()){
+
+                        binding.userText.setText(user?.email)
+                    }
+                    else{
+                        user?.displayName?.let { WordStartchar(it) }
+                        binding.userText.setText(user?.displayName)
+                        binding.alphaText.visibility = View.VISIBLE
+                    }
                     // ...
                 } else {
                     // Sign in failed, display a message to the user
@@ -417,7 +539,7 @@ catch (e:Exception){
         startActivityForResult(signInIntent, RC_SIGN_IN)
 //        auth.currentUser?.displayName
         Log.e("shuda", "loginTask: ${auth.currentUser?.displayName}", )
-    }
+    }                   //**
     private fun logout(){
         googleSignInClient.signOut()
     }
@@ -425,4 +547,40 @@ catch (e:Exception){
         startActivityForResult(googleSignInClient.signInIntent  ,13)
 
     }
+
+    private fun WordStartchar(line:String){
+
+        if (line.isNullOrEmpty()){
+
+            binding.userText.text ="login"
+            binding.alphaText.visibility = View.INVISIBLE
+
+        }
+        else{
+            val words = line.split(" ")
+            val firstLetters = words.map { it.first() }
+            var first = firstLetters.get(0).toUpperCase()
+//            when(firstLetters.size){
+//                1->{}
+//                2->{}
+//            }
+            var userAlphaChar=""
+            if (firstLetters.size>1){
+                var second = firstLetters.get(1).toUpperCase()
+                userAlphaChar = "$first$second"
+            }
+            else{
+               userAlphaChar = "$first"
+            }
+
+//            Log.e("sarra123", "$userAlphaChar", )
+            binding.alphaText.text = userAlphaChar
+            binding.userText.text = line
+            binding.alphaText.visibility = View.VISIBLE
+
+        }
+
+
+    }
+
 }

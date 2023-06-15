@@ -10,6 +10,7 @@
 
 
     <color name="yellow">#fd7e14</color>
+    <color name="yellow1">#ff953d</color>
     <color name="light_yellow">#ED9B57</color>
     <color name="blue">#1E73BD</color>
     <color name="creame">#f6f6f9</color>
@@ -21,6 +22,11 @@
     <color name="star_color">#f7d804</color>
     <color name="shimmer_color">#C6C0C0</color>
     <color name="shimmer_color2">#F6EBEB</color>
+
+
+    <color name="testlcr">#f4f2f5</color>
+
+
 
 
 

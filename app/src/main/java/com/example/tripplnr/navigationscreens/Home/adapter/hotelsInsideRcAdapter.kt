@@ -7,11 +7,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
-import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class hotelsInsideRcAdapter(var list : MutableList<hotelchild>, var onItemClick1: TravelBlogAdapter.onItemClick? = null):RecyclerView.Adapter<hotelsInsideRcAdapter.InnerClass>() {
 
@@ -28,10 +25,13 @@ class hotelsInsideRcAdapter(var list : MutableList<hotelchild>, var onItemClick1
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
-        GlobalScope.launch {
+
             holder.bind(list)
-            holder.itemView.setOnClickListener { onItemClick1?.onclickItem(position) }
-        }
+            holder.itemView.setOnClickListener { onItemClick1?.onclickItem(
+                position,
+                null
+            ) }
+
 
     }
     class InnerClass(view: View):RecyclerView.ViewHolder(view) {
@@ -44,7 +44,7 @@ class hotelsInsideRcAdapter(var list : MutableList<hotelchild>, var onItemClick1
 
       //  var learnmoretxt = view.findViewById<TextView>(R.id.learnmoretxt)
 
-       suspend fun bind (list: List<hotelchild>){
+        fun bind (list: List<hotelchild>){
             var item = list[position]
 
 

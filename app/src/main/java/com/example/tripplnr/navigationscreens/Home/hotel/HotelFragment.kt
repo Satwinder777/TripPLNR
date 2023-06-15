@@ -1,5 +1,6 @@
 package com.example.tripplnr.navigationscreens.Home.hotel
 
+import android.annotation.SuppressLint
 import android.app.ActionBar.OnNavigationListener
 import android.content.Context
 import android.content.Intent
@@ -16,6 +17,7 @@ import com.denzcoskun.imageslider.models.SlideModel
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHotelBinding
 import com.example.tripplnr.navigationscreens.Home.hotel.adapter.PageAdapter1
+import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.google.android.material.tabs.TabLayout
 
 
@@ -29,9 +31,12 @@ class HotelFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHotelBinding.inflate(layoutInflater)
+        val placetext = arguments?.getString("place","default" ) ?: ""
+        binding.hotelNametxt.setText(placetext)
         return binding.root
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -48,30 +53,25 @@ class HotelFragment : Fragment() {
         binding.backbtnhotlFragment.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
-//        tabLayout.addOnTabSelectedListener(object :TabLayout.OnTabSelectedListener{
-//            override fun onTabSelected(tab: TabLayout.Tab?) {
-////                TODO("Not yet implemented")
-//                tab?.position
-//                tabLayout.(R.color.yellow,R.color.yellow)
-//            }
-//
-//            override fun onTabUnselected(tab: TabLayout.Tab?) {
-//                TODO("Not yet implemented")
-//            }
-//
-//            override fun onTabReselected(tab: TabLayout.Tab?) {
-//                TODO("Not yet implemented")
-//            }
-//
-//        })
+
 
         binding.shareBtn.setOnClickListener {
-            val textToShare = "Hello, this is the content to be shared."
+            val textToShare = "WWW.shergillProductons.com"
             val subject = "Shared Content"
 
             shareContent(textToShare, subject, requireContext())
 
         }
+        binding.datepickerdate1.setText(Allfun.dateLiveData.value)
+        var dateDAta: String? = Allfun.dateLiveData.value
+
+
+
+        val guestdetails = Allfun.guestLiveData.value
+        val guest = guestdetails?.guest
+        val rooms = guestdetails?.rooms
+        binding.guestcount1.setText("$guest Guest, $rooms Room")
+
 
     }
     private fun sliderImageSet() {

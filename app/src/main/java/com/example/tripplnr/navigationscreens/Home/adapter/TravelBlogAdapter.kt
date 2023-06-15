@@ -6,14 +6,10 @@ import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.LifecycleOwner
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
-import com.example.tripplnr.navigationscreens.LiveDataVM.Live
 import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class TravelBlogAdapter(
     var list: List<travelBlogItem>,
@@ -41,14 +37,15 @@ class TravelBlogAdapter(
 
 
         holder.itemView.setOnClickListener {
-            onItemClick1?.onclickItem(position)
+            onItemClick1?.onclickItem(position,itemposition.placetextuser)
         }
 
-        GlobalScope.launch {
+
             holder.bind(list)
-            holder.favorateCardBtn.setOnClickListener {
+//            holder.favorateCardBtn.setOnClickListener {}
+
 //                onItemClick1?.onfavoratebtnClicks(position)
-            }
+
             var sizeless:Boolean = true    //true    already setted!!
 
 
@@ -97,7 +94,7 @@ class TravelBlogAdapter(
 
                         }
             }
-        }
+
 
 
 
@@ -115,7 +112,7 @@ class TravelBlogAdapter(
         var favorateBtn = view.findViewById<ImageView>(R.id.addtoFavorateIV)
 
 
-       suspend fun bind (list: List<travelBlogItem>){
+      fun bind (list: List<travelBlogItem>){
             var item = list[position]
 
            if (item.isfavorate==true){
@@ -134,6 +131,6 @@ class TravelBlogAdapter(
 
     }
     interface onItemClick{
-        fun onclickItem(position: Int)
+        fun onclickItem(position: Int, placetextuser: String?)
     }
 }

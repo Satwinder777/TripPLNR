@@ -10,11 +10,13 @@ import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
 import com.example.tripplnr.navigationscreens.Search.adapter.RecyclerAdapterSearchFr
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.adapter.HotelList2Adapter
+import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
 class HotelList2Activity : AppCompatActivity() {
     private lateinit var binding :ActivityHotelList2Binding
     @SuppressLint("MissingInflatedId", "InflateParams")
+    private lateinit var searchquery:String
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHotelList2Binding.inflate(layoutInflater)
@@ -31,6 +33,21 @@ class HotelList2Activity : AppCompatActivity() {
         binding.closebtnHotelList2.setOnClickListener{
            onBackPressed()
         }
+        searchquery = intent.getStringExtra("query").toString()
+
+        var rangedate = Allfun.dateLiveData.value
+        binding.cityname.setText(searchquery)
+        binding.daterange.setText(rangedate)
+
+
+        var guestdateails = Allfun.guestLiveData.value
+        var guest = guestdateails?.guest
+        var room = guestdateails?.rooms
+        binding.roomcountMapFrag.setText(room.toString())
+        binding.guestcountMapFragment.setText(guest.toString())
+
+
+
     }
     fun hotelData():List<hotelTitle>{
         val hotelchildData  = listOf<hotelchild>(

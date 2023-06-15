@@ -3,5 +3,5 @@
     <corners
         android:topRightRadius="15dp"
         android:topLeftRadius="15dp"/>
-    <solid android:color="@color/cardview_shadow_start_color" />
+    <solid android:color="@color/creame" />
 </shape>

@@ -51,6 +51,7 @@
                 android:orientation="vertical">
 
                 <TextView
+                    android:id="@+id/cityname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="New York"
@@ -63,6 +64,7 @@
                     android:orientation="horizontal">
 
                     <TextView
+                        android:id="@+id/daterange"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Wed, 30 Jun -  Thu, 31 Jun"
@@ -76,6 +78,7 @@
                         android:background="?android:attr/listDivider" />
 
                     <TextView
+                        android:id="@+id/roomcountMapFrag"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1"
@@ -90,6 +93,7 @@
                         app:tint="@color/yellow" />
 
                     <TextView
+                        android:id="@+id/guestcountMapFragment"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="1"

@@ -1,12 +1,16 @@
 package com.example.tripplnr.navigationscreens.Account.activity
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Intent
 import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ArrayAdapter
 import android.widget.SearchView
 import android.widget.Toast
+import androidx.core.view.get
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
@@ -19,104 +23,91 @@ import java.util.*
 
 class CurrencyActivity : AppCompatActivity(),CurrencyRecyclerAdapter.callfun {
     private lateinit var binding :ActivityCurrencyBinding
-    private lateinit var rcCurr :RecyclerView
-    private lateinit var adapter :CurrencyRecyclerAdapter
+//    private lateinit var rcCurr :RecyclerView
+//    private lateinit var adapter :CurrencyRecyclerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCurrencyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
-        rcCurr = binding.currencyRecyclerView
-        rcCurr.layoutManager = LinearLayoutManager(this)
-       adapter = CurrencyRecyclerAdapter(emptylist(),this)
-        rcCurr.adapter = adapter
+//        rcCurr = binding.currencyRecyclerView
+//        rcCurr.layoutManager = LinearLayoutManager(this)
+//       adapter = CurrencyRecyclerAdapter(emptylist(),this)
+//        rcCurr.adapter = adapter
 
 
-        var searchView = binding.searchView
+//        var searchView = binding.searchView
+//
+//        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+//            override fun onQueryTextSubmit(query: String): Boolean {
+//                // Perform search based on query
+//
+//                return false
+//            }
+//
+//            override fun onQueryTextChange(newText: String): Boolean {
+//                // Perform search as query text changes (optional)
+//                filter(newText)
+//                return false
+//            }
+//        })
+        var currencyPicker =  binding.currencyPicker
+        currencyPicker.apply {
+            threshold = 0
 
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-                // Perform search based on query
+            val suggestAdapter = ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, resources.getStringArray(R.array.currency) )
+            setAdapter(suggestAdapter)
+            this.setOnItemClickListener { parent, view, position, id ->
+                Allfun.currencyData.value = currencyPicker.text.toString()
 
-                return false
+                var value = currencyPicker.text.toString()
+                val resultIntent = intent
+                resultIntent.putExtra("key", value) // Replace "key" with your desired key and value with the actual data
+                setResult(Activity.RESULT_OK, resultIntent)
+                finish()
+//                Log.e("checkcurrency", "onCreate: ${view.transitionName},${parent.get(position).transitionName} ", )
             }
-
-            override fun onQueryTextChange(newText: String): Boolean {
-                // Perform search as query text changes (optional)
-                filter(newText)
-                return false
+            this.setOnClickListener{
+                showDropDown()
             }
-        })
+            //  performCompletion()
+        }
 
 
         binding.backbtncurrencyActivity.setOnClickListener { onBackPressed() }
     }
-    private fun currenData():MutableList<currencyData>{
-        var list = mutableListOf<currencyData>(
-
-            currencyData("US Dollar (USD)"),
-            currencyData("Euro (EUR)"),
-            currencyData("British Pound (GBP)"),
-            currencyData("Japanese Yen (JPY)"),
-            currencyData("Swiss Franc (CHF)"),
-            currencyData("Canadian Dollar (CAD)"),
-            currencyData("Australian Dollar (AUD)"),
-            currencyData("New Zealand Dollar (NZD)"),
-            currencyData("Chinese Yuan (CNY)"),
-            currencyData("Indian Rupee (INR)"),
-            currencyData("Russian Ruble (RUB)"),
-            currencyData("Brazilian Real (BRL)"),
-            currencyData("South African Rand (ZAR)"),
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        )
-
-        return list
-    }
 
     @SuppressLint("NotifyDataSetChanged")
-    private fun filter(text: String) {
-
-        var list11 = currenData()
-        // creating a new array list to filter our data.
-        val filteredlist:MutableList<currencyData> = mutableListOf()
-
-        // running a for loop to compare elements.
-        for (item in list11) {
-            // checking if the entered string matched with any item of our recycler view.
-            if (item.currency.toLowerCase().contains(text.toLowerCase())) {
-                // if the item is matched we are
-                // adding it to our filtered list.
-                filteredlist.add(item)
-
-            }
-        }
-        if (filteredlist.isEmpty()) {
-            // if no item is added in filtered list we are
-            // displaying a toast message as no data found.
-            Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show()
-        } else {
-            // at last we are passing that filtered
-            // list to our adapter class.
-//            adapter.filterList(filteredlist)
-            adapter.list = filteredlist
-            adapter.notifyDataSetChanged()
-            Log.e("test23", "filter: $filteredlist ", )
-        }
-    }
+//    private fun filter(text: String) {
+//
+//        var list11 = currenData()
+//        // creating a new array list to filter our data.
+//        val filteredlist:MutableList<currencyData> = mutableListOf()
+//
+//        // running a for loop to compare elements.
+//        for (item in list11) {
+//            // checking if the entered string matched with any item of our recycler view.
+//            if (item.currency.toLowerCase().contains(text.toLowerCase())) {
+//                // if the item is matched we are
+//                // adding it to our filtered list.
+//                filteredlist.add(item)
+//
+//            }
+//        }
+//        if (filteredlist.isEmpty()) {
+//            // if no item is added in filtered list we are
+//            // displaying a toast message as no data found.
+//            Toast.makeText(this, "No Data Found..", Toast.LENGTH_SHORT).show()
+//        } else {
+//            // at last we are passing that filtered
+//            // list to our adapter class.
+////            adapter.filterList(filteredlist)
+//            adapter.list = filteredlist
+//            adapter.notifyDataSetChanged()
+//            Log.e("test23", "filter: $filteredlist ", )
+//        }
+//    }
     private fun emptylist():MutableList<currencyData>{
 
         var list = mutableListOf<currencyData>(

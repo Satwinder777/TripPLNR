@@ -1,6 +1,7 @@
 package com.example.tripplnr.navigationscreens.objectfun
 
 import android.annotation.SuppressLint
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.ImageView
 import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import com.example.tripplnr.R
+import com.example.tripplnr.navigationscreens.DataCls.guestdatacls
 import com.example.tripplnr.navigationscreens.Home.dataclass.travelBlogItem
 import com.example.tripplnr.navigationscreens.LiveDataVM.Live
 import com.example.tripplnr.navigationscreens.favorateFragment.Adapter.FavorateFragmentAdapter
@@ -21,15 +23,37 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import org.w3c.dom.Text
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 object Allfun {
     var currencyData = MutableLiveData<String>("USD")
 
+    val dateLiveData =  MutableLiveData<String>(freshdate())
+
+     val guestLiveData =  MutableLiveData<guestdatacls>(guestdatacls(1,1))
+
+
+
     fun task1(){
         Log.e("testlog", "task1: i am a log", )
         println("testobj")
     }
+    fun freshdate():String{
+        val date = Date()
+        val dateFormat = SimpleDateFormat("EEE ,dd MMM", Locale.getDefault())
+        var startdate0 = dateFormat.format(date)
+
+
+        var rangestr = "$startdate0 - $startdate0"
+
+        return rangestr
+    }
+
+
+
+
 
 
 

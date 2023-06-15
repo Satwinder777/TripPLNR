@@ -25,8 +25,7 @@ class FavorateFragmentAdapter(
     ):RecyclerView.Adapter<FavorateFragmentAdapter.InnerClass>() {
     var filterList: MutableList<travelBlogItem>? = favorateList1?.filter { it.isfavorate==true }?.toMutableList()
 
-//    var livedataFavo = favorateList?.value?.toMutableList() ?: mutableListOf()
-//    var filter = favorateList?.value?.filter { it.isfavorate ==true }
+
 
 
 
@@ -41,7 +40,7 @@ class FavorateFragmentAdapter(
     }
 
 
-    @OptIn(DelicateCoroutinesApi::class)
+
     override fun onBindViewHolder(holder: InnerClass,position: Int) {
 
 //        var itemposition = favorateList?.get(position)
@@ -55,9 +54,11 @@ class FavorateFragmentAdapter(
 //            onItemClick1?.onclickItem(position)
 //        }
 
-        GlobalScope.launch {
 
-            filterList?.let { holder.bind(it) }
+
+            filterList?.let { holder.bind(it)
+                holder.favorateBtn.setImageResource(R.drawable.favo_ic)
+            }
 
 //            holder.favorateCardBtn.setOnClickListener {
 ////                onItemClick1?.onfavoratebtnClicks(position)
@@ -71,7 +72,6 @@ class FavorateFragmentAdapter(
 
                     if(sizeless==true){
                         aboutText.maxLines = Int.MAX_VALUE
-//                        onItemClick1?.showtext(position)
                         showMoretxt.setText("Show Less..")
                         sizeless = false
 
@@ -87,9 +87,6 @@ class FavorateFragmentAdapter(
 
                 }
 
-
-
-                favorateBtn.setImageResource(R.drawable.favo_ic)
                         favorateBtn?.setOnClickListener {
                             filterList?.let { it1 ->
                                 onItemClick1?.dltBlog(
@@ -103,8 +100,6 @@ class FavorateFragmentAdapter(
 
                         }
             }
-        }
-
 
         }
 
@@ -124,7 +119,7 @@ class FavorateFragmentAdapter(
       //  var learnmoretxt = view.findViewById<TextView>(R.id.learnmoretxt)
 
        @SuppressLint("SuspiciousIndentation")
-       suspend fun bind (list: MutableList<travelBlogItem>) {
+       fun bind (list: MutableList<travelBlogItem>) {
            val item = list.get(position)
 
                 if (item.isfavorate==true){

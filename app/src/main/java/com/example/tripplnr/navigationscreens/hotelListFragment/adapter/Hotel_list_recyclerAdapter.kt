@@ -8,13 +8,12 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelListClass
-import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
-import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class Hotel_list_recyclerAdapter(var list : List<hotelListClass>):RecyclerView.Adapter<Hotel_list_recyclerAdapter.InnerClass>() {
+class Hotel_list_recyclerAdapter(var list : List<hotelListClass>,private val details:viewdetail):RecyclerView.Adapter<Hotel_list_recyclerAdapter.InnerClass>() {
 
 
 
@@ -32,6 +31,11 @@ class Hotel_list_recyclerAdapter(var list : List<hotelListClass>):RecyclerView.A
         GlobalScope.launch {
             holder.bind(list)
         }
+        holder.apply {
+            viewdtl.setOnClickListener {
+                details.checkDetails(it,position)
+            }
+        }
 
     }
     class InnerClass(view: View):RecyclerView.ViewHolder(view) {
@@ -39,6 +43,7 @@ class Hotel_list_recyclerAdapter(var list : List<hotelListClass>):RecyclerView.A
         var hotelListItemImg = view.findViewById<ImageView>(R.id.hotelListItemImg)
         var hotelname1 = view.findViewById<TextView>(R.id.hotelname1)
         var locationhotel = view.findViewById<TextView>(R.id.locationhotel)
+        var viewdtl = view.findViewById<MaterialButton>(R.id.viewDetails)
 
 
 
@@ -53,5 +58,8 @@ class Hotel_list_recyclerAdapter(var list : List<hotelListClass>):RecyclerView.A
 
         }
 
+    }
+    interface viewdetail{
+        fun checkDetails(view: View, position: Int)
     }
 }

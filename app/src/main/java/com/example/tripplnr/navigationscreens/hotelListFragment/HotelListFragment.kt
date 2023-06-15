@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Binder
 import android.os.Bundle
 import android.os.Parcelable
@@ -26,6 +27,7 @@ import com.example.tripplnr.navigationscreens.DataCls.guestdatacls
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelListClass
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.HotelList2Activity
 import com.example.tripplnr.navigationscreens.hotelListFragment.adapter.Hotel_list_recyclerAdapter
+import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
@@ -33,9 +35,10 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class HotelListFragment : Fragment() {
+class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     private lateinit var binding: FragmentHotelListBinding
     private lateinit var rc: RecyclerView
+    private lateinit var query :String
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -44,14 +47,15 @@ class HotelListFragment : Fragment() {
 //        var data = arguments?.getParcelable("guest", ) ?: ""
 
 //        var myParcelable = arguments?.getParcelable("myParcelable") as MyParcelable
-        val data  = arguments?.getParcelable<guestdatacls>("guest")
-            ?: throw IllegalArgumentException("myParcelable not found in arguments bundle")
-        binding.roomtextviewHotelList.setText("${data.rooms}")
-        binding.guestTexthotelList.setText("${ data.guest }")
-        var date = arguments?.getString("date","default" ) ?: ""
-        var query = arguments?.getString("query","default" ) ?: ""
-        Log.e("data12", "onCreateView: $data,$date", )
-        binding.dateTextviewHotelList.setText(date)
+//        val data  = arguments?.getParcelable<guestdatacls>("guest")
+//            ?: throw IllegalArgumentException("myParcelable not found in arguments bundle")
+        val data = Allfun.guestLiveData.value
+        binding.roomtextviewHotelList.setText("${data?.rooms}")
+        binding.guestTexthotelList.setText("${ data?.guest }")
+//        var date = arguments?.getString("date","default" ) ?: ""
+         query = arguments?.getString("query","default" ) ?: ""
+//        Log.e("data12", "onCreateView: $data,$date", )
+        binding.dateTextviewHotelList.setText(Allfun.dateLiveData.value)
         binding.queryTextViewHotelList.setText(query)
 
         return binding.root
@@ -63,7 +67,7 @@ class HotelListFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         rc = binding.hotelListFragmentRecyclerView
         GlobalScope.launch {
-            var adapter  = Hotel_list_recyclerAdapter(postData())
+            var adapter  = Hotel_list_recyclerAdapter(postData(),this@HotelListFragment)
             rc.adapter = adapter
             adapter.notifyDataSetChanged()
         }
@@ -77,6 +81,7 @@ class HotelListFragment : Fragment() {
         }
         binding.mapChip.setOnClickListener {
             val intent = Intent(requireContext(),HotelList2Activity::class.java)
+            intent.putExtra("query",query)
             startActivity(intent)
         }
         doTask(binding.filterList)
@@ -97,7 +102,7 @@ class HotelListFragment : Fragment() {
 
     }
 
-    @SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId", "SuspiciousIndentation")
     fun doTask(view: View){
         var filter = binding.filterList
         var sort = binding.sortList
@@ -210,7 +215,10 @@ class HotelListFragment : Fragment() {
 
     }
 
-
+    override fun checkDetails(view: View, position: Int) {
+        val intent = Intent(Intent.ACTION_VIEW, Uri.parse( "https://www.booking.com"))
+        requireContext().startActivity(intent)
+    }
 
 
 }
