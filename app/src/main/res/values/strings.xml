@@ -66,6 +66,17 @@
         <item>INR</item>
         <item>USD</item>
     </string-array>
+
+
+<!--    <string name="app_name">SpinnerInKotlin</string>-->
+    <string name="selected_item">Selected item:</string>
+
+    <string-array name="Languages">
+        <item>1 Year</item>
+        <item>2 Year</item>
+        <item>3 Year</item>
+
+    </string-array>
     <!--    <string name="status_error"><font fgcolor='#FFFF3B30'>Error</font></string>-->
 <!--    <string name="my_string">&lt;u>&lt;font color='#FF0000'>Read less&lt;/font>&lt;/u></string>-->
 

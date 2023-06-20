@@ -2,4 +2,15 @@
 <resources>
     <dimen name="card_elevation">1000dp</dimen>
     <dimen name="chip_elevation">24dp</dimen>
+    <dimen name="cardHorpad">10dp</dimen>
+    <dimen name="cardVerpad">6dp</dimen>
+    <dimen name="padtop">5dp</dimen>
+    <dimen name="marghori">3dp</dimen>
+    <dimen name="chipspacing">4dp</dimen>
+    <dimen name="heightBtn">38dp</dimen>
+    <dimen name="heightBtn2">35dp</dimen>
+    <dimen name="marstart">5dp</dimen>
+    <dimen name="inset">0dp</dimen>
+
+
 </resources>

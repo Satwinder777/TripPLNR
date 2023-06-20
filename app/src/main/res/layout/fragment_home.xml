@@ -119,6 +119,8 @@
 
 
             android:text="View Hotels"
+            android:fontFamily="@font/poppin_regular"
+
             app:chipBackgroundColor="@color/yellow"
             app:chipIconTint="@color/yellow"
             app:closeIcon="@drawable/next_ic"

@@ -176,6 +176,7 @@
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
+                        android:id="@+id/viewDeals"
                         android:layout_width="match_parent"
                         android:layout_height="53dp"
                         android:layout_weight="1"

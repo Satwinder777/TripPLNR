@@ -4,16 +4,15 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
-import com.example.tripplnr.navigationscreens.Home.adapter.hotelsInsideRcAdapter
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
+import com.google.android.material.button.MaterialButton
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class HotelList2Adapter(var list : List<hotelTitle>):RecyclerView.Adapter<HotelList2Adapter.InnerClass>() {
+class HotelList2Adapter(var list : List<hotelTitle>,var m_onclickViewDeal:onclickViewDeal):RecyclerView.Adapter<HotelList2Adapter.InnerClass>() {
 
 
 
@@ -32,6 +31,9 @@ class HotelList2Adapter(var list : List<hotelTitle>):RecyclerView.Adapter<HotelL
         GlobalScope.launch {
 //            holder.bind(list)
         }
+        holder.m_button.setOnClickListener {
+            m_onclickViewDeal.viewDealHandle(position,it)
+        }
 
 //        holder.apply {
 //            var adapter = list[position].list?.let { hotelsInsideRcAdapter(it) }
@@ -41,6 +43,7 @@ class HotelList2Adapter(var list : List<hotelTitle>):RecyclerView.Adapter<HotelL
 //        }
     }
     class InnerClass(view: View):RecyclerView.ViewHolder(view) {
+        var m_button = view.findViewById<MaterialButton>(R.id.viewDeals)
 
 //        var popularhoteltxt = view.findViewById<TextView>(R.id.popularhoteltxt)
 //        var itemRecyclerView = view.findViewById<RecyclerView>(R.id.popularhotelInsideRc)
@@ -51,5 +54,8 @@ class HotelList2Adapter(var list : List<hotelTitle>):RecyclerView.Adapter<HotelL
 
 //        }
 
+    }
+    interface onclickViewDeal{
+        fun viewDealHandle(position: Int, view: View)
     }
 }

@@ -88,7 +88,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
         chip.setShadowLayer(0f, 10f, 50f, outlineSpotShadowColor)
         chip.outlineSpotShadowColor = outlineSpotShadowColor
         binding.viewHotelCard.setOnClickListener {
-            findNavController().navigate(R.id.searchFragment)
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
 
         }
 
@@ -121,7 +121,7 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 //            var tl =  sF?.requireActivity()?.findViewById<TabLayout>(R.id.tabLayout1)
 
 
-            val newFragment = SearchFragment(1)
+            val newFragment = SearchFragment()
 //            val targetFragment = TargetFragment()
             val fragmentManager = requireParentFragment().parentFragmentManager
             val transaction = fragmentManager.beginTransaction()

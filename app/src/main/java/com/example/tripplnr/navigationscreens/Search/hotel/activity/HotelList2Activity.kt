@@ -3,6 +3,7 @@ package com.example.tripplnr.navigationscreens.Search.hotel.activity
 import android.annotation.SuppressLint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.appcompat.widget.AppCompatImageView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.ActivityHotelList2Binding
@@ -13,7 +14,7 @@ import com.example.tripplnr.navigationscreens.Search.hotel.activity.adapter.Hote
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.google.android.material.bottomsheet.BottomSheetDialog
 
-class HotelList2Activity : AppCompatActivity() {
+class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal {
     private lateinit var binding :ActivityHotelList2Binding
     @SuppressLint("MissingInflatedId", "InflateParams")
     private lateinit var searchquery:String
@@ -23,11 +24,19 @@ class HotelList2Activity : AppCompatActivity() {
         setContentView(binding.root)
 
         var rc = binding.hotelListRecyclerview2
-        var adapter = HotelList2Adapter(hotelData())
+        var adapter = HotelList2Adapter(hotelData(),this)
         rc.adapter = adapter
 
         binding.filterbottom.setOnClickListener {
 
+            val bottomSheetFragment = FilterBottomSheet()
+            bottomSheetFragment.show(supportFragmentManager, bottomSheetFragment.tag)
+            bottomSheetFragment.isCancelable = false
+
+        }
+        binding.showList.setOnClickListener {
+
+            onBackPressed()
 
         }
         binding.closebtnHotelList2.setOnClickListener{
@@ -65,5 +74,9 @@ class HotelList2Activity : AppCompatActivity() {
 
             )
         return list
+    }
+
+    override fun viewDealHandle(position: Int, view: View) {
+        Allfun.openWeb(this)
     }
 }

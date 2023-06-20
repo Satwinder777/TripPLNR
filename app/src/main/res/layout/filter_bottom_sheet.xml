@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:padding="20dp"
-    tools:ignore="MissingClass">
+    tools:ignore="MissingClass"
+    app:background="@color/white"
+    tools:context="com.example.tripplnr.navigationscreens.Search.hotel.activity.FilterBottomSheet">
 
 
     <LinearLayout
@@ -61,26 +63,35 @@
                 android:text="PriceRange"
                 android:textColor="@color/black"
                 android:textStyle="bold"
+                android:fontFamily="@font/poppin_regular"
+
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/rangeReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppin_regular"
                 android:text="Reset"
                 android:textColor="@color/yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <com.google.android.material.slider.RangeSlider
+            android:id="@+id/rangeSlider"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:valueFrom="0"
-            android:valueTo="100"
+            android:valueFrom="10"
+            android:valueTo="5000"
             app:thumbColor="@color/yellow"
             app:values="@array/rangeSlider"
-            tools:ignore="MissingConstraints" />
+            tools:ignore="MissingConstraints"
+
+
+            />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -96,9 +107,11 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <TextView
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:textAlignment="center"
                     android:layout_gravity="center"
+
                     android:text="Min" />
 
                 <androidx.cardview.widget.CardView
@@ -111,13 +124,14 @@
                     app:cardCornerRadius="20dp">
 
                     <EditText
+                        android:id="@+id/minRange"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
                         android:ems="10"
                         android:inputType="number"
-                        android:text="$250"
+                        android:text="$10"
                         android:textAlignment="center" />
 
                 </androidx.cardview.widget.CardView>
@@ -146,13 +160,14 @@
                     app:cardCornerRadius="20dp">
 
                     <EditText
+                        android:id="@+id/maxRange"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_gravity="center"
                         android:background="@android:color/transparent"
                         android:ems="10"
                         android:inputType="number"
-                        android:text="$1600"
+                        android:text="$5000"
                         android:textAlignment="center" />
 
                 </androidx.cardview.widget.CardView>
@@ -174,43 +189,52 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="17sp"
+                android:fontFamily="@font/poppin_regular"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/parkingReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppin_regular"
                 android:text="Reset"
                 android:textColor="@color/yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <LinearLayout
+        <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
+                android:id="@+id/freePark"
+                android:tag="freepark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cornerRadius="20dp"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="Free Parking"
-                app:backgroundTint="@color/yellow"
-                android:layout_marginStart="5dp"/>
+                android:background="@drawable/bg_normal"
+                android:paddingHorizontal="@dimen/cardHorpad"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingVertical="@dimen/cardVerpad"/>
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
+                android:id="@+id/paidPark"
+                android:tag="paidpark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cornerRadius="20dp"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="Paid Parking"
-                app:backgroundTint="@color/yellow"
-                android:layout_marginStart="5dp"/>
-        </LinearLayout>
+                android:background="@drawable/bg_normal"
+                android:paddingHorizontal="@dimen/cardHorpad"
+                android:fontFamily="@font/poppins_medium"
+
+                android:paddingVertical="@dimen/cardVerpad"/>
+        </com.google.android.material.chip.ChipGroup>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -224,46 +248,55 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="17sp"
+                android:fontFamily="@font/poppin_regular"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/paymentReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppin_regular"
                 android:text="Reset"
                 android:textColor="@color/yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <LinearLayout
+        <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal">
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
+                android:id="@+id/freeCancel"
+                android:tag="freecancelation"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cornerRadius="20dp"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
+                android:textColor="@color/black"
                 android:text="Free Cancelation"
-                app:backgroundTint="@color/yellow"
-                android:layout_marginStart="5dp"/>
+                android:background="@drawable/bg_normal"
 
-            <com.google.android.material.button.MaterialButton
+                android:fontFamily="@font/poppins_medium"
+                android:paddingHorizontal="@dimen/cardHorpad"
+                android:paddingVertical="@dimen/cardVerpad"
+                 />
+
+            <TextView
+                android:id="@+id/payLater"
+                android:tag="paylater"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                app:cornerRadius="20dp"
-                android:textAllCaps="false"
                 android:textColor="@color/black"
                 android:text="Pay Later"
-                app:strokeColor="@color/brown"
-                app:strokeWidth="1dp"
-                android:layout_marginStart="5dp"/>
+                android:background="@drawable/bg_normal"
+                android:fontFamily="@font/poppins_medium"
+
+                android:paddingHorizontal="@dimen/cardHorpad"
+                android:paddingVertical="@dimen/cardVerpad"/>
                 />
-        </LinearLayout>
+        </com.google.android.material.chip.ChipGroup>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -277,61 +310,73 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="17sp"
+                android:fontFamily="@font/poppin_regular"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/propertyReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppin_regular"
                 android:text="Reset"
                 android:textColor="@color/yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <LinearLayout
+        <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:chipSpacing="5dp"
             android:orientation="horizontal">
 
 
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
+                android:id="@+id/allPropertyType"
+                android:tag="all"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                app:cornerRadius="20dp"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
+                android:textColor="@color/white"
                 android:text="All"
-                app:strokeColor="@color/brown"
-                app:strokeWidth="1dp"
-                android:layout_marginStart="5dp"/>
+                android:background="@drawable/bg_normal2"
+                android:paddingHorizontal="@dimen/cardHorpad"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingVertical="@dimen/cardVerpad"/>
 
-            <com.google.android.material.button.MaterialButton
+            <TextView
+                android:id="@+id/allHotel"
+                android:tag="allhotel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/yellow"
-                app:cornerRadius="20dp"
-                android:textAllCaps="false"
-                android:text="Hotel"
-                android:layout_marginStart="5dp"/>
-
-            <com.google.android.material.button.MaterialButton
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="@color/white"
-                app:cornerRadius="20dp"
-                android:textAllCaps="false"
                 android:textColor="@color/black"
-                android:text="Apartment"
-                app:strokeColor="@color/brown"
-                app:strokeWidth="1dp"
-                android:layout_marginStart="5dp"/>
+                android:text="Hotel"
+                android:background="@drawable/bg_normal"
+
+                android:fontFamily="@font/poppins_medium"
+                android:paddingHorizontal="@dimen/cardHorpad"
+                android:paddingVertical="@dimen/cardVerpad"
+
+
+                />
+
+            <TextView
+                android:id="@+id/apartment"
+                android:tag="apartment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="Aparments"
+                android:background="@drawable/bg_normal"
+                android:paddingHorizontal="@dimen/cardHorpad"
+                android:fontFamily="@font/poppins_medium"
+                android:paddingVertical="@dimen/cardVerpad"/>
 
 
 
-        </LinearLayout>
+        </com.google.android.material.chip.ChipGroup>
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -345,152 +390,141 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="17sp"
+                android:fontFamily="@font/poppin_regular"
+
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/hotelclassReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppin_regular"
                 android:text="Reset"
                 android:textColor="@color/yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
-        <androidx.appcompat.widget.LinearLayoutCompat
+        <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
             android:layout_marginTop="5dp"
             android:orientation="horizontal"
+            app:chipSpacing="5dp"
+
             android:layout_height="wrap_content">
 
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:strokeColor="@color/brown"
-                app:strokeWidth="1dp"
-                android:layout_height="wrap_content">
-                <ImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="2dp"
-                    android:paddingVertical="4dp"
-
-                    android:src="@drawable/star_ic"/>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:strokeColor="@color/brown"
-                app:strokeWidth="1dp"
-                android:layout_marginHorizontal="5dp"
-
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="2dp"
-                    android:paddingVertical="4dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic"/>
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic"/>
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:cardBackgroundColor="@color/yellow"
-
-                android:layout_height="wrap_content">
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="2dp"
-                    android:paddingVertical="4dp"
-                    android:orientation="horizontal">
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic"/>
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic"/>
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic"/>
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-            <com.google.android.material.card.MaterialCardView
-                android:layout_width="wrap_content"
-                app:cardCornerRadius="20dp"
-                app:strokeColor="@color/brown"
-                app:strokeWidth="1dp"
-                android:layout_marginHorizontal="5dp"
-                android:layout_height="wrap_content">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="10dp"
-                    android:layout_marginVertical="2dp"
-                    android:orientation="horizontal"
-                    android:paddingVertical="4dp">
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic" />
-
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:src="@drawable/star_ic" />
-                </LinearLayout>
-
-            </com.google.android.material.card.MaterialCardView>
-
-
-        </androidx.appcompat.widget.LinearLayoutCompat>
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="wrap_content"
-            app:cardCornerRadius="20dp"
-            android:layout_marginTop="10dp"
-            app:strokeColor="@color/brown"
-            app:strokeWidth="1dp"
-            android:layout_height="wrap_content">
-            <LinearLayout
+            <ImageView
+                android:id="@+id/btn1"
+                android:tag="class1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="10dp"
-                android:layout_marginVertical="2dp"
-                android:paddingVertical="4dp"
-                android:orientation="horizontal">
+                android:src="@drawable/star_ic"
+
+
+                android:paddingVertical="@dimen/cardVerpad"
+                android:background="@drawable/bg_normal"
+                android:paddingHorizontal="@dimen/cardHorpad"/>
+
+                <LinearLayout
+                    android:id="@+id/btn2"
+                    android:tag="class2"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:paddingVertical="@dimen/cardVerpad"
+                    android:background="@drawable/bg_normal2"
+                    android:paddingHorizontal="@dimen/cardHorpad">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_white"/>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_white"/>
+                </LinearLayout>
+
+
+
+
+                <LinearLayout
+                    android:id="@+id/btn3"
+                    android:tag="class3"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingVertical="@dimen/cardVerpad"
+                    android:background="@drawable/bg_normal"
+                    android:paddingHorizontal="@dimen/cardHorpad"
+                    android:orientation="horizontal">
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_ic"/>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_ic"/>
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_ic"/>
+                </LinearLayout>
+
+
+
+
+
+                <LinearLayout
+                    android:id="@+id/btn4"
+                    android:tag="class4"
+
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+
+
+                    android:paddingVertical="@dimen/cardVerpad"
+                    android:background="@drawable/bg_normal"
+                    android:paddingHorizontal="@dimen/cardHorpad">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_ic" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_ic" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_ic" />
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:src="@drawable/star_ic" />
+                </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/btn5"
+                android:tag="class5"
+
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="6dp"
+
+                android:paddingVertical="@dimen/cardVerpad"
+                android:background="@drawable/bg_normal"
+
+                android:paddingHorizontal="@dimen/cardHorpad">
                 <ImageView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
@@ -513,7 +547,12 @@
                     android:src="@drawable/star_ic"/>
             </LinearLayout>
 
-        </com.google.android.material.card.MaterialCardView>
+        </com.google.android.material.chip.ChipGroup>
+
+
+
+
+
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -528,170 +567,157 @@
             android:textColor="@color/black"
             android:textStyle="bold"
             android:textSize="17sp"
+            android:fontFamily="@font/poppin_regular"
 
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Reset"
-            android:textColor="@color/yellow"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/customerreviewReset"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/poppin_regular"
+                android:text="Reset"
+                android:textColor="@color/yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal">
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn1"
-            android:layout_width="match_parent"
+        <com.google.android.material.chip.ChipGroup
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:icon="@drawable/star_ic"
-            android:layout_marginHorizontal="3dp"
-            android:text="1.0+"
-            android:textColor="@color/black"
-
-            app:iconPadding="5dp"
-            app:iconGravity="textStart"
-            app:iconTint="@color/star_color"
-
-            app:cornerRadius="20dp"
-            app:strokeColor="@color/brown"
-            app:strokeWidth="1dp"
+            android:orientation="horizontal"
+            app:chipSpacing="5dp">
 
 
-            android:backgroundTint="@color/white"
-            android:drawableTintMode="add"
-            app:backgroundTintMode="screen"
+            <!--        <LinearLayout-->
+            <!--            android:layout_width="match_parent"-->
+            <!--            android:layout_height="wrap_content"-->
+            <!--            android:orientation="horizontal"-->
+            <!--            -->
+            <!--            android:background="@drawable/bg_normal"-->
+            <!--             -->
+            <!--             -->
+            <!--            >-->
+
+            <!--        </LinearLayout>-->
 
 
-
-            >
-
-        </com.google.android.material.button.MaterialButton>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:icon="@drawable/star_ic"
-            android:layout_marginHorizontal="3dp"
-            android:text="1.0+"
-            android:textColor="@color/black"
-
-            app:iconPadding="5dp"
-            app:iconGravity="textStart"
-            app:iconTint="@color/star_color"
-
-            app:cornerRadius="20dp"
-            app:strokeColor="@color/brown"
-            app:strokeWidth="1dp"
-
-
-            android:backgroundTint="@color/white"
-            android:drawableTintMode="add"
-            app:backgroundTintMode="screen"
-            >
-
-        </com.google.android.material.button.MaterialButton>
-
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn3"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            app:icon="@drawable/star_ic"
-            android:layout_marginHorizontal="3dp"
-            android:text="1.0+"
-            android:textColor="@color/black"
-
-            app:iconPadding="5dp"
-            app:iconGravity="textStart"
-            app:iconTint="@color/star_color"
-
-            app:cornerRadius="20dp"
-            app:strokeColor="@color/brown"
-            app:strokeWidth="1dp"
-
-
-            android:backgroundTint="@color/white"
-            android:drawableTintMode="add"
-            app:backgroundTintMode="screen"
-            >
-
-        </com.google.android.material.button.MaterialButton>
-
-
-
-
-    </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:orientation="horizontal">
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn4"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/star_ic"
-                android:layout_marginHorizontal="3dp"
+                android:id="@+id/onestar"
+                android:tag="onestar"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
                 android:text="1.0+"
                 android:textColor="@color/black"
-
-                app:iconPadding="5dp"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/star_ic"
                 app:iconGravity="textStart"
-                app:iconTint="@color/star_color"
+                android:includeFontPadding="false"
 
-                app:cornerRadius="20dp"
+
+                app:iconTint="@color/yellow"
                 app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/twostar"
+                android:tag="twostar"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:includeFontPadding="false"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+
+                android:text="2.0+"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/star_ic"
+                app:iconGravity="textStart"
+                app:iconTint="@color/yellow"
+
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/threestar"
+                android:tag="threestar"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:fontFamily="@font/poppin_regular"
+                android:includeFontPadding="false"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+                android:text="3.0+"
+                android:textColor="@color/white"
+                app:icon="@drawable/star_ic"
+                app:iconGravity="textStart"
+                android:background="@drawable/bg_normal2"
+                app:backgroundTint="@color/yellow"
+  />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fourstar"
+                android:tag="fourstar"
+
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+                android:text="4.0+"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/star_ic"
+                app:iconGravity="textStart"
+                app:iconTint="@color/yellow"
+                android:includeFontPadding="false"
+
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/fivestar"
+                android:tag="fivestar"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+                android:text="5.0"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/star_ic"
+                app:iconGravity="textStart"
+                app:iconTint="@color/yellow"
+                app:strokeColor="@color/brown"
+                android:includeFontPadding="false"
                 app:strokeWidth="1dp"
 
 
-                android:backgroundTint="@color/white"
-                android:drawableTintMode="add"
-                app:backgroundTintMode="screen"
-                >
-
-            </com.google.android.material.button.MaterialButton>
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btn5"
-                android:layout_width="120dp"
-                android:layout_height="wrap_content"
-                app:icon="@drawable/star_ic"
-                android:layout_marginHorizontal="3dp"
-                android:text="1.0+"
-                android:textColor="@color/black"
-
-                app:iconPadding="5dp"
-                app:iconGravity="textStart"
-                app:iconTint="@color/star_color"
-
-                app:cornerRadius="20dp"
-                app:strokeColor="@color/brown"
-                app:strokeWidth="1dp"
+                />
 
 
-                android:backgroundTint="@color/white"
-                android:drawableTintMode="add"
-                app:backgroundTintMode="screen"
-                >
-
-            </com.google.android.material.button.MaterialButton>
+        </com.google.android.material.chip.ChipGroup>
 
 
-        </LinearLayout>
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:visibility="gone"
             android:layout_marginTop="15dp">
 
             <TextView
@@ -701,326 +727,222 @@
                 android:textColor="@color/black"
                 android:textStyle="bold"
                 android:textSize="17sp"
+                android:fontFamily="@font/poppin_regular"
 
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
+                android:id="@+id/amenitiesReset"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="@font/poppin_regular"
                 android:text="Reset"
                 android:textColor="@color/yellow"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <LinearLayout
+        <com.google.android.material.chip.ChipGroup
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:chipSpacing="5dp"
             android:orientation="vertical"
-            >
-
-            <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-                android:layout_marginVertical="5dp"
-            android:orientation="horizontal"
-                >
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="5dp"
-
-                    app:cardBackgroundColor="@color/yellow"
-                    app:cardCornerRadius="20dp"
+            android:visibility="gone">
 
 
 
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="10dp"
-                        android:paddingVertical="8dp"
-
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/restau"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:textColor="@color/white"
-                            android:textStyle="bold"
-                            android:text="Restaurent"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:strokeColor="@color/brown"
-                    app:strokeWidth="1dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:cardCornerRadius="20dp"
-
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:paddingVertical="8dp"
-                        android:layout_marginHorizontal="10dp"
-
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:src="@drawable/gym"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:text="Fitness Centre"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="5dp"
-                android:orientation="horizontal"
-                >
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="5dp"
-                    app:strokeColor="@color/brown"
-                    app:strokeWidth="1dp"
-                    app:cardCornerRadius="20dp"
-
-
-
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="10dp"
-                        android:paddingVertical="8dp"
-
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/bar"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:text="Bar/Laugage "/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:strokeColor="@color/brown"
-                    app:strokeWidth="1dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:cardCornerRadius="20dp"
-
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:paddingVertical="8dp"
-                        android:layout_marginHorizontal="10dp"
-
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/swim"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:text="Swimming"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="5dp"
-                android:orientation="horizontal"
-                >
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="5dp"
-                    app:cardCornerRadius="20dp"
-                    app:strokeColor="@color/brown"
-                    app:strokeWidth="1dp"
-
-
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="10dp"
-                        android:paddingVertical="8dp"
-
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/time"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:textStyle="bold"
-                            android:textColor="@color/black"
-                            android:text="24 Hour Front Desk"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    app:strokeColor="@color/brown"
-                    app:strokeWidth="1dp"
-                    android:layout_marginHorizontal="5dp"
-                    app:cardCornerRadius="20dp"
-
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:paddingVertical="8dp"
-                        android:layout_marginHorizontal="10dp"
-
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/internet"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:text="Internet Access"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="5dp"
-                android:orientation="horizontal"
-                >
-                <com.google.android.material.card.MaterialCardView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:layout_marginHorizontal="5dp"
-                    app:strokeColor="@color/brown"
-                    app:strokeWidth="1dp"
-                    app:cardCornerRadius="20dp"
-
-
-
-                    >
-                    <LinearLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:layout_marginHorizontal="10dp"
-                        android:paddingVertical="8dp"
-
-                        android:orientation="horizontal">
-                        <ImageView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:src="@drawable/park"
-                            android:layout_gravity="center"
-                            />
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:layout_marginStart="8dp"
-                            android:textColor="@color/black"
-                            android:textStyle="bold"
-                            android:text="Parking Area"/>
-                    </LinearLayout>
-                </com.google.android.material.card.MaterialCardView>
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/textView8"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@color/yellow"
-                android:textStyle="bold"
-                android:textSize="18sp"
-                android:layout_marginTop="15dp"
-
-                android:text="@string/see_more" />
 
             <com.google.android.material.button.MaterialButton
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:text="Apply"
-                android:backgroundTint="@color/yellow"
-                app:cornerRadius="10dp"
+                android:id="@+id/m_restaurant"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+                android:text="Restaurant"
                 android:textAllCaps="false"
-                />
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/restauranr1"
+                app:iconGravity="textStart"
+                android:includeFontPadding="false"
 
 
-        </LinearLayout>
+                app:iconTint="@color/yellow"
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/m_fitness"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+                android:text="Fitness centre"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/gym1"
+                app:iconGravity="textStart"
+                android:includeFontPadding="false"
 
 
+                app:iconTint="@color/yellow"
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/m_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+                android:text="Bar"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/bar1"
+                app:iconGravity="textStart"
+                android:includeFontPadding="false"
+
+
+                app:iconTint="@color/yellow"
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/m_swimming"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+                android:text="Swimming pool"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/swimmingpool1"
+                app:iconGravity="textStart"
+                android:includeFontPadding="false"
+
+
+                app:iconTint="@color/yellow"
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/m_frontdesk"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+                android:text="Frontdesk Available 24/7"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/frontdesk1_24_7"
+                app:iconGravity="textStart"
+                android:includeFontPadding="false"
+
+
+                app:iconTint="@color/yellow"
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/m_parking"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+                android:text="Parking"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/parking1"
+                app:iconGravity="textStart"
+                android:includeFontPadding="false"
+
+
+                app:iconTint="@color/yellow"
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp" />
+
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/m_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/heightBtn"
+                android:backgroundTint="@color/white"
+                android:fontFamily="@font/poppin_regular"
+                android:insetTop="@dimen/inset"
+                android:insetBottom="@dimen/inset"
+
+                android:text="Free Wifi"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:cornerRadius="18dp"
+                app:icon="@drawable/freewifi1"
+                app:iconGravity="textStart"
+                android:includeFontPadding="false"
+
+
+                app:iconTint="@color/yellow"
+                app:strokeColor="@color/brown"
+                app:strokeWidth="1dp"
+                tools:ignore="TooManyViews" />
+
+
+
+
+
+
+
+<!--            <TextView-->
+<!--                android:id="@+id/textView8"-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_marginTop="15dp"-->
+<!--                android:text="@string/see_more"-->
+<!--                android:textColor="@color/yellow"-->
+<!--                android:textSize="18sp"-->
+<!--                android:fontFamily="@font/poppin_regular"-->
+<!--                android:visibility="invisible"-->
+
+<!--                android:textStyle="bold" />-->
+
+
+
+
+        </com.google.android.material.chip.ChipGroup>
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/applyBtn"
+            android:layout_width="match_parent"
+            android:layout_height="70dp"
+            android:backgroundTint="@color/yellow"
+            android:text="Apply"
+            android:fontFamily="@font/poppin_regular"
+            android:layout_marginTop="8dp"
+
+            android:textAllCaps="false"
+            app:cornerRadius="10dp" />
 
     </LinearLayout>
 

@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = binding.bottomNavigation
         bottomNavigationView.setBackgroundResource(R.drawable.bg_botton_nav)
         NavigationUI.setupWithNavController(bottomNavigationView, navController)
-        FirebaseApp.initializeApp(this)
+//        FirebaseApp.initializeApp(this)
 
 
 //        val selectedColor = ColorStateList.valueOf(R.color.yellow)

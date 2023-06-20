@@ -18,6 +18,8 @@ dependencyResolutionManagement {
         mavenCentral()
 
 
+
+
     }
 }
 rootProject.name = "TripPLNR"

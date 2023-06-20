@@ -3,34 +3,31 @@ package com.example.tripplnr.navigationscreens.hotelListFragment
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
-import android.os.Binder
 import android.os.Bundle
-import android.os.Parcelable
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageButton
+import android.widget.ImageView
+import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
-import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.content.ContextCompat
-import androidx.navigation.fragment.findNavController
+import androidx.core.view.forEach
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHotelListBinding
-import com.example.tripplnr.navigationscreens.DataCls.guestdatacls
+import com.example.tripplnr.navigationscreens.DataCls.sortData
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelListClass
+import com.example.tripplnr.navigationscreens.Search.hotel.activity.FilterBottomSheet
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.HotelList2Activity
 import com.example.tripplnr.navigationscreens.hotelListFragment.adapter.Hotel_list_recyclerAdapter
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
-import com.google.android.material.card.MaterialCardView
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -39,6 +36,8 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     private lateinit var binding: FragmentHotelListBinding
     private lateinit var rc: RecyclerView
     private lateinit var query :String
+    val data = mutableListOf<String>()
+    var sortingTech = ""
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -90,6 +89,7 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
             parentFragmentManager.popBackStack()
         }
 
+
     }
     private fun postData():List<hotelListClass>{
         var list = listOf<hotelListClass>(
@@ -102,24 +102,19 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
 
     }
 
-    @SuppressLint("MissingInflatedId", "SuspiciousIndentation")
+    @SuppressLint("MissingInflatedId", "SuspiciousIndentation", "InflateParams")
     fun doTask(view: View){
         var filter = binding.filterList
         var sort = binding.sortList
         view.setOnClickListener {
         val bottom = BottomSheetDialog(requireContext())
             when(view){
-                filter->{
-                    var view = layoutInflater.inflate(R.layout.filter_bottom_sheet,null,false)
-                    bottom.setContentView(view)
-                    bottom.show()
+                filter-> {
 
-                    var closebtn =  view.findViewById<AppCompatImageView>(R.id.closebottomFilter)
-                    closebtn.setOnClickListener{
-                        bottom.dismiss()
-                    }
-
-                    dotask(bottom)
+//                    Allfun.openFragment(FilterBottomSheet(),requireParentFragment().parentFragmentManager)
+                    val bottomSheetFragment = FilterBottomSheet()
+                    bottomSheetFragment.show(requireParentFragment().parentFragmentManager, bottomSheetFragment.tag)
+                    bottomSheetFragment.isCancelable = false
                 }
                 sort->{
 
@@ -131,82 +126,159 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
                     closebtn.setOnClickListener{
                         bottom.dismiss()
                     }
+
+
+                    var recommended = bottom.findViewById<TextView>(R.id.recommended)
+                    var imgpos1 = bottom.findViewById<ImageView>(R.id.imgpos1)
+
+                    var prizeLtoH = bottom.findViewById<TextView>(R.id.prizeLowtoHigh)
+                    var imgpos2 = bottom.findViewById<ImageView>(R.id.imgpos2)
+
+                    var prizeHtoL = bottom.findViewById<TextView>(R.id.prizeHightoLow)
+                    var imgpos3 = bottom.findViewById<ImageView>(R.id.imgpos3)
+
+                    var reviews = bottom.findViewById<TextView>(R.id.sortByReviews)
+                    var imgpos4 = bottom.findViewById<ImageView>(R.id.imgpos4)
+
+                    var starRatingHtoL = bottom.findViewById<TextView>(R.id.starRatingHighToLow)
+                    var imgpos5 = bottom.findViewById<ImageView>(R.id.imgpos5)
+
+                    var distanceNtoF = bottom.findViewById<TextView>(R.id.distanceNearToFar)
+                    var imgpos6 = bottom.findViewById<ImageView>(R.id.imgpos6)
+
+                    val applyBtn = bottom.findViewById<MaterialButton>(R.id.sortApplyBtn)
+                    applyBtn?.setOnClickListener{
+                        Toast.makeText(requireContext(), sortingTech, Toast.LENGTH_SHORT).show()
+
+                        bottom.dismiss()
+                    }
+
+
+
+
+                    val listSortType = listOf(sortData(recommended!!,imgpos1!!),sortData(prizeLtoH!!,imgpos2!!),sortData(prizeHtoL!!,imgpos3!!)
+                        ,sortData(reviews!!,imgpos4!!),sortData(starRatingHtoL!!,imgpos5!!),sortData(distanceNtoF!!,imgpos6!!),
+                    )
+                    mSortData(listSortType as List<sortData>)
+                bottom.setCancelable(false)
                 }
             }
         }
     }
 
     @SuppressLint("ResourceAsColor", "ResourceType")
-    private fun dotask(bottom: BottomSheetDialog) {
-
-        var btn1 =  bottom.findViewById<MaterialButton>(R.id.btn1)
-        var btn2 =  bottom.findViewById<MaterialButton>(R.id.btn2)
-        var btn3 =  bottom.findViewById<MaterialButton>(R.id.btn3)
-        var btn4 =  bottom.findViewById<MaterialButton>(R.id.btn4)
-        var btn5 =  bottom.findViewById<MaterialButton>(R.id.btn5)
-
-
-//        var btn1 =  requireView().findViewById<MaterialCardView>(R.id.btn1)
-//        var btn2 =  requireView().findViewById<MaterialCardView>(R.id.btn2)
-//        var btn3 =  requireView().findViewById<MaterialCardView>(R.id.btn3)
-//        var btn4 =  requireView().findViewById<MaterialCardView>(R.id.btn4)
-//        var btn5 =  requireView().findViewById<MaterialCardView>(R.id.btn5)
-        val list = listOf(btn1,btn2,btn3,btn4,btn5)
-
-
+    private fun dotask(list: List<View>) {
 
         for (button in list) {
-            button?.setOnClickListener {
+            button.setOnClickListener {
                 // Reset background for all buttons
                 for (b in list) {
-                    b?.setBackgroundResource(R.drawable.card_notchecked)
-                    b?.backgroundTintMode = PorterDuff.Mode.MULTIPLY
-                    val color = ContextCompat.getColor(requireContext(), R.color.white)
-//                materialButton.backgroundTintList = ColorStateList.valueOf(color)
-                    b?.backgroundTintList = ColorStateList.valueOf(color)
-//                    val color = Color.parseColor("#FF0000") // Replace with your desired color
-//                    val colorStateList = ColorStateList.valueOf(color)
-//                    b?.backgroundTintList = colorStateList
+                    data.remove(b.tag)
+
+                    b.setBackgroundResource(R.drawable.bg_normal)
+
+                    b.backgroundTintMode = PorterDuff.Mode.SRC_ATOP
+                    val color = ContextCompat.getColor(requireContext(), R.color.brown)
+
+                    b.backgroundTintList = ColorStateList.valueOf(color)
+
+                    when(b){
+                        is TextView->{
+
+                            b.setTextColor(resources.getColor(R.color.black))
+                        }
+                        is LinearLayout->{
+                            b.forEach {
+                            if(it is ImageView){
+                                it.setImageResource(R.drawable.star_ic)
+                            }
+                        }}
+                        else->{
+                            Toast.makeText(requireContext(), "error occured!!", Toast.LENGTH_SHORT).show()
+                        }
+                    }
+
+                    if (b is MaterialButton){
+                        b.iconTint = ContextCompat.getColorStateList(requireContext(), R.color.yellow)
+
+                    }
+
                 }
 
                 // Change background of the clicked button
-                button.setBackgroundResource(R.drawable.card_shape)
+                button.setBackgroundResource(R.drawable.bg_normal2)
+                data.add(it.tag.toString())
+
+
+                when(button){
+
+
+                    is TextView->{
+                        button.setTextColor(resources.getColor(R.color.white))
+                    }
+                    is LinearLayout->{
+                        button.forEach {
+
+                            when(it){
+                                is ImageView->{
+//                                    it.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                                    it.setImageResource(R.drawable.star_white)
+                                }
+                                else->{
+                                    Toast.makeText(requireContext(), "eroor", Toast.LENGTH_SHORT).show()
+                                }
+                            }
+                        }}
+                    else->{
+                        Toast.makeText(requireContext(), "error occured!!", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 val color = ContextCompat.getColor(requireContext(), R.color.yellow)
-//                materialButton.backgroundTintList = ColorStateList.valueOf(color)
+
                 button.backgroundTintList = ColorStateList.valueOf(color)
+                if (button is MaterialButton){
+                    button.iconTint = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                }
 
 
-//                materialButton.backgroundTintMode = PorterDuff.Mode.MULTIPLY
-                // Perform actions specific to the selected button
+
                 when (button) {
-                    btn1 -> {
+                    list.get(0) -> {
                         // Actions for button1
 //                        it.setBackgroundResource(R.drawable.card_shape)
                         Toast.makeText(requireContext(), "btn1", Toast.LENGTH_SHORT).show()
                     }
-                    btn2 -> {
+                    list.get(1) -> {
                         // Actions for button2
 //                        it.setBackgroundResource(R.drawable.card_shape)
                         Toast.makeText(requireContext(), "btn2", Toast.LENGTH_SHORT).show()
 
                     }
-                    btn3 -> {
+                    list.get(2) -> {
                         // Actions for button3
 //                        it.setBackgroundResource(R.drawable.card_shape)
                         Toast.makeText(requireContext(), "btn3", Toast.LENGTH_SHORT).show()
 
                     }
-                    btn4 -> {
+                    list.get(3) -> {
                         // Actions for button3
 //                        it.setBackgroundResource(R.drawable.card_shape)
                         Toast.makeText(requireContext(), "btn4", Toast.LENGTH_SHORT).show()
 
                     }
-                    btn5 -> {
+                    list.get(4) -> {
                         // Actions for button3
 //                        it.setBackgroundResource(R.drawable.card_shape)
                         Toast.makeText(requireContext(), "btn5", Toast.LENGTH_SHORT).show()
 
+                    }list.get(5) -> {
+                        // Actions for button3
+//                        it.setBackgroundResource(R.drawable.card_shape)
+                        Toast.makeText(requireContext(), "btn", Toast.LENGTH_SHORT).show()
+
+                    }
+                    else->{
+                        Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
                     }
 
                 }
@@ -214,11 +286,81 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
         }
 
     }
+    private fun mSortData(list: List<sortData>){
+        for (item in list){
+
+            item.text.setOnClickListener {
+                // Reset background for all buttons
+                for (mItem in list){
+                    mItem.image.visibility = View.INVISIBLE
+                    mItem.text.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                }
+                item.text.setTextColor(ContextCompat.getColor(requireContext(),R.color.yellow))
+                item.image.visibility = View.VISIBLE
+                sortingTech = item.text.tag.toString()
+
+            }
+
+        }
+
+    }
+    private fun onClickResetBtn(textView:TextView,list: List<View>){
+
+        when(textView.id){
+            R.id.rangeReset->{ setNormalbg(list) }
+            R.id.parkingReset->{  setNormalbg(list) }
+            R.id.paymentReset->{ setNormalbg(list)}
+            R.id.propertyReset->{ setNormalbg(list)}
+            R.id.hotelclassReset->{ setNormalbg(list)}
+            R.id.customerreviewReset->{ setNormalbg(list)}
+            R.id. amenitiesReset->{ setNormalbg(list)}
+        }
+
+    }
+    @SuppressLint("ResourceType")
+    private fun setNormalbg(list: List<View>) {
+        for (item in list) {
+            item.setBackgroundResource(R.drawable.bg_normal)
+
+            item.backgroundTintMode = PorterDuff.Mode.MULTIPLY
+            val color = ContextCompat.getColor(requireContext(), R.color.white)
+//                materialButton.backgroundTintList = ColorStateList.valueOf(color)
+            item.backgroundTintList = ColorStateList.valueOf(color)
+
+
+            when(item){
+                is TextView->{
+                    item.setTextColor(resources.getColor(R.color.black))
+                }
+                is LinearLayout->{
+                    item.forEach {
+                        if (it is ImageView){
+                            it.setImageResource(R.drawable.star_ic)
+                        }
+                    }
+                }
+
+                else->{
+                    Toast.makeText(requireContext(), "error occured!!", Toast.LENGTH_SHORT).show()
+                }
+
+            }
+            if (item is MaterialButton){
+                item.iconTint = ContextCompat.getColorStateList(requireContext(), R.color.yellow)
+            }
+
+        }
+    }
 
     override fun checkDetails(view: View, position: Int) {
-        val intent = Intent(Intent.ACTION_VIEW, Uri.parse( "https://www.booking.com"))
-        requireContext().startActivity(intent)
+        Allfun.openWeb(requireContext())
+
     }
+
+
+
+
+
 
 
 }

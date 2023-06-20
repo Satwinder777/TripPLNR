@@ -87,6 +87,7 @@ dependencies {
     //noinspection GradleCompatible
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
+
     //noinspection GradleCompatible
 
 

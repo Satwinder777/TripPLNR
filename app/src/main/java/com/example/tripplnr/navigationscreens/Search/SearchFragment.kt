@@ -34,11 +34,12 @@ import kotlinx.coroutines.DelicateCoroutinesApi
  * Use the [SearchFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchFragment(var tabpos:Int?=0) : Fragment() {
+class SearchFragment : Fragment() {
     private lateinit var binding :FragmentSearchBinding
     private lateinit var tabLayout :TabLayout
     private lateinit var viewPager :ViewPager
 
+    var create :Boolean?=false
 
 
     override fun onCreateView(
@@ -46,6 +47,21 @@ class SearchFragment(var tabpos:Int?=0) : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentSearchBinding.inflate(layoutInflater)
+        tabLayout = binding.tabLayout1
+        viewPager = binding.viewPager1
+
+        viewPager.adapter = ViewPagerAdapter(requireContext(), childFragmentManager, lifecycle)
+
+        create = true
+
+        Log.e("cretedata", "onCreateView: create vall ", )
+
+        tabLayout.post {
+            val tab = tabLayout.getTabAt(0)
+            tab?.select()
+        }
+
+
 
         return binding.root
     }
@@ -56,13 +72,14 @@ class SearchFragment(var tabpos:Int?=0) : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        tabLayout = binding.tabLayout1
-        viewPager = binding.viewPager1
-        viewPager.adapter = ViewPagerAdapter(requireContext(), childFragmentManager, lifecycle)
-
-        viewPager.currentItem = tabpos!!
-
+        viewPager.setCurrentItem(0)
         tabLayout.setupWithViewPager(viewPager)
+
+        Log.e("cretedata", "onCreateView: create vall2 ", )
+
+//        viewPager.currentItem = tabpos!!
+
+
         binding.searchBackCard.setOnClickListener {
 //                    requireParentFragment().requireActivity().onBackPressed()
 //                 requireActivity().supportFragmentManager.popBackStack()
@@ -86,26 +103,24 @@ class SearchFragment(var tabpos:Int?=0) : Fragment() {
         }
 
 
-
+        var tabpoo = tabLayout.selectedTabPosition
+        Log.e("cretedata", "onCreateView: create vall  $tabpoo", )
 
         tabLayout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
+
             override fun onTabSelected(tab: TabLayout.Tab?) {
 
 
 //                tabLayout.animationMode = TabLayout.AnimationMode.PADDLE
 
 
-                val tabIndex = tab?.position ?: return
+               val tabIndex = tab?.position ?: return
 
-//                val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
                 var hotel =  view.findViewWithTag<Chip>(R.string.chip1)
                 var blogs =  view.findViewWithTag<Chip>(R.string.chip2)
 
                 when(tabIndex){
                     0->{
-//                        bottomNavigationView.menu.getItem(2).isVisible = false
-//                        bottomNavigationView.menu.findItem(R.id.searchFragment).setChecked(true)
-//                        hotel.chipBackgroundColor.getColorForState(this,R.color.yellow)
                         hotel.setChipBackgroundColorResource(R.color.white)
                         hotel.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
                         blogs.setChipBackgroundColorResource(R.color.yellow1)
@@ -113,11 +128,6 @@ class SearchFragment(var tabpos:Int?=0) : Fragment() {
 
                     }
                     1->{
-//                        bottomNavigationView.menu.getItem(2).isVisible = true
-////                bottomNavigationView.se
-//                        bottomNavigationView.menu.findItem(R.id.blogsFragment).setChecked(true)
-
-
                         blogs.setChipBackgroundColorResource(R.color.white)
                         blogs.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
 
@@ -134,12 +144,25 @@ class SearchFragment(var tabpos:Int?=0) : Fragment() {
 
             override fun onTabUnselected(tab: TabLayout.Tab?) {
 //                tab?.customView?.findViewById<Chip>(R.id.tab_chip)?.isChecked = false
+//                val desiredPosition = 0
+//                val tab = tabLayout.getTabAt(desiredPosition)
+//                tab?.select()
+//                viewPager.currentItem = 0
+
+//
+////                val firsttab = tabLayout.getTabAt(0)
+////                firsttab?.select()
+//                tabLayout.setupWithViewPager(viewPager)
+
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Do nothing
+                Toast.makeText(requireContext(), "reslected" +
+                        "", Toast.LENGTH_SHORT).show()
             }
-        })
+        }
+        )
 
         for (i in 0 until tabLayout.tabCount) {
 
@@ -186,6 +209,7 @@ class SearchFragment(var tabpos:Int?=0) : Fragment() {
         }
 
         setbg()
+
 }
 
 
@@ -216,6 +240,12 @@ class SearchFragment(var tabpos:Int?=0) : Fragment() {
             hotel?.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
         }
 
+    }
+
+    fun oncreatecall(a:Boolean):Boolean{
+//        val tab = tabLayout.getTabAt(0)
+//        tab?.select()
+        return a
     }
 //    fun initchipcolor(){
 //        var hotelchip = view?.findViewWithTag<Chip>("chip1")

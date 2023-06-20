@@ -49,6 +49,8 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/recommended"
+                android:tag="recommended"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/recommended"
@@ -58,6 +60,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/imgpos1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -70,6 +73,8 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/prizeLowtoHigh"
+                android:tag="prizeLtoH"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/prize_low_to_high"
@@ -80,6 +85,8 @@
                 />
 
             <ImageView
+                android:id="@+id/imgpos2"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +100,9 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/prizeHightoLow"
+
+                android:tag="prizeHtoL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/prize_high_to_low"
@@ -102,6 +112,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/imgpos3"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -114,6 +126,8 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/sortByReviews"
+                android:tag="@string/reviews"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/reviews"
@@ -123,6 +137,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/imgpos4"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -136,6 +152,9 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/starRatingHighToLow"
+
+                android:tag="starRatingHtoL"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/star_ratings_high_to_low"
@@ -145,6 +164,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/imgpos5"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -157,6 +178,9 @@
             android:layout_height="wrap_content">
 
             <TextView
+                android:id="@+id/distanceNearToFar"
+
+                android:tag="distanceNtoF"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/distance_near_to_far"
@@ -166,6 +190,8 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:id="@+id/imgpos6"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -174,6 +200,7 @@
                 app:srcCompat="@drawable/check" />
         </androidx.constraintlayout.widget.ConstraintLayout>
         <com.google.android.material.button.MaterialButton
+            android:id="@+id/sortApplyBtn"
             android:layout_width="match_parent"
             android:layout_height="70dp"
             app:backgroundTint="@color/yellow"

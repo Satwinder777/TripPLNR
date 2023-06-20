@@ -9,12 +9,12 @@
 
 
 
-<androidx.fragment.app.FragmentContainerView
-    android:id="@+id/map"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:name="com.google.android.gms.maps.SupportMapFragment"
-    />
+<!--<androidx.fragment.app.FragmentContainerView-->
+<!--    android:id="@+id/map"-->
+<!--    android:layout_width="match_parent"-->
+<!--    android:layout_height="match_parent"-->
+<!--    android:name="com.google.android.gms.maps.SupportMapFragment"-->
+<!--    />-->
 
 
     <androidx.cardview.widget.CardView
@@ -156,6 +156,7 @@
                 >
 
                 <LinearLayout
+                    android:id="@+id/showList"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
