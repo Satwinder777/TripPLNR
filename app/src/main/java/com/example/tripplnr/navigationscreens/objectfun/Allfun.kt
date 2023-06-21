@@ -3,10 +3,14 @@ package com.example.tripplnr.navigationscreens.objectfun
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.net.Uri
+import android.os.Build
 import android.util.Log
 import android.widget.EditText
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -20,6 +24,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.google.maps.GeocodingApi
+import com.google.type.LatLng
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -195,6 +201,48 @@ object Allfun {
     fun openWeb(context:Context){
         val intent = Intent(Intent.ACTION_VIEW, Uri.parse( "https://www.booking.com"))
         context.startActivity(intent)
+    }
+//        fun getLocationLatLng(locationName: String): LatLng? {
+//        val geocoder = GeocodingApi.newRequest(getGeoContext()).address(locationName)
+//        val result = geocoder.await()
+//
+//        if (result.isNotEmpty()) {
+//            val location = result[0].geometry.location
+//            return LatLng(location.lat, location.lng)
+//        }
+//
+//        return null
+//    }
+//
+//
+//    fun getGeoContext(): GeoApiContext {
+////        val apiKey = getString(R.string.satwinder_shergill)
+////        val apiKey = "AIzaSyBq16ekrXE3LHeDIwu3KDk0O9s-rMjZpqc"
+//        val apiKey = "AIzaSyBOdO2-t1GISAkfwBf1hHXmrc6YAhkX1zA"
+//        return GeoApiContext.Builder().apiKey(apiKey).build()
+//    }
+//val latLng = getLocationLatLng(locationName)
+//
+//    if (latLng != null) {
+//
+//        val latitude = latLng.latitude
+//        val longitude = latLng.longitude
+//
+//        Log.e("latlng", "onViewCreated:Latitude: $latitude, Longitude: $longitude ", )
+//
+//    } else {
+//        Log.e("latlng", "onViewCreated:Latitude: null", )
+//    }
+
+    @RequiresApi(Build.VERSION_CODES.M)
+    fun isInternetAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val network = connectivityManager.activeNetwork
+        val networkCapabilities = connectivityManager.getNetworkCapabilities(network)
+
+        return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
+            ?: false
     }
 
 }

@@ -29,7 +29,7 @@
 
                 <meta-data
                     android:name="com.google.android.geo.API_KEY"
-                    android:value="@string/mapKey" />
+                    android:value="@string/satwinder_shergill" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
@@ -41,6 +41,7 @@
             android:name=".navigationscreens.Search.hotel.activity.HotelList2Activity"
             android:exported="false"
             android:label="@string/mapKey" />
+
         <activity
             android:name=".splace.SplaceScreenActivity"
             android:exported="true">

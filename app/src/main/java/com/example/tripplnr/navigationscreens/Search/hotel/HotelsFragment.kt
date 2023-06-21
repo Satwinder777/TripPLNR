@@ -7,6 +7,8 @@ import android.content.Context
 import android.content.SearchRecentSuggestionsProvider
 import android.database.Cursor
 import android.graphics.Color
+import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -60,12 +62,20 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.RangeDateSelector
+import com.google.maps.GeoApiContext
+import com.google.maps.GeocodingApi
+import com.google.maps.model.GeocodingResult
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
+const val API_KEY = "AIzaSyAsSMYb29gSo5bq2Ip-3lwx5mhqToxd5W8"
+const val API_KEY_ONE = "AIzaSyAA8J4FwN3vqvltGu5osXTtKeexjjq_CkA"
+
+const val NEW1_API_KEY = "AIzaSyBiWumyUM7nfC4_SlLP1j-FIsDuyLpb390"
+const val NEW2_API_KEY = "AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg"
 
 class HotelsFragment : Fragment(){
     private lateinit var binding: FragmentHotelsBinding
@@ -127,7 +137,7 @@ class HotelsFragment : Fragment(){
 //        GlobalScope.launch {
 
 //        initView()
-
+//        Log.e("isApiAuthorized", "onViewCreated: ${isApiAuthorized()}")
         rc = binding.searchFrRecycler1
         rc.layoutManager = LinearLayoutManager(requireContext())
 
@@ -152,7 +162,10 @@ class HotelsFragment : Fragment(){
         val search = binding.searhhotel
 
 
+        Places.initialize(requireContext(), getString(R.string.google_maps_key))
+        placesClient = Places.createClient(requireContext())
        var autocm =  binding.AutoCompleteTextView
+//        autocm.adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,placesClient)
         autocm.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
@@ -163,8 +176,17 @@ class HotelsFragment : Fragment(){
                 fetchLocationPredictions(query)
             }
         })
+        autocm.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
+            val selectedPlace = parent.getItemAtPosition(position)
 
-        var listcities = listOf("Amritsar","Ajnala","SAS Nagar","SBS Nagar","Chandighar","Pathankot","Himachal","Mohali","Ropar","Kharar","Tarntaran","Gurdaspur")
+
+            val locationName = "$selectedPlace"
+
+        }
+
+
+
+//        var listcities = listOf("Amritsar","Ajnala","SAS Nagar","SBS Nagar","Chandighar","Pathankot","Himachal","Mohali","Ropar","Kharar","Tarntaran","Gurdaspur")
 
 
 
@@ -194,13 +216,13 @@ class HotelsFragment : Fragment(){
             if (searchView.text.isNullOrEmpty().not() && guestLiveData.value!=null && dateLiveData.value!=null   ){
                 val newFragment = HotelListFragment()
 
-                if (listcities.contains(searchView.text.toString()).not()){
-//                    Toast.makeText(requireContext(), "Please Enter CorrectData!!", Toast.LENGTH_SHORT).show()
-                    searchView.text.clear()
-//                    searchView.setError("Please enter correct city ")
-                    Toast.makeText(requireContext(), "wrong data", Toast.LENGTH_SHORT).show()
-
-                }else{
+//                if (listcities.contains(searchView.text.toString()).not()){
+////                    Toast.makeText(requireContext(), "Please Enter CorrectData!!", Toast.LENGTH_SHORT).show()
+//                    searchView.text.clear()
+////                    searchView.setError("Please enter correct city ")
+//                    Toast.makeText(requireContext(), "wrong data", Toast.LENGTH_SHORT).show()
+//
+//                }else{
                     val args = Bundle()
 //                args.putParcelable("guest", guestLiveData.value)
 //                args.putString("date",dateLiveData.value)
@@ -215,7 +237,7 @@ class HotelsFragment : Fragment(){
                     transaction.addToBackStack(null)
                     transaction.setReorderingAllowed(true)
                     transaction.commit()
-                }
+//                }
 
 
             }
@@ -485,13 +507,13 @@ fun checklivedata(m1:MutableLiveData<guestdatacls>?, m2:MutableLiveData<String>?
     private fun addAddress() {
 
 try {
-    val fields = listOf(Place.Field.ID, Place.Field.NAME)
-
-    val intent1 = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-        .build(requireActivity())
-    startActivityForResult(intent1, AllConstants.REQUEST_CODE.AUTOCOMPLETE_REQUEST_CODE)
-
-    Log.e("field12", "addAddress: ${fields[1].name}")
+//    val fields = listOf(Place.Field.ID, Place.Field.NAME)
+//
+//    val intent1 = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
+//        .build(requireActivity())
+//    startActivityForResult(intent1, AllConstants.REQUEST_CODE.AUTOCOMPLETE_REQUEST_CODE)
+//
+//    Log.e("field12", "addAddress: ${fields[1].name}")
 
 
 //    val autocompleteFragment = fragmentManager?.findFragmentById(R.layout.fragment_hotel) as AutocompleteSupportFragment
@@ -559,14 +581,18 @@ catch (e:Exception){
 //        Log.e("predictions", "showPredictions: ${predictions.get(0)},", )
         val colorSpan = ForegroundColorSpan(Color.RED)
         val spannableString = SpannableString("Hello World")
-        spannableString.setSpan(colorSpan, 0, 5, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(colorSpan, 0, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+
 
         val colorSpans = spannableString.getSpans(0, spannableString.length, ForegroundColorSpan::class.java)
         var m_data_show = mutableListOf<String>()
        var m_predictions = predictions.forEach {
+//           it.placeId
+
 
            m_data_show.add(it.getFullText(colorSpan).toString())
         }
+
         val suggestAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, m_data_show )
         binding.AutoCompleteTextView.setAdapter(suggestAdapter)
         suggestAdapter.notifyDataSetChanged()
@@ -575,6 +601,7 @@ catch (e:Exception){
 
 
     }
+    @SuppressLint("LongLogTag")
     private fun fetchLocationPredictions(query: String) {
         val token = AutocompleteSessionToken.newInstance()
 //        val bounds = RectangularBounds.newInstance(
@@ -605,13 +632,28 @@ catch (e:Exception){
 
         for (item in list){
 
-            item.setOnClickListener {
-
-            }
+            item.setOnClickListener { item.id }
 
         }
     }
+//
+//    fun getLatLng(locationName: String): Pair<Double, Double>? {
+//        val context = GeoApiContext.Builder()
+//            .apiKey(getString(R.string.google_maps_key))
+//            .build()
+//        val results: Array<GeocodingResult> = GeocodingApi.geocode(context, locationName).await()
+//        if (results.isNotEmpty()) {
+//            val latLng = results[0].geometry.location
+//            return Pair(latLng.lat, latLng.lng)
+//        }
+//        return null
+//    }
 
+    fun exceptioncode(e:Exception){
+        Log.e("exception1324", "exceptioncode:  ${e.message} ", )
+        Allfun
+
+    }
 
 }
 

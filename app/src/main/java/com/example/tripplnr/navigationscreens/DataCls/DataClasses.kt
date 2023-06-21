@@ -5,6 +5,7 @@ import android.os.Parcelable
 import android.widget.DatePicker
 import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.gms.maps.model.LatLng
 
 data class Massage(
     val msg :String
@@ -45,3 +46,4 @@ data class guestdatacls(
 data class userData(var first :String,var second:String)
 data class User1(val username: String? = null, val email: String? = null)
 data class sortData(val text:TextView,val image:ImageView)
+data class locationItem(val name: String?, val latitude: Double?, val longitude: Double?)
