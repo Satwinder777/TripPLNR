@@ -174,6 +174,7 @@ object Allfun {
 
     }
 
+
     fun textfChar(data:String):List<Char>{
 
         var words = data.split(" ")
@@ -243,6 +244,11 @@ object Allfun {
 
         return networkCapabilities?.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
             ?: false
+    }
+    fun exceptioncode(e:Exception,tag:String){
+        Log.e(tag, "exceptioncode:  ${e.message} ", )
+
+
     }
 
 }

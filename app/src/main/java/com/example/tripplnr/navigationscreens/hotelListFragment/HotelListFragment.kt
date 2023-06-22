@@ -17,11 +17,13 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHotelListBinding
 import com.example.tripplnr.navigationscreens.DataCls.sortData
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelListClass
+import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.FilterBottomSheet
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.HotelList2Activity
 import com.example.tripplnr.navigationscreens.hotelListFragment.adapter.Hotel_list_recyclerAdapter
@@ -93,10 +95,10 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     }
     private fun postData():List<hotelListClass>{
         var list = listOf<hotelListClass>(
-            hotelListClass(R.drawable.exploreimg,"Taj Hotel","Punjab ,India"),
-            hotelListClass(R.drawable.exploreimg,"The Royal Villa Hotel","Himachal ,India"),
-            hotelListClass(R.drawable.exploreimg,"The Gold Hotel","Pathankot ,India"),
-            hotelListClass(R.drawable.exploreimg,"Punjab Hotel","Pakistan ,India"),
+            hotelListClass(R.drawable.exploreimg,"Taj Hotel","Punjab ,India",5f),
+            hotelListClass(R.drawable.exploreimg,"The Royal Villa Hotel","Himachal ,India",4f),
+            hotelListClass(R.drawable.exploreimg,"The Gold Hotel","Pathankot ,India",3f),
+            hotelListClass(R.drawable.exploreimg,"Punjab Hotel","Pakistan ,India",4f),
         )
         return list
 
@@ -357,6 +359,31 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
 
     }
 
+    override fun onCardClicks(
+        view: View,
+        position: Int,
+        placetxt: Pair<String, String>,
+        rating: Float
+    ) {
+        val bundle = Bundle()
+//                args.putParcelable("guest", guestLiveData.value)
+//                args.putString("date",dateLiveData.value)
+        bundle.putString("place", placetxt.first)
+        bundle.putString("city", placetxt.second)
+        bundle.putFloat("rate", rating)
+
+
+//
+        val newFragment = HotelFragment()
+//       var HotelFragment_id =  newFragment.id
+        newFragment.arguments = bundle
+        val fragmentManager = requireParentFragment().parentFragmentManager
+        val transaction = fragmentManager.beginTransaction()
+        transaction.replace(R.id.nav_host_fragment, newFragment)
+        transaction.addToBackStack("hotel_fragment")
+        transaction.commit()
+//        findNavController().navigate(HotelFragment_id,bundle)
+    }
 
 
 

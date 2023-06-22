@@ -28,7 +28,7 @@ class bookingCardAdapter(var list: List<bookingCard>, var onclickCard1: onclickC
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
-        GlobalScope.launch {
+
             holder.bind(list)
             holder.apply {
                 itemView.setOnClickListener {
@@ -37,7 +37,7 @@ class bookingCardAdapter(var list: List<bookingCard>, var onclickCard1: onclickC
                     onclickCard1.cardIsActive(position)
                 }
             }
-        }
+
 
     }
     class InnerClass(view: View):RecyclerView.ViewHolder(view) {
@@ -50,7 +50,7 @@ class bookingCardAdapter(var list: List<bookingCard>, var onclickCard1: onclickC
 
       //  var learnmoretxt = view.findViewById<TextView>(R.id.learnmoretxt)
 
-       suspend fun bind (list: List<bookingCard>){
+         fun bind (list: List<bookingCard>){
             var item = list[position]
 
 

@@ -1,24 +1,21 @@
 package com.example.tripplnr.navigationscreens.Home.hotel
 
 import android.annotation.SuppressLint
-import android.app.ActionBar.OnNavigationListener
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.fragment.findNavController
-import androidx.viewpager.widget.ViewPager
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.denzcoskun.imageslider.constants.ScaleTypes
 import com.denzcoskun.imageslider.models.SlideModel
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHotelBinding
 import com.example.tripplnr.navigationscreens.Home.hotel.adapter.PageAdapter1
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
-import com.google.android.material.tabs.TabLayout
 
 
 class HotelFragment : Fragment() {
@@ -32,11 +29,20 @@ class HotelFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentHotelBinding.inflate(layoutInflater)
         val placetext = arguments?.getString("place","default" ) ?: ""
+        val cityLoc = arguments?.getString("city","default" ) ?: ""
+        val rate = arguments?.getFloat("rate",0f ) ?: ""
         binding.hotelNametxt.setText(placetext)
+        binding.mHoteltxt.setText(placetext)
+        binding.locationTxt.setText(cityLoc)
+        binding.ratingBar2.rating = rate as Float
+        binding.ratingBar2.setIsIndicator(true)
+
+
+
         return binding.root
     }
 
-    @SuppressLint("SetTextI18n")
+    @SuppressLint("SetTextI18n", "SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -51,7 +57,28 @@ class HotelFragment : Fragment() {
         sliderImageSet()
 
         binding.backbtnhotlFragment.setOnClickListener {
-            parentFragmentManager.popBackStack()
+//            parentFragmentManager.popBackStack()
+//            val fragmentManager = parentFragmentManager
+//            fragmentManager.popBackStack("hotel_fragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+            val fragmentManager = requireFragmentManager()
+
+                fragmentManager.popBackStack("hotel_fragment", FragmentManager.POP_BACK_STACK_INCLUSIVE)
+
+
+
+//            val fragmentManager = requireActivity().supportFragmentManager
+//
+//// Check the back stack count
+//            val backStackCount = fragmentManager.backStackEntryCount
+//            Log.e("backcount0", "onViewCreated: $backStackCount",)
+//// Pop the fragment from the back stack if there are more than one fragments in the stack
+//            if (backStackCount > 1) {
+//                fragmentManager.popBackStackImmediate()
+//            } else {
+//                // Handle the back navigation as needed, e.g., navigate to a different screen or finish the activity
+//                requireActivity().onBackPressed()
+//            }
+//            Log.e("backcount", "onViewCreated: $backStackCount",)
         }
 
 

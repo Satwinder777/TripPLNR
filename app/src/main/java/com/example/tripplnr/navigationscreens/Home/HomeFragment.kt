@@ -14,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHomeBinding
@@ -87,8 +88,11 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
         chip.elevation = 900f
         chip.setShadowLayer(0f, 10f, 50f, outlineSpotShadowColor)
         chip.outlineSpotShadowColor = outlineSpotShadowColor
+
+
+//        SearchFragment()
         binding.viewHotelCard.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+            findNavController().navigate(R.id.searchFragment)
 
         }
 

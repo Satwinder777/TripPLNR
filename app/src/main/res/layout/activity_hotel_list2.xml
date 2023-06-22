@@ -9,12 +9,12 @@
 
 
 
-<!--<androidx.fragment.app.FragmentContainerView-->
-<!--    android:id="@+id/map"-->
-<!--    android:layout_width="match_parent"-->
-<!--    android:layout_height="match_parent"-->
-<!--    android:name="com.google.android.gms.maps.SupportMapFragment"-->
-<!--    />-->
+<androidx.fragment.app.FragmentContainerView
+    android:id="@+id/map"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:name="com.google.android.gms.maps.SupportMapFragment"
+    />
 
 
     <androidx.cardview.widget.CardView
@@ -220,6 +220,8 @@
             android:layout_gravity="bottom"
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:paddingHorizontal="8dp"
+
             tools:listitem="@layout/hotel_list_2_item" />
 
     </LinearLayout>

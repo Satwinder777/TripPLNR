@@ -80,25 +80,26 @@ class SearchFragment : Fragment() {
 //        viewPager.currentItem = tabpos!!
 
 
-        binding.searchBackCard.setOnClickListener {
-//                    requireParentFragment().requireActivity().onBackPressed()
+        binding.backButtonSearchFragment.setOnClickListener {
+                    requireParentFragment().requireActivity().onBackPressed()
+//            fragmentManager?.popBackStack()
 //                 requireActivity().supportFragmentManager.popBackStack()
 
 
 // Get the reference to the FragmentManager
-            val fragmentManager = requireActivity().supportFragmentManager
-
-// Check the back stack count
-            val backStackCount = fragmentManager.backStackEntryCount
-
-// Pop the fragment from the back stack if there are more than one fragments in the stack
-            if (backStackCount > 1) {
-                fragmentManager.popBackStackImmediate()
-            } else {
-                // Handle the back navigation as needed, e.g., navigate to a different screen or finish the activity
-                requireActivity().onBackPressed()
-            }
-            Log.e("backcount", "onViewCreated: $backStackCount",)
+//            val fragmentManager = requireActivity().supportFragmentManager
+//
+//// Check the back stack count
+//            val backStackCount = fragmentManager.backStackEntryCount
+//
+//// Pop the fragment from the back stack if there are more than one fragments in the stack
+//            if (backStackCount > 1) {
+//                fragmentManager.popBackStackImmediate()
+//            } else {
+//                // Handle the back navigation as needed, e.g., navigate to a different screen or finish the activity
+//                requireActivity().onBackPressed()
+//            }
+//            Log.e("backcount", "onViewCreated: $backStackCount",)
 
         }
 

@@ -25,6 +25,7 @@ data class hotelListClass(
     var hotelListItemImg :Int,
     var hotelname1 :String,
     var locationhotel :String,
+    var rate:Float
 
 )
 data class bookingCard(

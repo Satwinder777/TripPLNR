@@ -74,7 +74,7 @@
                 <TextView
                     android:id="@+id/ratingtxt"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_gravity="center"
                     android:text="3.5"
                     android:textColor="@color/black"
@@ -93,6 +93,7 @@
                 <ImageView
                     android:layout_width="18sp"
                     android:layout_height="18sp"
+
                     android:src="@drawable/location_ic" />
 
                 <TextView

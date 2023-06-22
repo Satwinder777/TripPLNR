@@ -89,6 +89,7 @@ class HotelsFragment : Fragment(){
 
 
 
+
     private lateinit var placesClient:PlacesClient
 //    private lateinit var suggestionAdapter: SuggestionAdapter
 //    private lateinit var searchView :EditText
@@ -111,6 +112,7 @@ class HotelsFragment : Fragment(){
         Log.e("testdata", "onCreateView:$guestLiveData,$dateLiveData ", )
 
 //        searchView = binding.searchView
+
         binding.GuestTextView.setText(Guest)
 //        binding.GuestTextView.setText(guestLiveData.value?.guest)
         binding.rangeDAteTextView.setText(dateLiveData.value.toString())
@@ -165,11 +167,17 @@ class HotelsFragment : Fragment(){
         Places.initialize(requireContext(), getString(R.string.google_maps_key))
         placesClient = Places.createClient(requireContext())
        var autocm =  binding.AutoCompleteTextView
+
+
 //        autocm.adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,placesClient)
         autocm.addTextChangedListener(object : TextWatcher {
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
-            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                if (Allfun.isInternetAvailable(requireContext())==true.not()){
+                    autocm.setError("check Internet connection")
+                }
+            }
 
             override fun afterTextChanged(s: Editable?) {
                 val query = s.toString()
@@ -651,7 +659,7 @@ catch (e:Exception){
 
     fun exceptioncode(e:Exception){
         Log.e("exception1324", "exceptioncode:  ${e.message} ", )
-        Allfun
+
 
     }
 

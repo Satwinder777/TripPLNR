@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/creame"
-    android:padding="20dp"
+
+
     tools:context=".navigationscreens.Home.hotel.HotelFragment"
 
      >
@@ -46,7 +47,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                app:layout_scrollFlags="scroll|enterAlways|snap">
+                app:layout_scrollFlags="scroll|enterAlways|snap"
+                android:paddingHorizontal="20dp"
+                android:paddingTop="20sp"
+                >
 
                 <ImageButton
                     android:id="@+id/backbtnhotlFragment"
@@ -74,8 +78,9 @@
                         android:text="Capital O Hotel Ocean te..."
                         android:textAlignment="center"
                         android:textColor="@color/black"
-                        android:textSize="20sp"
-                        android:textStyle="bold" />
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        android:fontFamily="@font/poppins_medium"/>
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -92,6 +97,7 @@
                             android:text="10 Mar - 11 Mar"
                             android:textAlignment="center"
                             android:textSize="12sp"
+                            android:fontFamily="@font/poppin_regular"
                             android:textColor="@color/yellow"/>
 
                         <ImageView
@@ -110,7 +116,8 @@
                             android:text="2 Guests, 1 Room"
                             android:textAlignment="center"
                             android:textSize="12sp"
-                            android:textColor="@color/yellow"/>
+                            android:textColor="@color/yellow"
+                            android:fontFamily="@font/poppin_regular"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -127,16 +134,19 @@
                 android:layout_width="match_parent"
                 android:layout_height="220dp"
                 android:layout_marginVertical="5dp"
+
                 >
 
                 <com.denzcoskun.imageslider.ImageSlider
                     android:id="@+id/image_slider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:forceHasOverlappingRendering="true"
+
                     app:iss_auto_cycle="true"
                     app:iss_delay="0"
                     app:iss_period="1000"
+
+
 
 
                     app:iss_placeholder="@drawable/placeholder"
@@ -150,26 +160,32 @@
                     tools:ignore="MissingClass,MissingConstraints" />
             </androidx.constraintlayout.widget.ConstraintLayout>
 
+
+
             <TextView
-                android:id="@+id/textView13"
+                android:id="@+id/m_hoteltxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Capital O Hotel Ocean"
                 android:textColor="@color/black"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:paddingHorizontal="20dp"
+                android:fontFamily="@font/poppin_regular"/>
 
             <TextView
-                android:id="@+id/textView14"
+                android:id="@+id/locationTxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Milan, Italy" />
+                android:text="Milan, Italy"
+                android:paddingHorizontal="20dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginTop="5dp"
+                android:paddingHorizontal="20dp"
 
                 >
 
@@ -200,7 +216,8 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="2dp"
                     android:layout_weight="1"
-                    android:text="Very Good" />
+                    android:text="Very Good"
+                    android:fontFamily="@font/poppin_regular"/>
             </LinearLayout>
 
             <com.google.android.material.tabs.TabLayout
@@ -212,6 +229,8 @@
                 app:tabIndicatorColor="@color/yellow"
                 android:layout_marginTop="-10dp"
                 android:background="@color/creame"
+                android:layout_marginHorizontal="20dp"
+
                 />
 
             <View
@@ -220,7 +239,9 @@
                 android:layout_height="1dp"
                 android:background="?android:attr/listDivider"
                 android:backgroundTintMode="add"
-                android:backgroundTint="@color/brown"/>
+                android:backgroundTint="@color/brown"
+                android:layout_marginHorizontal="10dp"
+                />
 
 
         </LinearLayout>
@@ -234,13 +255,13 @@
             android:layout_height="match_parent"
             android:layout_marginTop="5dp"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-
-
             android:layout_weight="1"
+            android:layout_marginHorizontal="20dp"
 
 
 
             />
+
 
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 

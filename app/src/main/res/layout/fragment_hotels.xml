@@ -73,6 +73,8 @@
                     android:background="@android:color/transparent"
                     android:drawableStart="@drawable/search"
                     android:drawablePadding="10dp"
+                    android:singleLine="true"
+
 
                     android:saveEnabled="true"
                     android:ellipsize="end"
@@ -82,8 +84,9 @@
 
 
 
+
                     android:hint="search hotel"
-                    android:maxLines="1"
+
                     android:paddingVertical="8dp"
                     android:paddingStart="10dp"
                     tools:ignore="RtlSymmetry" />

@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
-    android:paddingHorizontal="5dp"
+    android:layout_width="match_parent"
     android:background="@android:color/transparent"
+    android:layout_margin="5dp"
+
 
     android:layout_height="wrap_content">
 
@@ -24,7 +25,7 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
-            android:paddingHorizontal="20dp"
+            android:paddingHorizontal="10dp"
             android:paddingVertical="10dp"
 
             android:orientation="horizontal">
@@ -49,8 +50,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingStart="10dp"
+                android:layout_weight="0.5"
 
-                android:orientation="vertical">
+                android:orientation="vertical"
+                tools:ignore="RtlSymmetry">
 
 
                 <TextView
@@ -58,11 +61,13 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
-                    android:text="Capital O Hotel Ocean"
+                    android:text="@string/testLine"
                     android:textColor="@color/black"
                     android:textSize="18sp"
                     android:textStyle="bold"
-                    tools:ignore="RtlSymmetry" />
+                    tools:ignore="RtlSymmetry"
+                    android:maxLines="1"
+                    android:ellipsize="end"/>
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -73,10 +78,13 @@
 
                     <TextView
                         android:id="@+id/locationhotel"
-                        android:layout_width="wrap_content"
+                        android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:text="Mohali,Chandighar"
-                        android:textColor="@color/black" />
+                        android:textColor="@color/black"
+                        android:maxLines="1"
+
+                        android:ellipsize="end"/>
 
                     <ImageView
                         android:layout_width="10dp"
@@ -89,7 +97,10 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="4Km " />
+                        android:text="4Km"
+                        android:maxLines="1"
+                        android:textSize="12sp"
+                        android:ellipsize="end"/>
                 </LinearLayout>
 
                 <LinearLayout
@@ -104,13 +115,17 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:text="6.5 "
+
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:layout_width="wrap_content"
+                        android:layout_width="50dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:text="Good" />
+
+                        android:text="Good"
+                        android:maxLines="1"
+                        android:ellipsize="end"/>
 
                     <!--                    <RatingBar-->
                     <!--                        android:layout_width="wrap_content"-->
@@ -131,9 +146,9 @@
                         android:id="@+id/ratingBar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="-60dp"
-                        android:layout_marginEnd="-90dp"
-                        android:scaleX=".5"
+                        android:layout_marginStart="-70dp"
+                        android:layout_marginEnd="-100dp"
+                        android:scaleX=".45"
                         android:scaleY=".5" />
 
                 </LinearLayout>
@@ -154,7 +169,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
-                        android:layout_weight="1"
+                        android:layout_weight="0.6"
                         android:orientation="vertical"
 
 
@@ -163,16 +178,21 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="AUS$144"
+                            android:text="USD 84"
                             android:textColor="@color/sky"
                             android:textSize="18sp"
                             android:layout_marginEnd="5dp"
-                            android:textStyle="bold" />
+                            android:textStyle="bold"
+                            android:maxLines="1"
+                            android:ellipsize="end"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Per Night On" />
+                            android:text="@string/Inc"
+                            android:maxLines="2"
+                            android:textSize="7sp"
+                            android:ellipsize="end"/>
                     </LinearLayout>
 
                     <com.google.android.material.button.MaterialButton
@@ -182,9 +202,14 @@
                         android:layout_weight="1"
                         android:backgroundTint="@color/yellow"
                         android:textAllCaps="false"
-                        android:textSize="11sp"
-                        android:text="View Deal"
-                        app:cornerRadius="10dp" />
+                        android:textSize="8sp"
+                        android:text="View deal"
+
+                        app:cornerRadius="10dp"
+
+                        android:layout_gravity="center"
+                        android:lines="1"
+                        />
 
 
                 </LinearLayout>
