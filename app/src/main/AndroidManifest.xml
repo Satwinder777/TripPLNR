@@ -28,20 +28,20 @@
             android:name=".navigationscreens.Account.activity.LegalinformatinActivity"
             android:exported="false" />
 
-                <meta-data
-                    android:name="com.google.android.geo.API_KEY"
-                    android:value="@string/satwinder_shergill" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyDuSP-_onkA8xA6gARaWWoy5hS2JaToSuM" />
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
-<!--        <meta-data-->
-<!--            android:name="com.google.android.geo.API_KEY"-->
-<!--            android:value="@string/google_maps_key" />-->
+        <!--        <meta-data-->
+        <!--            android:name="com.google.android.geo.API_KEY"-->
+        <!--            android:value="@string/google_maps_key" />-->
 
         <activity
             android:name=".navigationscreens.Search.hotel.activity.HotelList2Activity"
             android:exported="false"
-            android:label="@string/mapKey" />
+            android:label="@string/google_maps_key3" />
 
         <activity
             android:name=".splace.SplaceScreenActivity"

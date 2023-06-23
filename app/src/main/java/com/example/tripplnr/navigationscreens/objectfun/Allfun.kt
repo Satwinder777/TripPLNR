@@ -44,7 +44,7 @@ object Allfun {
         println("testobj")
     }
     fun freshdate():String{
-        val date = Date()
+        val date = Date().time
         val dateFormat = SimpleDateFormat("EEE ,dd MMM", Locale.getDefault())
         var startdate0 = dateFormat.format(date)
 

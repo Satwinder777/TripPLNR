@@ -28,6 +28,7 @@ import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.example.tripplnr.navigationscreens.objectfun.mLive
 import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
+import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.*
 
 class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
@@ -88,7 +89,6 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
         chip.elevation = 900f
         chip.setShadowLayer(0f, 10f, 50f, outlineSpotShadowColor)
         chip.outlineSpotShadowColor = outlineSpotShadowColor
-
 
 //        SearchFragment()
         binding.viewHotelCard.setOnClickListener {

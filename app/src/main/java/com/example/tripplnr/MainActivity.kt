@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(),
 
 
 
+
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
         var navController = navHostFragment.navController
@@ -66,25 +67,14 @@ class MainActivity : AppCompatActivity(),
         btn.setOnClickListener {
             navController.navigate(R.id.homeFragment)
         }
+
 //        bottomNavigationView.setOnClickListener {
-//            when(it.id){
-//                R.id.homeFragment->{
-//                    NavigationUI.onNavDestinationSelected(it as MenuItem,navController)
-//                }
-//                R.id.searchFragment->{
-//                    NavigationUI.onNavDestinationSelected(it as MenuItem,navController)
-//                }
-//                R.id.favorateFragment->{
-//                    NavigationUI.onNavDestinationSelected(it as MenuItem,navController)
-//                }
-//                R.id.accountFragment->{
-//                    NavigationUI.onNavDestinationSelected(it as MenuItem,navController)
-//                }
-//            }
+
+            }
 //        }
 
 
-    }
+
 
     override fun onNetworkConnected() {
         Log.e("networktest", "onNetworkConnected:  Network Connected", )

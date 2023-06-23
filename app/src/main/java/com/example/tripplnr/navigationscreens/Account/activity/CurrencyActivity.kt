@@ -6,8 +6,11 @@ import android.content.Intent
 import android.os.Binder
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.SearchView
 import android.widget.Toast
 import androidx.core.view.get
@@ -23,6 +26,7 @@ import java.util.*
 
 class CurrencyActivity : AppCompatActivity(),CurrencyRecyclerAdapter.callfun {
     private lateinit var binding :ActivityCurrencyBinding
+    private lateinit var suggestAdapter : ArrayAdapter<*>
 //    private lateinit var rcCurr :RecyclerView
 //    private lateinit var adapter :CurrencyRecyclerAdapter
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,7 +60,7 @@ class CurrencyActivity : AppCompatActivity(),CurrencyRecyclerAdapter.callfun {
         currencyPicker.apply {
             threshold = 0
 
-            val suggestAdapter = ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, resources.getStringArray(R.array.currency) )
+              suggestAdapter = ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, resources.getStringArray(R.array.currency) )
             setAdapter(suggestAdapter)
             this.setOnItemClickListener { parent, view, position, id ->
                 Allfun.currencyData.value = currencyPicker.text.toString()
@@ -72,6 +76,8 @@ class CurrencyActivity : AppCompatActivity(),CurrencyRecyclerAdapter.callfun {
                 showDropDown()
             }
             //  performCompletion()
+
+
         }
 
 

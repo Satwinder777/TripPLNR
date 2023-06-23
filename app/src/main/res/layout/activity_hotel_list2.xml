@@ -52,10 +52,14 @@
 
                 <TextView
                     android:id="@+id/cityname"
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="New York"
-                    android:textColor="@color/black" />
+                    android:text="@string/testLine"
+                    android:textColor="@color/black"
+                    android:lines="1"
+                    android:ems="11"
+                    android:textAlignment="center"
+                    android:ellipsize="end"/>
 
 
                 <LinearLayout
@@ -100,11 +104,12 @@
                         android:textColor="@color/black" />
 
                     <ImageView
-                        android:layout_width="20dp"
-                        android:layout_height="20dp"
+                        android:layout_width="13dp"
+                        android:layout_height="13dp"
                         android:layout_gravity="center"
                         android:layout_marginHorizontal="5dp"
-                        android:src="@drawable/group_white_ic"
+                        android:src="@drawable/user"
+                        android:layout_marginBottom="2dp"
                         app:tint="@color/yellow" />
 
 

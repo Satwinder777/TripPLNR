@@ -5,6 +5,7 @@ import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.SearchRecentSuggestionsProvider
+import android.content.SharedPreferences
 import android.database.Cursor
 import android.graphics.Color
 import android.net.ConnectivityManager
@@ -46,10 +47,7 @@ import com.example.tripplnr.navigationscreens.objectfun.Allfun.guestLiveData
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
-import com.google.android.libraries.places.api.model.AutocompletePrediction
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken
-import com.google.android.libraries.places.api.model.Place
-import com.google.android.libraries.places.api.model.RectangularBounds
+import com.google.android.libraries.places.api.model.*
 import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
@@ -60,6 +58,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
 import com.google.android.material.datepicker.RangeDateSelector
 import com.google.maps.GeoApiContext
@@ -71,11 +70,8 @@ import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
-const val API_KEY = "AIzaSyAsSMYb29gSo5bq2Ip-3lwx5mhqToxd5W8"
-const val API_KEY_ONE = "AIzaSyAA8J4FwN3vqvltGu5osXTtKeexjjq_CkA"
 
-const val NEW1_API_KEY = "AIzaSyBiWumyUM7nfC4_SlLP1j-FIsDuyLpb390"
-const val NEW2_API_KEY = "AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg"
+
 
 class HotelsFragment : Fragment(){
     private lateinit var binding: FragmentHotelsBinding
@@ -83,6 +79,12 @@ class HotelsFragment : Fragment(){
     var roomc:Int = 1
     var adultc:Int = 1
     var childc:Int = 1
+    private lateinit var share_pref :SharedPreferences
+    private lateinit var editor :SharedPreferences.Editor
+
+    var m_data_show = mutableListOf<String>()
+
+
 
 
 
@@ -103,13 +105,15 @@ class HotelsFragment : Fragment(){
         // Inflate the layout for this fragment
         binding = FragmentHotelsBinding.inflate(layoutInflater)
         initView()
-
+        share_pref = requireContext().getSharedPreferences("share_pref_hotel_fragment", Context.MODE_PRIVATE)
+        editor = share_pref.edit()
 
         val Guest = "$adultc Guests, $roomc Rooms"
         Allfun
 
         checklivedata(guestLiveData,dateLiveData)
         Log.e("testdata", "onCreateView:$guestLiveData,$dateLiveData ", )
+
 
 //        searchView = binding.searchView
 
@@ -162,11 +166,7 @@ class HotelsFragment : Fragment(){
 //            }
         }
         val search = binding.searhhotel
-
-
-        Places.initialize(requireContext(), getString(R.string.google_maps_key))
-        placesClient = Places.createClient(requireContext())
-       var autocm =  binding.AutoCompleteTextView
+        var autocm =  binding.AutoCompleteTextView
 
 
 //        autocm.adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,placesClient)
@@ -182,6 +182,8 @@ class HotelsFragment : Fragment(){
             override fun afterTextChanged(s: Editable?) {
                 val query = s.toString()
                 fetchLocationPredictions(query)
+//                fetchPlacePredictions(query)
+//                getLatLngFromAddress(query)
             }
         })
         autocm.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
@@ -211,7 +213,8 @@ class HotelsFragment : Fragment(){
             //  performCompletion()
         }
         binding.destination.setOnClickListener {
-            openlocation()
+//            openlocation()
+            updateDatePicker()
         }
 
 
@@ -219,6 +222,7 @@ class HotelsFragment : Fragment(){
         search.setOnClickListener {
 
             val searchView = autocm
+
 
 
             if (searchView.text.isNullOrEmpty().not() && guestLiveData.value!=null && dateLiveData.value!=null   ){
@@ -231,20 +235,20 @@ class HotelsFragment : Fragment(){
 //                    Toast.makeText(requireContext(), "wrong data", Toast.LENGTH_SHORT).show()
 //
 //                }else{
-                    val args = Bundle()
+                val args = Bundle()
 //                args.putParcelable("guest", guestLiveData.value)
 //                args.putString("date",dateLiveData.value)
-                    args.putString("query",searchView.text.toString())
-                    newFragment.arguments = args
+                args.putString("query",searchView.text.toString())
+                newFragment.arguments = args
 
 //                Log.e("test311", "onViewCreated: ${binding.searchView.query.toString()}", )
 //            val targetFragment = TargetFragment()
-                    val fragmentManager = requireParentFragment().parentFragmentManager
-                    val transaction = fragmentManager.beginTransaction()
-                    transaction.replace(R.id.nav_host_fragment, newFragment)
-                    transaction.addToBackStack(null)
-                    transaction.setReorderingAllowed(true)
-                    transaction.commit()
+                val fragmentManager = requireParentFragment().parentFragmentManager
+                val transaction = fragmentManager.beginTransaction()
+                transaction.replace(R.id.nav_host_fragment, newFragment)
+                transaction.addToBackStack(null)
+                transaction.setReorderingAllowed(true)
+                transaction.commit()
 //                }
 
 
@@ -253,7 +257,7 @@ class HotelsFragment : Fragment(){
             else{
                 Toast.makeText(requireContext(), "Please search query", Toast.LENGTH_SHORT).show()
             }
-
+            m_data_show.clear()
         }
 
 
@@ -292,7 +296,7 @@ class HotelsFragment : Fragment(){
         view.setOnClickListener {
             when (view) {
                 selectdate -> {
-
+//                    updateDatePicker()
                     val builder = MaterialDatePicker.Builder.dateRangePicker()
                         .setTitleText("Select Date Range")
                     val datePicker = builder.build()
@@ -301,19 +305,29 @@ class HotelsFragment : Fragment(){
                         val startDate = selection.first
                         val endDate = selection.second
 
+                        editor.putLong("startdate",startDate)
+                        editor.putLong("endDate",endDate)
+                        editor.apply()
+
+
+
 
 
                         val date = Date(startDate)
+                        var date_one_milli = date.time
                         val dateFormat = SimpleDateFormat("EEE ,dd MMM", Locale.getDefault())
                         var startdate0 = dateFormat.format(date)
 
                         val date2 = Date(endDate)
+                        var date_two_milli = date2.time
                         val dateFormat2 = SimpleDateFormat("EEE ,dd MMM", Locale.getDefault())
 
                         var enddate0 = dateFormat2.format(date2)
                         var rangestr = "$startdate0 - $enddate0"
                         binding.rangeDAteTextView.setText(rangestr)
 
+
+                        Log.e("millis_date", "bottomTask: $date_one_milli,$date_two_milli", )
                         dateLiveData.value = rangestr
                     }
 
@@ -397,7 +411,7 @@ class HotelsFragment : Fragment(){
         var a = roomdata(addroom,roomsub,roomcount )
         var b = adultdata(addadult,roomadult,adultcount )
         var c = childdata(addchild,roomchild,childcount )
-       var submit =  view?.findViewById<MaterialButton>(R.id.guestApply)
+        var submit =  view?.findViewById<MaterialButton>(R.id.guestApply)
         submit?.setOnClickListener{
 //            Toast.makeText(requireContext(), "  Guest Are  R:$roomc,A:$adultc,C:$childc, ", Toast.LENGTH_SHORT).show()
             view?.dismiss()
@@ -488,87 +502,43 @@ class HotelsFragment : Fragment(){
 
     }
 
-@SuppressLint("SetTextI18n")
-fun checklivedata(m1:MutableLiveData<guestdatacls>?, m2:MutableLiveData<String>?){
+    @SuppressLint("SetTextI18n")
+    fun checklivedata(m1:MutableLiveData<guestdatacls>?, m2:MutableLiveData<String>?){
 
-    var TAG = "test31"
-    if (m1?.value != null && m2?.value != null){
+        var TAG = "test31"
+        if (m1?.value != null && m2?.value != null){
 
-        var data = guestLiveData.value
+            var data = guestLiveData.value
 
-        val adlt = data?.guest
-        val room = data?.rooms
-        binding.GuestTextView.setText("$adlt Guest,$room Rooms")
-        binding.rangeDAteTextView.setText(dateLiveData.value)
-        Log.e(TAG, "checklivedata: !null")
+            val adlt = data?.guest
+            val room = data?.rooms
+            binding.GuestTextView.setText("$adlt Guest,$room Rooms")
+            binding.rangeDAteTextView.setText(dateLiveData.value)
+            Log.e(TAG, "checklivedata: !null")
 
-    }
-    else{
-        guestLiveData.value = guestdatacls(1,1)
-        dateLiveData.value = "Sun, 8 jun - Sun, 8 Jun "
+        }
+        else{
+            guestLiveData.value = guestdatacls(1,1)
+            dateLiveData.value = "Sun, 8 jun - Sun, 8 Jun "
 //        binding.GuestTextView.setText("1 Guest,1 Room")
 //        binding.rangeDAteTextView.setText("8 jun - 8 Jun")
-        Log.e(TAG, "checklivedata: null ${guestLiveData.value},${dateLiveData.value}  ")
+            Log.e(TAG, "checklivedata: null ${guestLiveData.value},${dateLiveData.value}  ")
+        }
     }
-}
     @SuppressLint("ResourceType")
     private fun addAddress() {
 
-try {
-//    val fields = listOf(Place.Field.ID, Place.Field.NAME)
-//
-//    val intent1 = Autocomplete.IntentBuilder(AutocompleteActivityMode.OVERLAY, fields)
-//        .build(requireActivity())
-//    startActivityForResult(intent1, AllConstants.REQUEST_CODE.AUTOCOMPLETE_REQUEST_CODE)
-//
-//    Log.e("field12", "addAddress: ${fields[1].name}")
 
-
-//    val autocompleteFragment = fragmentManager?.findFragmentById(R.layout.fragment_hotel) as AutocompleteSupportFragment
-//
-//// Specify the types of place data to return.
-//    autocompleteFragment.setPlaceFields(listOf(Place.Field.ID, Place.Field.NAME))
-
-//    intent.setOnPlaceSelectedListener(object : PlaceSelectionListener {
-//        override fun onPlaceSelected(place: Place) {
-//            // Handle the selected place.
-//            val placeName = place.name
-//            Log.e("test23", "onPlaceSelected: $placeName", )
-//            // Do something with the place name.
-//        }
-//
-//        override fun onError(status: Status) {
-//            // Handle the error.
-//            Log.e("test23", "onError: ${status.status}", )
-//        }
-//    })
-
-}
-catch (e:Exception){
-    Log.e("exp", "addAddress: ${e.message}")
-}
-
-
-//        try {
-//            if (marker.isVisible) {
-//                marker.remove()
-//                // If you have a marker list and want to remove a specific marker, uncomment the following lines:
-//                // if (markerlist.isNotEmpty()) {
-//                //     markerlist.remove(markerlist[0])
-//                // }
-//            }
-//        } catch (e: Exception) {
-//            Log.e("newsc", "setUpUi: ${e.message}")
-        }
+    }
     private fun initView() {
 
 
         if (!Places.isInitialized()) {
             Places.initialize(
-                requireActivity(), getString(R.string.google_maps_key), Locale.US
+                requireContext(), getString(R.string.google_maps_key3)
             )
         }
-        placesClient = Places.createClient(requireActivity())
+        placesClient = Places.createClient(requireContext())
     }
     private fun openlocation(){
 
@@ -593,12 +563,12 @@ catch (e:Exception){
 
 
         val colorSpans = spannableString.getSpans(0, spannableString.length, ForegroundColorSpan::class.java)
-        var m_data_show = mutableListOf<String>()
-       var m_predictions = predictions.forEach {
+        var m_predictions = predictions.forEach {
 //           it.placeId
+            Log.e("m_predictions", "showPredictions: m_predictions", )
 
 
-           m_data_show.add(it.getFullText(colorSpan).toString())
+            m_data_show.add(it.getFullText(colorSpan).toString())
         }
 
         val suggestAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, m_data_show )
@@ -657,15 +627,54 @@ catch (e:Exception){
 //        return null
 //    }
 
-    fun exceptioncode(e:Exception){
-        Log.e("exception1324", "exceptioncode:  ${e.message} ", )
+
+//    private fun fetchPlacePredictions(query: String) {
+//        val request = FindAutocompletePredictionsRequest.builder()
+//            .setQuery(query)
+//            .setTypeFilter(TypeFilter.ADDRESS)
+//            .build()
+//
+//        placesClient.findAutocompletePredictions(request)
+//            .addOnSuccessListener { response: FindAutocompletePredictionsResponse ->
+//                for (prediction: AutocompletePrediction in response.autocompletePredictions) {
+//                    // Handle each prediction as needed
+//                    val placeId = prediction.placeId
+//                    val description = prediction.getPrimaryText(null).toString()
+//                    Log.d("fetchplacepred", "Place: $placeId, Description: $description")
+//                }
+//            }
+//            .addOnFailureListener { exception: Exception ->
+//                // Handle error
+//                Log.e("fetchplacepred", "Place prediction fetch failed: ${exception.message}")
+//            }
+//    }
+
+private fun updateDatePicker(){
+
+    val startDate = share_pref.getLong("startdate",Date().time) // start date in milliseconds
+    val endDate: Long = share_pref.getLong("endDate",Date().time)// end date in milliseconds
 
 
-    }
 
+
+// Get the current calendar instance
+    val calendar = Calendar.getInstance()
+
+// Set the start date of the range to 1 week ago
+    calendar.add(Calendar.DAY_OF_MONTH, -7)
+
+
+// Create a MaterialDatePicker with a date range
+    val builder = MaterialDatePicker.Builder.dateRangePicker()
+    builder.setSelection(androidx.core.util.Pair(startDate, endDate))
+
+// Show the MaterialDatePicker
+    val materialDatePicker = builder.build()
+    materialDatePicker.show(childFragmentManager, "DATE_PICKER_TAG")
+
+}
 }
 
 //}
-
 
 

@@ -1,7 +1,7 @@
 plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
-    id 'com.google.gms.google-services'
+
 
 }
 
@@ -90,6 +90,17 @@ dependencies {
     implementation 'com.google.maps:google-maps-services:0.17.0'
     implementation 'com.google.android.libraries.places:places:3.1.0'
     implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
+
+        // Other dependencies...
+        implementation 'com.google.android.libraries.places:places:3.1.0'
+ 
+
+
+
+    //gms
+//    implementation 'com.google.android.gms:play-services-maps:18.1.0'
+//    implementation 'com.google.android.gms:play-services-places:17.0.1'
+//    implementation 'com.google.android.gms:play-services-places:17.0.1'
 
     //noinspection GradleCompatible
 

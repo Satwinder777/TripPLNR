@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Lifecycle
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentAccountBinding
 import com.example.tripplnr.navigationscreens.Account.activity.CreateUserActivity
@@ -33,6 +35,9 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.chip.Chip
+import com.google.firebase.FirebaseApp
+import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
@@ -43,6 +48,7 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
+import java.lang.Character.toUpperCase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -58,19 +64,25 @@ class AccountFragment : Fragment() {
     private lateinit var binding : FragmentAccountBinding
     private lateinit var googleSignInClient: GoogleSignInClient
     private lateinit var intent: Intent
+    private lateinit var auth: FirebaseAuth
+    private lateinit var f_base: FirebaseApp
+    private lateinit var sharedPreferences: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
 
 
-    val currentUser = FirebaseAuth.getInstance().currentUser
+
+
+
 
 
 
     //    private var user = Firebase.auth.currentUser
-        var auth = Firebase.auth
+
 //    val RC_SIGN_IN = 13
 
 
 
-    val user = FirebaseAuth.getInstance().currentUser
+//    val user = FirebaseAuth.getInstance().currentUser
 
     @SuppressLint("RestrictedApi")
     override fun onCreateView(
@@ -79,6 +91,13 @@ class AccountFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentAccountBinding.inflate(layoutInflater)
+        important_init()
+
+
+        sharedPreferences =  requireContext().getSharedPreferences("AccountFragment_pref", Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
+
+        auth = Firebase.auth
 
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.client_id))
@@ -86,33 +105,36 @@ class AccountFragment : Fragment() {
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-
-        if (currentUser?.isAnonymous == true) {
-            // User is anonymous
-            // Perform the necessary actions for anonymous users
-            // For example, show a different UI or restrict certain functionalities
-            Toast.makeText(requireContext(), "anonymous", Toast.LENGTH_SHORT).show()
-        } else {
-            // User is not anonymous
-            // Perform the necessary actions for authenticated users
-            // For example, allow access to restricted features or show personalized content
-            var name = currentUser?.displayName
-            var email = currentUser?.email
-            Toast.makeText(requireContext(), "not anonymous", Toast.LENGTH_SHORT).show()
-            Log.e("c123", "onCreateView: $name,$email", )
-            if (email != null) {
-                WordStartchar(email)
-            }
-
-        }
-
-
-
-        Toast.makeText(requireContext(), "${user?.displayName}", Toast.LENGTH_SHORT).show()
-
+//        val currentUser = auth.currentUser
+//
+//
+//
+//        if (currentUser?.isAnonymous == true) {
+//            // User is anonymous
+//            // Perform the necessary actions for anonymous users
+//            // For example, show a different UI or restrict certain functionalities
+//            Toast.makeText(requireContext(), "anonymous", Toast.LENGTH_SHORT).show()
+//        } else {
+//            // User is not anonymous
+//            // Perform the necessary actions for authenticated users
+//            // For example, allow access to restricted features or show personalized content
+//            var name = currentUser?.displayName
+//            var email = currentUser?.email
+//            Toast.makeText(requireContext(), "not anonymous", Toast.LENGTH_SHORT).show()
+//            Log.e("c123", "onCreateView: $name,$email", )
+//            if (email != null) {
+//                WordStartchar(email)
+//            }
+//
+//        }
 
 
 
+//        Toast.makeText(requireContext(), "${user?.displayName}", Toast.LENGTH_SHORT).show()
+
+
+
+        isUserLoggedIn()
         return binding.root
 
 
@@ -122,25 +144,13 @@ class AccountFragment : Fragment() {
     @SuppressLint("MissingInflatedId", "InflateParams", "SuspiciousIndentation")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        important_init()
         binding.legalTxt.setOnClickListener {
             val intent = Intent(requireContext(), LegalinformatinActivity::class.java)
             startActivity(intent)
         }
         var imgUrl =  "android.resource://" + requireContext() + "/" + R.drawable.account_ic
-        val database = FirebaseDatabase.getInstance().getReference()
-        database.child("users").child("userId").addListenerForSingleValueEvent(object : ValueEventListener {
-            override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val user = dataSnapshot.getValue(User::class.java)
-                // Do something with the user object
-                Log.e("dbase", "onDataChange: $user", )
-            }
 
-            override fun onCancelled(databaseError: DatabaseError) {
-                // Handle errors here
-                Log.e("dbase", "onCancelled: ${databaseError.message}", )
-            }
-        })
 //              var gclient =   getGoogleSignInClient(requireContext())
           // show currency
 
@@ -149,6 +159,7 @@ class AccountFragment : Fragment() {
 
 
         binding.logintxt.setOnClickListener {
+            val currentUser = FirebaseAuth.getInstance().currentUser
 
             val account = GoogleSignIn.getLastSignedInAccount(requireContext())
 
@@ -218,7 +229,7 @@ class AccountFragment : Fragment() {
                                 binding.userText.setText(user)
                                 var alphabetfirst = user?.get(0)?.toUpperCase().toString()
                                 binding.alphaText.setText(alphabetfirst)
-                                binding.alphaText.visibility = View.VISIBLE
+//                                binding.alphaText.visibility = View.VISIBLE
                                 binding.logoutBtn.visibility = View.VISIBLE
                                 binding.logoutBtn.setText("Logout")
 
@@ -264,6 +275,8 @@ class AccountFragment : Fragment() {
 
         }
 
+       var currencyType = sharedPreferences.getString("currency","USD")
+        binding.currencyType.setText(currencyType)
 
 
 
@@ -277,15 +290,10 @@ class AccountFragment : Fragment() {
 
             }
         binding.logoutBtn.setOnClickListener{
-
-            if (it is MaterialButton){
-                it.text = "Log in"
-            }
-
-
-
-
-
+                binding.alphaText.visibility = View.GONE
+                it.visibility = View.GONE
+                logout()
+                binding.userText.setText("Login")
         }
             chipclick(binding.chiKm)
             chipclick(binding.chipMile)
@@ -293,53 +301,71 @@ class AccountFragment : Fragment() {
 
 
 
-        binding.logoutBtn.setOnClickListener{
-            logout()
-            binding.userText.setText("Login")
-//            var alphabetfirst = user?.get(0).toString()
-            binding.alphaText.visibility = View.INVISIBLE
-        }
+
 
 //        binding.shareapp.setOnClickListener{
 ////            loginTask()
 //
 //        }
+        var chipkm = binding.chiKm
+        var chipMile = binding.chipMile
+        val enable_unit = sharedPreferences.getString("units","chipMile")
+        Log.e("enable_unit", "onViewCreated: $enable_unit", )
+        when(enable_unit){
+             "KMS"->{
+                chipActive(chipkm)
+                chipActive_not(chipMile)
+
+            }
+            "MILES"->{
+                chipActive(chipMile)
+                chipActive_not(chipkm)
+
+
+            }
+            else->{
+                Toast.makeText(requireContext(), "wrong chip [${enable_unit.toString()}]", Toast.LENGTH_SHORT).show()
+            }
+        }
 
 
 
+        isUserLoggedIn()
 
     }
 
-        private fun chipclick(view: View) {
+        private fun chipclick(view: View){
 
             var chipkm = binding.chiKm
             var chipMile = binding.chipMile
+            var idea :String =""
             view.setOnClickListener {
-                when (view) {
+                 when (view) {
                     chipkm -> {
-                        chipkm.setChipBackgroundColorResource(R.color.yellow)
-                        chipkm.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
-                        chipMile.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.black
-                            )
-                        )
-                        chipMile.setChipBackgroundColorResource(R.color.creame)
+                        chipActive(chipkm)
+                        chipActive_not(chipMile)
+
+                        idea = chipkm.text.toString().toUpperCase()
+                        editor.remove("units")
+                        editor.putString("units",idea)
+                        editor.apply()
+
                     }
                     chipMile -> {
-                        chipMile.setChipBackgroundColorResource(R.color.yellow)
-                        chipMile.setTextColor(
-                            ContextCompat.getColor(
-                                requireContext(),
-                                R.color.white
-                            )
-                        )
-                        chipkm.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
-                        chipkm.setChipBackgroundColorResource(R.color.creame)
+                        chipActive(chipMile)
+                        chipActive_not(chipkm)
+
+                        idea = chipMile.text.toString().toUpperCase()
+                        editor.remove("units")
+                        editor.putString("units",idea)
+                        editor.apply()
+                        Log.e("ides_data", "chipclick: $idea", )
+
                     }
                 }
             }
+
+
         }
 
 
@@ -381,6 +407,7 @@ class AccountFragment : Fragment() {
 
 
 
+    @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)                                                                           ///activity result
 
@@ -406,6 +433,8 @@ class AccountFragment : Fragment() {
         if (requestCode == 1 && resultCode == Activity.RESULT_OK) {                                                                     /// setting currency 
             val value = data?.getStringExtra("key") // Replace "key" with the key you used in the child activity
             // Use the retrieved value as needed
+            editor.putString("currency",value)
+            editor.apply()
             Toast.makeText(requireContext(), "$value", Toast.LENGTH_SHORT).show()
             Log.e("valuedata", "onActivityResult: $value", )
             binding.currencyType.setText(value)
@@ -414,65 +443,48 @@ class AccountFragment : Fragment() {
 
         }
 
-        val username = GoogleSignIn.getLastSignedInAccount(requireContext())
-
-        if (requestCode == RC_SIGN_IN) {
-            val response = IdpResponse.fromResultIntent(data)
-
-            if (resultCode == Activity.RESULT_OK) {
-                // User successfully signed in
-
-                // Get the user's display name (username)
-
-
-                // Use the username as needed
-                if (username != null) {
-                    // Do something with the username
-//                        Log.d("MainActivity", "Username: $username")
-                    Log.e(TAG, "onActivityResult: $username", )
-//                    binding.userText.setText(username.givenName)
-//                    WordStartchar(username.givenName)
-
-
-                    binding.alphaText.visibility = View.VISIBLE
-                    Log.e("username", "onActivityResult:$username ", )
-                }else{
-                    Log.e("testuser", "onActivityResult: null", )
-                }
-            } else {
-                // Sign in failed
-                if (response != null) {
-                    // Handle the error
-                    val error = response.error
-                    Log.e("MainActivity", "Sign-in error: $error")
-                }
-            }
-        }
-
-
-
-
-//        callbackManager.onActivityResult(requestCode, resultCode, data)
-
+//        val username = GoogleSignIn.getLastSignedInAccount(requireContext())
+//
 //        if (requestCode == RC_SIGN_IN) {
-//            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-//            try {
-//                // Google Sign-In was successful, authenticate with Firebase.
-//                val account = task.getResult(ApiException::class.java)!!
-//                firebaseAuthWithGoogle(account.idToken!!)
-//            } catch (e: ApiException) {
-//                // Google Sign-In failed, update UI accordingly.
-//                Log.e("statususer", "onActivityResult: ${e.message}", )
+//            val response = IdpResponse.fromResultIntent(data)
+//
+//            if (resultCode == Activity.RESULT_OK) {
+//                // User successfully signed in
+//
+//                // Get the user's display name (username)
+//
+//
+//                // Use the username as needed
+//                if (username != null) {
+//                    // Do something with the username
+////                        Log.d("MainActivity", "Username: $username")
+//                    Log.e(TAG, "onActivityResult: $username", )
+////                    binding.userText.setText(username.givenName)
+////                    WordStartchar(username.givenName)
+//
+//
+//                    binding.alphaText.visibility = View.VISIBLE
+//                    Log.e("username", "onActivityResult:$username ", )
+//                }else{
+//                    Log.e("testuser", "onActivityResult: null", )
+//                }
+//            } else {
+//                // Sign in failed
+//                if (response != null) {
+//                    // Handle the error
+//                    val error = response.error
+//                    Log.e("MainActivity", "Sign-in error: $error")
+//                }
 //            }
 //        }
 
-    }
-//    private fun updateUI(user: FirebaseUser?) {
-//
-//    }
-//
 
-//
+
+
+
+    }
+
+    @SuppressLint("CommitPrefEdits")
     private fun firebaseAuthWithGoogle(idToken:String){
         val credential = GoogleAuthProvider.getCredential(idToken, null)
         auth.signInWithCredential(credential)
@@ -484,12 +496,16 @@ class AccountFragment : Fragment() {
 
                     if(user?.displayName.isNullOrEmpty()){
 
-                        binding.userText.setText(user?.email)
+                        binding.userText.setText(WordStartchar("login"))
                     }
                     else{
                         user?.displayName?.let { WordStartchar(it) }
                         binding.userText.setText(user?.displayName)
                         binding.alphaText.visibility = View.VISIBLE
+                        Log.e("tttttt", "firebaseAuthWithGoogle: ${user?.displayName}", )
+                        var loggedUser = user?.displayName
+                        editor.putString("loggedUser",loggedUser)
+                        editor.apply()
                     }
                     // ...
                 } else {
@@ -497,49 +513,16 @@ class AccountFragment : Fragment() {
                     // ...
                     Log.e(TAG, "firebaseAuthWithGoogle: got error ${task.exception}", )
                 }
+                binding.logoutBtn.visibility = View.VISIBLE
             }.addOnFailureListener {
                 Toast.makeText(requireContext(), it.localizedMessage.toString(), Toast.LENGTH_SHORT).show()
             }
     }
 
-//    private fun checkuserisLogged() {
-//        val currentUser = auth.currentUser
-//
-//        if (currentUser != null) {
-//            // User is logged in
-//            val uid = currentUser.uid
-//            val email = currentUser.email
-//
-//            println("User is logged in")
-//            println("UID: $uid")
-//            println("Email: $email")
-//            Toast.makeText(requireContext(), "$uid,$email", Toast.LENGTH_SHORT).show()
-//        } else {
-//            // User is not logged in
-//            Log.e("abc123", "not present user", )
-//        }
-//    }
-    private fun setcurrency(){
-        binding.currencyType.text = Allfun.currencyData.value
-
-    }
 
 
 
-    private fun loginTask(){
-        val auth = FirebaseAuth.getInstance()
-        val providers = listOf(AuthUI.IdpConfig.EmailBuilder().build())
-        val signInIntent =
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setAvailableProviders(providers)
-                .build()
 
-
-        startActivityForResult(signInIntent, RC_SIGN_IN)
-//        auth.currentUser?.displayName
-        Log.e("shuda", "loginTask: ${auth.currentUser?.displayName}", )
-    }                   //**
     private fun logout(){
         googleSignInClient.signOut()
     }
@@ -548,13 +531,13 @@ class AccountFragment : Fragment() {
 
     }
 
-    private fun WordStartchar(line:String){
+    private fun WordStartchar(line:String):String{
 
-        if (line.isNullOrEmpty()){
+       return if (line.isNullOrEmpty()){
 
             binding.userText.text ="login"
             binding.alphaText.visibility = View.INVISIBLE
-
+        return "l"
         }
         else{
             val words = line.split(" ")
@@ -578,9 +561,66 @@ class AccountFragment : Fragment() {
             binding.userText.text = line
             binding.alphaText.visibility = View.VISIBLE
 
+           return userAlphaChar
         }
 
 
     }
+//    fun isInitFireBase(){
+//        FirebaseApp.initializeApp(requireContext())
+//        if (FirebaseApp.getInstance().)
+//    }
 
+
+    fun isUserLoggedIn(){
+
+
+        var current_user  = auth.currentUser
+        if (auth.currentUser != null && GoogleSignIn.getLastSignedInAccount(requireContext())!=null ) {
+
+           var n = current_user?.displayName
+           var a = current_user?.isAnonymous
+          var e =  current_user?.email
+            Log.e("data_currentuserlogg", "isUserLoggedIn: $n,$a,$e", )
+            binding.alphaText.visibility = View.VISIBLE
+            binding.logoutBtn.visibility = View.VISIBLE
+            var g_value = sharedPreferences.getString("loggedUser","Login")
+
+            binding.alphaText.setText(WordStartchar(g_value!!))
+        }else{
+            Log.e("data_currentuserlogg", "isUserLoggedIn:  user not found", )
+            binding.alphaText.visibility = View.GONE
+            binding.logoutBtn.visibility = View.GONE
+
+        }
+    }
+ fun important_init(){
+     if (FirebaseApp.getApps(requireContext()).isEmpty()){
+         val options = FirebaseOptions.Builder()
+             .setApiKey(getString(R.string.firebase_key))
+             .setApplicationId(getString(R.string.firebase_project_id))
+             .setProjectId(getString(R.string.firebase_project_id))
+             .build()
+
+         f_base = FirebaseApp.initializeApp(requireContext(), options)
+     }
+
+ }
+    private fun chipActive(view: Chip){
+        view.setChipBackgroundColorResource(R.color.yellow)
+        view.setTextColor(ContextCompat.getColor(requireContext(), R.color.white))
+
+
+    }
+    private fun chipActive_not(view: Chip){
+        view.setTextColor(
+            ContextCompat.getColor(
+                requireContext(),
+                R.color.black
+            )
+        )
+        view.setChipBackgroundColorResource(R.color.creame)
+
+
+    }
 }

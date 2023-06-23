@@ -1,20 +1,26 @@
 package com.example.tripplnr.navigationscreens.Search.hotel.activity
 
 import android.annotation.SuppressLint
-import androidx.appcompat.app.AppCompatActivity
+import android.location.Address
+import android.location.Geocoder
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import androidx.appcompat.widget.AppCompatImageView
+import androidx.appcompat.app.AppCompatActivity
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.ActivityHotelList2Binding
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
-import com.example.tripplnr.navigationscreens.Search.adapter.RecyclerAdapterSearchFr
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.adapter.HotelList2Adapter
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
-import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.firebase.firestore.GeoPoint
+import java.io.IOException
 
-class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal {
+
+class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal,OnMapReadyCallback {
     private lateinit var binding :ActivityHotelList2Binding
     @SuppressLint("MissingInflatedId", "InflateParams")
     private lateinit var searchquery:String
@@ -43,6 +49,8 @@ class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal
            onBackPressed()
         }
         searchquery = intent.getStringExtra("query").toString()
+//        var location_m = getLocationFromAddress(searchquery)
+//        Log.e("location_m", "onCreate: location is $location_m", )
 
         var rangedate = Allfun.dateLiveData.value
         binding.cityname.setText(searchquery)
@@ -79,4 +87,37 @@ class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal
     override fun viewDealHandle(position: Int, view: View) {
         Allfun.openWeb(this)
     }
+    override fun onMapReady(p0: GoogleMap) {
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment?
+        mapFragment!!.getMapAsync(this)
+
+
+
+    }
+//    fun getLocationFromAddress(strAddress: String?): GeoPoint? {
+//        val coder = Geocoder(this)
+//        val address: List<Address>?
+//        var p1: GeoPoint? = null
+//        try {
+//            address = coder.getFromLocationName(strAddress!!, 5)
+//            if (address == null) {
+//                return null
+//            }
+//            val location: Address = address[0]
+//            location.getLatitude()
+//            location.getLongitude()
+//            p1 = GeoPoint(
+//                (location.getLatitude() * 1E6) as Double,
+//                (location.getLongitude() * 1E6) as Double
+//            )
+//            return p1
+//        } catch (e: Exception) {
+//            e.printStackTrace()
+//            Log.e("satwinder_m", "getLocationFromAddress: ${e.message}", )
+//            R.string.chip2
+//        }
+//        return null
+//    }
+
 }

@@ -1,8 +1,10 @@
 <resources>
     <string name="app_name">TripPLNR</string>
-    <string name="satwinder_shergill">AIzaSyCVtKjLw0UhkegGttzhxpMwRyMcDl2aWG0</string>
-    <string name="shergill4983">AIzaSyBOdO2-t1GISAkfwBf1hHXmrc6YAhkX1zA</string>
-    <string name="google_maps_key">AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg</string>
+
+<!--    <string name="google_maps_key0">AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg</string>-->
+<!--    <string name="google_maps_key1">AIzaSyDuSP-_onkA8xA6gARaWWoy5hS2JaToSuM</string>-->
+<!--    <string name="google_maps_key2">AIzaSyDuSP-_onkA8xA6gARaWWoy5hS2JaToSuM</string>-->
+    <string name="google_maps_key3">AIzaSyBq16ekrXE3LHeDIwu3KDk0O9s-rMjZpqc</string>
     <string name="client_id">"794842989592-l9igqsvhcq9uo20q8ghpcjqhvbpg5ere.apps.googleusercontent.com"</string>
     <string name="testLine">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
     <!-- TODO: Remove or change this placeholder text -->
@@ -75,6 +77,8 @@
 
 <!--    <string name="app_name">SpinnerInKotlin</string>-->
     <string name="selected_item">Selected item:</string>
+    <string name="firebase_key">AIzaSyB-h-PxhSrYsl3CDW-1S36pv6RbsnbDG00</string>
+    <string name="firebase_project_id">tripplnr-c6bf2</string>
 
     <string-array name="Languages">
         <item>1 Year</item>
