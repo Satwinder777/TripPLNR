@@ -1,15 +1,13 @@
 <resources>
     <string name="app_name">TripPLNR</string>
 
-<!--    <string name="google_maps_key0">AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg</string>-->
-<!--    <string name="google_maps_key1">AIzaSyDuSP-_onkA8xA6gARaWWoy5hS2JaToSuM</string>-->
-<!--    <string name="google_maps_key2">AIzaSyDuSP-_onkA8xA6gARaWWoy5hS2JaToSuM</string>-->
+    <!--    <string name="google_maps_key0">AIzaSyBBgOn1FtmzyjUnX0Xl6xMFqXYFmSEgdZg</string>-->
+    <!--    <string name="google_maps_key1">AIzaSyDuSP-_onkA8xA6gARaWWoy5hS2JaToSuM</string>-->
+    <!--    <string name="google_maps_key2">AIzaSyDuSP-_onkA8xA6gARaWWoy5hS2JaToSuM</string>-->
     <string name="google_maps_key3">AIzaSyBq16ekrXE3LHeDIwu3KDk0O9s-rMjZpqc</string>
     <string name="client_id">"794842989592-l9igqsvhcq9uo20q8ghpcjqhvbpg5ere.apps.googleusercontent.com"</string>
     <string name="testLine">Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum</string>
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="mapKey">AIzaSyAsSMYb29gSo5bq2Ip-3lwx5mhqToxd5W8</string>
     <string name="see_more"><u> See More</u></string>
     <string name="chip2">chip2</string>
     <string name="chip1">chip1</string>
@@ -25,35 +23,12 @@
     <string name="Inc"><font fgcolor='#000000'>Included taxes and changes</font>\n<font fgcolor='#858381'>Price on Booking.com</font></string>
 
 
-    <string name="certificate">keytool -list -v -keystore ~/.android/debug.keystore -alias androiddebugkey -storepass android -keypass android</string>
-
-<!--    <string name="book1"><font fgcolor='#253d7a'>Booking</font></string>-->
-<!--    <string name="book2"><font fgcolor='#52aee5'>.com</font></string>-->
+    <!--    <string name="book1"><font fgcolor='#253d7a'>Booking</font></string>-->
+    <!--    <string name="book2"><font fgcolor='#52aee5'>.com</font></string>-->
     <string name="booking_line"><font fgcolor='#253d7a'>Booking</font><font fgcolor='#52aee5'>.com</font></string>
 
 
     <string name="l1">you will be redirected to the affiliate \n s website to finish booking</string>
-    <string name="l2">SHA1: 12:32:94:8D:7A:22:2B:1C:7B:86:40:23:97:C1:0F:01:AC:52:50:9D</string>
-    <string name="l3">27:64:9C:F4:4B:33:46:47:5B:BD:8D:B8:19:DD:13:F1:18:9E:6F:C8:F4:9F:8B:FA:15:44:CE:40:15:07:FF:57</string>
-
-
-    <string-array name="cities">
-        <item>Amritsar</item>
-        <item>Ajnala</item>
-        <item>SAS Nagar</item>
-        <item>SBS Nagar</item>
-        <item>Chandighar</item>
-        <item>Pathankot</item>
-        <item>Himachal</item>
-        <item>Mohali</item>
-        <item>Ropar</item>
-        <item>Kharar</item>
-        <item>Tarntaran</item>
-        <item>Gurdaspur</item>
-        <item>Jalandhar</item>
-        <item>Nawashehar</item>
-        <item>Ludhiana</item>
-    </string-array>
 
 
     <string-array name="currency">
@@ -75,19 +50,12 @@
     </string-array>
 
 
-<!--    <string name="app_name">SpinnerInKotlin</string>-->
-    <string name="selected_item">Selected item:</string>
+    <!--    <string name="app_name">SpinnerInKotlin</string>-->
     <string name="firebase_key">AIzaSyB-h-PxhSrYsl3CDW-1S36pv6RbsnbDG00</string>
     <string name="firebase_project_id">tripplnr-c6bf2</string>
 
-    <string-array name="Languages">
-        <item>1 Year</item>
-        <item>2 Year</item>
-        <item>3 Year</item>
-
-    </string-array>
     <!--    <string name="status_error"><font fgcolor='#FFFF3B30'>Error</font></string>-->
-<!--    <string name="my_string">&lt;u>&lt;font color='#FF0000'>Read less&lt;/font>&lt;/u></string>-->
+    <!--    <string name="my_string">&lt;u>&lt;font color='#FF0000'>Read less&lt;/font>&lt;/u></string>-->
 
 
 </resources>

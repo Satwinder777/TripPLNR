@@ -1,5 +1,8 @@
 package com.example.tripplnr.navigationscreens.Home.dataclass
 
+import android.widget.Spinner
+import android.widget.TextView
+
 data class travelBlogItem(
     var exploreImg:Int? =null,
     var placetextuser:String? =null,
@@ -64,6 +67,10 @@ data class reviewData(
 data class currencyData(
     val currency: String,
 
+)
+data class guest_Children(
+    val textView: TextView,
+    val spinner: Spinner
 )
 
 

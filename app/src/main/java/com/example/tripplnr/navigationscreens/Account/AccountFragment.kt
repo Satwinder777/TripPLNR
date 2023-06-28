@@ -13,17 +13,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.WebSettings
 import android.widget.*
 import androidx.core.content.ContextCompat
+import androidx.core.view.marginRight
 import androidx.lifecycle.Lifecycle
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentAccountBinding
-import com.example.tripplnr.navigationscreens.Account.activity.CreateUserActivity
-import com.example.tripplnr.navigationscreens.Account.activity.CurrencyActivity
-import com.example.tripplnr.navigationscreens.Account.activity.LegalinformatinActivity
+import com.example.tripplnr.navigationscreens.Account.activity.*
 import com.example.tripplnr.navigationscreens.DataCls.User1
 import com.example.tripplnr.navigationscreens.DataCls.userData
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
+import com.example.tripplnr.navigationscreens.objectfun.FirebaseUtils.firebaseAuth
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.firebase.ui.auth.data.model.User
@@ -34,12 +35,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.tasks.RuntimeExecutionException
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.chip.Chip
 import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
@@ -68,6 +71,8 @@ class AccountFragment : Fragment() {
     private lateinit var f_base: FirebaseApp
     private lateinit var sharedPreferences: SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
+    private lateinit var email:EditText
+    private lateinit var password0:EditText
 
 
 
@@ -99,40 +104,25 @@ class AccountFragment : Fragment() {
 
         auth = Firebase.auth
 
+        if (auth.currentUser!=null){
+            val current_user =  auth.currentUser?.email
+            WordStartchar("$current_user,123")
+            Log.e("loged_user", "onCreateView: auth.currentUser!=null1 :${auth.currentUser?.email}", )
+
+
+        }
+        else{
+            Log.e("loged_user", "onCreateView: auth.currentUser==null", )
+            auth = Firebase.auth
+        }
+
+
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
             .requestIdToken(getString(R.string.client_id))
             .requestEmail()
             .build()
 
         googleSignInClient = GoogleSignIn.getClient(requireActivity(), gso)
-//        val currentUser = auth.currentUser
-//
-//
-//
-//        if (currentUser?.isAnonymous == true) {
-//            // User is anonymous
-//            // Perform the necessary actions for anonymous users
-//            // For example, show a different UI or restrict certain functionalities
-//            Toast.makeText(requireContext(), "anonymous", Toast.LENGTH_SHORT).show()
-//        } else {
-//            // User is not anonymous
-//            // Perform the necessary actions for authenticated users
-//            // For example, allow access to restricted features or show personalized content
-//            var name = currentUser?.displayName
-//            var email = currentUser?.email
-//            Toast.makeText(requireContext(), "not anonymous", Toast.LENGTH_SHORT).show()
-//            Log.e("c123", "onCreateView: $name,$email", )
-//            if (email != null) {
-//                WordStartchar(email)
-//            }
-//
-//        }
-
-
-
-//        Toast.makeText(requireContext(), "${user?.displayName}", Toast.LENGTH_SHORT).show()
-
-
 
         isUserLoggedIn()
         return binding.root
@@ -149,6 +139,26 @@ class AccountFragment : Fragment() {
             val intent = Intent(requireContext(), LegalinformatinActivity::class.java)
             startActivity(intent)
         }
+        binding.shareapp.setOnClickListener {
+            val shareIntent = Intent(Intent.ACTION_SEND)
+            shareIntent.type = "text/plain" // Set the MIME type of the content you want to share
+            shareIntent.putExtra(Intent.EXTRA_TEXT, "www.shergill_production.com") // Set the text you want to share
+
+            startActivity(Intent.createChooser(shareIntent, "Share via")) // Display the share dialog to choose an app
+
+        }
+        binding.aboutUs.setOnClickListener {
+            var intent = Intent(requireContext(),AboutUsActivity::class.java)
+            startActivity(intent)
+        }
+        binding.becomeAffiliate.setOnClickListener{
+            var intent = Intent(requireContext(),BecomeAffiliateActivity::class.java)
+            startActivity(intent)
+        }
+//        binding.legalInformation.setOnClickListener{
+//            var intent = Intent(requireContext(),LegalInformationActivity::class.java)
+//            startActivity(intent)
+//        }
         var imgUrl =  "android.resource://" + requireContext() + "/" + R.drawable.account_ic
 
 //              var gclient =   getGoogleSignInClient(requireContext())
@@ -159,32 +169,38 @@ class AccountFragment : Fragment() {
 
 
         binding.logintxt.setOnClickListener {
-            val currentUser = FirebaseAuth.getInstance().currentUser
+            val currentUser = auth.currentUser
 
             val account = GoogleSignIn.getLastSignedInAccount(requireContext())
 
-            if (account != null && currentUser!=null) {
+            if (account != null || currentUser!=null) {
                 // User is logged in with Google
                 // You can access the user's information via the account object
-                val displayName = account.displayName
-                val email = account.email
+                val displayName = account?.displayName
+                val email = account?.email
+
                 // Perform actions for a logged-in user
                 Toast.makeText(requireContext(), "already logged!", Toast.LENGTH_SHORT).show()
+
             } else {
-                // User is not logged in with Google
-                // Perform actions for a logged-out user
+
                 Toast.makeText(requireContext(), "login require!", Toast.LENGTH_SHORT).show()
 
                 var view = layoutInflater.inflate(R.layout.login_display, null, false)
-//            checkuserisLogged()
+
                 var pop = PopupWindow(
                     view,
                     ViewGroup.LayoutParams.MATCH_PARENT,
                     ViewGroup.LayoutParams.WRAP_CONTENT,
                     true
+
                 )
 
-//            pop.contentView = view
+                pop.contentView = view
+
+                pop.setBackgroundDrawable(ContextCompat.getDrawable(requireContext(),R.drawable.my_background))
+
+
                 pop.showAtLocation(view, Gravity.CENTER, 0, 0)
                 var closebtn = view.findViewById<ImageView>(R.id.closeLogin)
                 closebtn.setOnClickListener {
@@ -197,8 +213,8 @@ class AccountFragment : Fragment() {
                     startActivity(intent)
                 }                                               //create acc
 
-                var email = view.findViewById<EditText>(R.id.emailEditText)
-                var password0 = view.findViewById<EditText>(R.id.passwordEditText)
+                  email = view.findViewById<EditText>(R.id.emailEditText)
+                 password0 = view.findViewById<EditText>(R.id.passwordEditText)
                 var loginbtn = view.findViewById<MaterialButton>(R.id.loginMButton)
                 var googlelogin =  view.findViewById<MaterialButton>(R.id.btn_login_google)
                 googlelogin.setOnClickListener{
@@ -210,52 +226,104 @@ class AccountFragment : Fragment() {
 
                 loginbtn.setOnClickListener {
 
-                    val userName = email.text.toString().trim()
-                    val password = password0.text.toString().trim()
-
-                    var TAG = "test30"
-
-                    auth.createUserWithEmailAndPassword(userName, password)
-                        .addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-
-
-
-
-
-                                val user1 = FirebaseAuth.getInstance().currentUser
-                                Toast.makeText(requireContext(), "${user1?.displayName}", Toast.LENGTH_SHORT).show()
-                                var user = auth.currentUser?.email
-                                binding.userText.setText(user)
-                                var alphabetfirst = user?.get(0)?.toUpperCase().toString()
-                                binding.alphaText.setText(alphabetfirst)
-//                                binding.alphaText.visibility = View.VISIBLE
-                                binding.logoutBtn.visibility = View.VISIBLE
-                                binding.logoutBtn.setText("Logout")
-
-
-
-                                pop.dismiss()
-                            } else {
-                                Log.w(TAG, "createUserWithEmail:failure", task.exception)
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Authentication failed.",
-                                    Toast.LENGTH_SHORT,
-                                ).show()
-                                binding.logoutBtn.visibility = View.GONE
-                            }
+                    if (email.text.isNullOrEmpty()||password0.text.isNullOrEmpty()){
+                        if (email.text.isNullOrEmpty()){
+                            email.setError("Please enter your email.")
                         }
-                    if (auth.currentUser!=null){
-                       var email = auth.currentUser?.email
-                       var name = auth.currentUser?.displayName
-                       var anony = auth.currentUser?.isAnonymous
-                        Log.e("check2312", "onViewCreated: $email,$name,$anony", )
-                    }
-                    else{
-                        Log.e("check2312", "onViewCreated: usernull", )
+                        else{
+                            password0.setError("Please enter your password.")
+                        }
+                    }else{
+                        val userName = email.text.toString().trim()
+                        val password = password0.text.toString().trim()
 
+                        var TAG = "test30_30"
+
+                        try {
+                            auth.signInWithEmailAndPassword(userName,password).addOnCompleteListener { task->
+                                if (task.isSuccessful){
+                                    var user = auth.currentUser
+                                    Log.e("user_data_logged", "onViewCreated: ${user?.displayName},${user?.email}", )
+                                    Toast.makeText(requireContext(), "logged!! ${user?.email}", Toast.LENGTH_SHORT).show()
+
+
+
+                                    user?.email?.let { it1 -> WordStartchar(it1) }
+//                                    Log.e(TAG, "onViewCreated: ${auth.currentUser?.displayName},${auth.currentUser?.email}}")
+
+//                                    var alphabetfirst = user?.get(0)?.toUpperCase().toString()
+//                                    Log.e(TAG, "onViewCreated: $user", )
+//                                    binding.alphaText.setText(alphabetfirst)
+//                                binding.alphaText.visibility = View.VISIBLE
+                                    binding.logoutBtn.visibility = View.VISIBLE
+                                    binding.logoutBtn.setText("Logout")
+
+
+
+                                    var em =  task.result.user?.email
+
+                                    Log.e("completeListner", "onViewCreated: ,$em,", )
+                                    task.apply {
+                                        editor.putString("loged_user",em)
+                                        editor.apply()
+                                    }
+                                    pop.dismiss()
+
+                                }else{
+
+
+                                    binding.logoutBtn.visibility = View.GONE
+                                    Log.e("user_data_logged_1", "onViewCreated: ${task.exception}", )
+                                    Toast.makeText(requireContext(), "exp", Toast.LENGTH_SHORT).show()
+                                    when(task.exception.toString()){
+                                         "RuntimeExecutionException"->{
+                                            password0.setError("wrong password")
+                                        }
+                                    }
+//                                    email.text.clear()
+//                                    password0.text.clear()
+
+                                    isemailExist(userName)
+
+
+                                    val exception = task.exception
+                                    if (exception is FirebaseAuthInvalidCredentialsException) {
+                                        // Email or password is incorrect
+                                        // Handle the error or display an error message
+                                        password0.setError("The password is invalid!")
+                                    } else {
+                                        // Other exceptions occurred
+                                        // Handle the error or display an error message
+                                    }
+
+                                }
+                            }
+
+                        }
+                        catch (e:RuntimeExecutionException){
+                            password0.setError("Wrong password!")
+                            password0.error  ="wrong password"
+//                            when(e){
+//                                is RuntimeExecutionException ->{
+//
+//                                }
+//                            }
+                        }
+
+
+//                        if (auth.currentUser!=null){
+//                            var email = auth.currentUser?.email
+//                            var name = auth.currentUser?.displayName
+//                            var anony = auth.currentUser?.isAnonymous
+//                            Log.e("check2312", "onViewCreated: $email,$name,$anony", )
+//                        }
+//                        else{
+//                            Log.e("check2312", "onViewCreated: usernull", )
+//
+//                        }
                     }
+
+
 
                 }
 
@@ -294,6 +362,8 @@ class AccountFragment : Fragment() {
                 it.visibility = View.GONE
                 logout()
                 binding.userText.setText("Login")
+
+            editor.remove("loged_user")
         }
             chipclick(binding.chiKm)
             chipclick(binding.chipMile)
@@ -496,7 +566,8 @@ class AccountFragment : Fragment() {
 
                     if(user?.displayName.isNullOrEmpty()){
 
-                        binding.userText.setText(WordStartchar("login"))
+                        binding.userText.setText("loginxx")
+                        binding.alphaText.visibility = View.GONE
                     }
                     else{
                         user?.displayName?.let { WordStartchar(it) }
@@ -504,8 +575,7 @@ class AccountFragment : Fragment() {
                         binding.alphaText.visibility = View.VISIBLE
                         Log.e("tttttt", "firebaseAuthWithGoogle: ${user?.displayName}", )
                         var loggedUser = user?.displayName
-                        editor.putString("loggedUser",loggedUser)
-                        editor.apply()
+
                     }
                     // ...
                 } else {
@@ -525,6 +595,8 @@ class AccountFragment : Fragment() {
 
     private fun logout(){
         googleSignInClient.signOut()
+        auth.signOut()
+
     }
     private fun googleloginintent(){
         startActivityForResult(googleSignInClient.signInIntent  ,13)
@@ -533,10 +605,10 @@ class AccountFragment : Fragment() {
 
     private fun WordStartchar(line:String):String{
 
-       return if (line.isNullOrEmpty()){
+       return if (line.isEmpty()){
 
-            binding.userText.text ="login"
-            binding.alphaText.visibility = View.INVISIBLE
+            binding.userText.text ="loginW"
+            binding.alphaText.visibility = View.GONE
         return "l"
         }
         else{
@@ -560,6 +632,10 @@ class AccountFragment : Fragment() {
             binding.alphaText.text = userAlphaChar
             binding.userText.text = line
             binding.alphaText.visibility = View.VISIBLE
+//           Log.e("word_setup", "WordStartchar: $line,$userAlphaChar", )
+//           editor.putString("loggedUser_1",line)
+//           editor.putString("loggedUser_2",userAlphaChar)
+//           editor.apply()
 
            return userAlphaChar
         }
@@ -572,25 +648,41 @@ class AccountFragment : Fragment() {
 //    }
 
 
+    @SuppressLint("SuspiciousIndentation")
     fun isUserLoggedIn(){
 
-
         var current_user  = auth.currentUser
-        if (auth.currentUser != null && GoogleSignIn.getLastSignedInAccount(requireContext())!=null ) {
 
-           var n = current_user?.displayName
-           var a = current_user?.isAnonymous
-          var e =  current_user?.email
-            Log.e("data_currentuserlogg", "isUserLoggedIn: $n,$a,$e", )
-            binding.alphaText.visibility = View.VISIBLE
-            binding.logoutBtn.visibility = View.VISIBLE
-            var g_value = sharedPreferences.getString("loggedUser","Login")
+        if (current_user != null || GoogleSignIn.getLastSignedInAccount(requireContext())!=null ) {
 
-            binding.alphaText.setText(WordStartchar(g_value!!))
+
+
+                if (current_user?.displayName.isNullOrEmpty().not()){
+                    var name = current_user?.displayName
+                    binding.alphaText.setText(name?.let { WordStartchar(name) })
+                    Log.e("shergill", "isUserLoggedIn:isUserLoggedIn() if blick ", )
+
+                }
+                else{
+                    var email = current_user?.email
+                    if (email != null) {
+                        WordStartchar(email)
+                    }else{
+                        Log.e("shergill", "isUserLoggedIn:isUserLoggedIn() ", )
+                    }
+                }
+                binding.alphaText.visibility = View.VISIBLE
+                binding.logoutBtn.visibility = View.VISIBLE
+
         }else{
+            binding.alphaText.setText(WordStartchar("login"))
             Log.e("data_currentuserlogg", "isUserLoggedIn:  user not found", )
             binding.alphaText.visibility = View.GONE
             binding.logoutBtn.visibility = View.GONE
+            var em = auth.currentUser?.email
+            var na = auth.currentUser?.displayName
+
+            Log.e("firebase_user", "isUserLoggedInelse: $em ,$na vfvfvf", )
 
         }
     }
@@ -623,4 +715,29 @@ class AccountFragment : Fragment() {
 
 
     }
+fun isemailExist(email0:String){
+
+
+    auth.fetchSignInMethodsForEmail(email0)
+        .addOnCompleteListener { task ->
+            if (task.isSuccessful) {
+                val signInMethods = task.result?.signInMethods
+                if (signInMethods.isNullOrEmpty()) {
+                    // Email does not exist
+                    // Perform your desired action here
+                    email.setError("Wrong email!!")
+
+                } else {
+                    // Email already exists
+                    // Handle the case accordingly
+
+                }
+            } else {
+                // Error occurred while checking email existence
+                // Handle the error or display an error message
+            }
+        }
+
+
+}
 }

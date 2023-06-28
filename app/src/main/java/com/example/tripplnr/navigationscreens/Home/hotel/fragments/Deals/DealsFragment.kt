@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.Gravity
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -269,6 +271,7 @@ class DealsFragment : Fragment(),bookingCardAdapter.onclickCard {
 //        GlobalScope.launch {
             popCard()
 
+
 //            delay(5000)
 
 
@@ -278,8 +281,9 @@ class DealsFragment : Fragment(),bookingCardAdapter.onclickCard {
 
     }
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("InflateParams")
-    private fun popCard(){
+    private fun popCard():PopupWindow{
         var view = layoutInflater.inflate(R.layout.loading_page,null,false)
 
         var pop = PopupWindow(view,
@@ -288,9 +292,15 @@ class DealsFragment : Fragment(),bookingCardAdapter.onclickCard {
             true )
 //        pop.contentView = view
         pop.showAtLocation(view,Gravity.CENTER,0,0)
+
         view.setOnClickListener {
             pop.dismiss()
         }
+
+            return pop
+
+
+
     }
 
 

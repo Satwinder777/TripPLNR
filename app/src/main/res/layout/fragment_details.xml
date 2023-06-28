@@ -19,7 +19,6 @@
 
     tools:ignore="MissingConstraints">
     <TextView
-        android:id="@+id/textView12"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Details"
@@ -51,13 +50,11 @@
         />
 
     <View
-        android:id="@+id/divider6"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:background="?android:attr/listDivider" />
 
     <TextView
-        android:id="@+id/textView16"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Popular Amentities"

@@ -37,16 +37,10 @@
 <!--        <item name="android:statusBarColor">@android:color/transparent</item>-->
 <!--        <item name="android:windowSoftInputMode">adjustResize</item>-->
 <!--    </style>-->
-    <style name="Widget.Design.BottomNavigationView." parent="Widget.Design.BottomNavigationView">
-        <item name="android:windowIsFloating">false</item>
-        <item name="android:windowSoftInputMode">adjustResize</item>
-    </style>
-
-
 
 
     ////////
-<!--    <style-->
+    <!--    <style-->
 <!--        name="AppPopUpWindowTheme"-->
 <!--        parent="">-->
 <!--        <item name="bottomSheetStyle">@style/AppModelStyle</item>-->
@@ -58,19 +52,7 @@
 <!--    </style>-->
 
 
-
-
-
     ////search view handling
-    <style name="SearchViewStyle" parent="Widget.AppCompat.SearchView">
-        <item name="android:paddingBottom">0dp</item>
-        <item name="iconTint">@color/yellow</item>
-        <item name="searchIcon">@drawable/search</item>
-        <item name="android:queryBackground">@null</item>
-
-    </style>
-
-
 
 
 </resources>

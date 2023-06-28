@@ -26,7 +26,6 @@
 
 
             <TextView
-                android:id="@+id/textView7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Booking.com"
@@ -59,7 +58,6 @@
         </LinearLayout>
 
         <ImageView
-            android:id="@+id/imageView7"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|end"

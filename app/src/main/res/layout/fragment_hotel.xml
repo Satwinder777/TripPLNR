@@ -19,7 +19,6 @@
     <!-- Your content here -->
 
     <com.google.android.material.appbar.AppBarLayout
-        android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/creame"
@@ -54,13 +53,14 @@
 
                 <ImageButton
                     android:id="@+id/backbtnhotlFragment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:layout_width="40dp"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center"
                     android:background="@drawable/stroke_bg"
                     android:backgroundTint="#ECE9E8"
                     android:src="@drawable/back_arrow_ic"
                     app:tint="@color/black"
+
 
 
                     />
@@ -83,7 +83,7 @@
                         android:fontFamily="@font/poppins_medium"/>
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:layout_weight="1"
@@ -94,11 +94,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="10 Mar - 11 Mar"
-                            android:textAlignment="center"
+                            android:text="thu, 01 jun - fri, 30 jun"
+                            android:textAlignment="textEnd"
                             android:textSize="12sp"
                             android:fontFamily="@font/poppin_regular"
-                            android:textColor="@color/yellow"/>
+                            android:textColor="@color/yellow"
+                            android:lines="1"/>
 
                         <ImageView
                             android:layout_width="10dp"
@@ -113,11 +114,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="2 Guests, 1 Room"
-                            android:textAlignment="center"
+                            android:text="1 guest, 1 room"
+                            android:textAlignment="textStart"
                             android:textSize="12sp"
                             android:textColor="@color/yellow"
-                            android:fontFamily="@font/poppin_regular"/>
+                            android:fontFamily="@font/poppin_regular"
+                            android:lines="1"/>
                     </LinearLayout>
                 </LinearLayout>
 
@@ -138,7 +140,7 @@
                 >
 
                 <com.denzcoskun.imageslider.ImageSlider
-                    android:id="@+id/image_slider"
+                    android:id="@+id/imageSlider"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
 
@@ -163,7 +165,7 @@
 
 
             <TextView
-                android:id="@+id/m_hoteltxt"
+                android:id="@+id/mHoteltxt"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Capital O Hotel Ocean"

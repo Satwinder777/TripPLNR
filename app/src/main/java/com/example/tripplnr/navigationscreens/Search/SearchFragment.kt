@@ -26,6 +26,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
 import com.google.android.material.navigation.NavigationView.OnNavigationItemSelectedListener
 import com.google.android.material.tabs.TabLayout
+import com.google.firestore.admin.v1.Index
 import kotlinx.coroutines.DelicateCoroutinesApi
 
 
@@ -34,7 +35,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
  * Use the [SearchFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchFragment : Fragment() {
+class SearchFragment(var index :Int?=0) : Fragment() {
     private lateinit var binding :FragmentSearchBinding
     private lateinit var tabLayout :TabLayout
     private lateinit var viewPager :ViewPager
@@ -56,11 +57,12 @@ class SearchFragment : Fragment() {
 
         Log.e("cretedata", "onCreateView: create vall ", )
 
+//        index = 1
+
         tabLayout.post {
-            val tab = tabLayout.getTabAt(0)
+            val tab = tabLayout.getTabAt(index!!)
             tab?.select()
         }
-
 
 
         return binding.root
@@ -81,7 +83,14 @@ class SearchFragment : Fragment() {
 
 
         binding.backButtonSearchFragment.setOnClickListener {
-                    requireParentFragment().requireActivity().onBackPressed()
+//                    requireParentFragment().requireActivity().onBackPressed()
+            try {
+                findNavController().navigate(R.id.action_searchFragment_to_homeFragment)
+            }
+            catch (e:Exception){
+                Log.e("exp_msg", "onViewCreated: ${e.message}", )
+            }
+//            fragmentManager?.popBackStack("home_to_search", FragmentManager.POP_BACK_STACK_INCLUSIVE)
 //            fragmentManager?.popBackStack()
 //                 requireActivity().supportFragmentManager.popBackStack()
 
@@ -159,8 +168,7 @@ class SearchFragment : Fragment() {
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // Do nothing
-                Toast.makeText(requireContext(), "reslected" +
-                        "", Toast.LENGTH_SHORT).show()
+
             }
         }
         )
@@ -248,12 +256,15 @@ class SearchFragment : Fragment() {
 //        tab?.select()
         return a
     }
+
+
 //    fun initchipcolor(){
 //        var hotelchip = view?.findViewWithTag<Chip>("chip1")
 //        var blogchip = view?.findViewWithTag<Chip>("chip2")
 //
 //        hotelchip.setChipBackgroundColorResource()
 //    }
+
 }
 
 

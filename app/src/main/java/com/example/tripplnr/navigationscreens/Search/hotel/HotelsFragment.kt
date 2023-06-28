@@ -1,15 +1,10 @@
 package com.example.tripplnr.navigationscreens.Search.hotel
 
 import android.annotation.SuppressLint
-import android.app.DatePickerDialog
-import android.app.Dialog
 import android.content.Context
 import android.content.SearchRecentSuggestionsProvider
 import android.content.SharedPreferences
-import android.database.Cursor
 import android.graphics.Color
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
 import android.os.Build
 import android.os.Bundle
 import android.text.Editable
@@ -18,52 +13,36 @@ import android.text.SpannableString
 import android.text.TextWatcher
 import android.text.style.ForegroundColorSpan
 import android.util.Log
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.annotation.RequiresApi
-import androidx.core.view.WindowInsetsCompat
-import androidx.core.view.WindowInsetsControllerCompat
-import androidx.core.view.get
-import androidx.core.view.marginBottom
-import androidx.cursoradapter.widget.CursorAdapter
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.MutableLiveData
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHotelsBinding
-import com.example.tripplnr.navigationscreens.Constants.AllConstants
 import com.example.tripplnr.navigationscreens.DataCls.guestdatacls
+import com.example.tripplnr.navigationscreens.Home.dataclass.guest_Children
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
 import com.example.tripplnr.navigationscreens.Search.adapter.RecyclerAdapterSearchFr
+import com.example.tripplnr.navigationscreens.Search.adapter.guest_Child_Adapter
 import com.example.tripplnr.navigationscreens.hotelListFragment.HotelListFragment
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.example.tripplnr.navigationscreens.objectfun.Allfun.dateLiveData
 import com.example.tripplnr.navigationscreens.objectfun.Allfun.guestLiveData
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.*
-import com.google.android.libraries.places.api.net.FetchPlaceRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsResponse
 import com.google.android.libraries.places.api.net.PlacesClient
-import com.google.android.libraries.places.widget.Autocomplete
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode
-import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.datepicker.CalendarConstraints
 import com.google.android.material.datepicker.MaterialDatePicker
-import com.google.android.material.datepicker.RangeDateSelector
-import com.google.maps.GeoApiContext
-import com.google.maps.GeocodingApi
-import com.google.maps.model.GeocodingResult
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -71,33 +50,29 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 
-
-
-class HotelsFragment : Fragment(){
+class HotelsFragment : Fragment() {
     private lateinit var binding: FragmentHotelsBinding
     private lateinit var rc: RecyclerView
-    var roomc:Int = 1
-    var adultc:Int = 1
-    var childc:Int = 1
-    private lateinit var share_pref :SharedPreferences
-    private lateinit var editor :SharedPreferences.Editor
+    var roomc: Int = 1
+    var adultc: Int = 1
+    var childc: Int = 1
+    private lateinit var share_pref: SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+    private lateinit var adapter: guest_Child_Adapter
+    var final_count :Int = 0
 
     var m_data_show = mutableListOf<String>()
+    var list = mutableListOf<guest_Children>()
+    private lateinit var textView: TextView
+    private lateinit var spinner: Spinner
 
 
-
-
-
-
-
-
-
-    private lateinit var placesClient:PlacesClient
+    private lateinit var placesClient: PlacesClient
 //    private lateinit var suggestionAdapter: SuggestionAdapter
 //    private lateinit var searchView :EditText
 
 
-
+    @SuppressLint("NotifyDataSetChanged")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -105,24 +80,46 @@ class HotelsFragment : Fragment(){
         // Inflate the layout for this fragment
         binding = FragmentHotelsBinding.inflate(layoutInflater)
         initView()
-        share_pref = requireContext().getSharedPreferences("share_pref_hotel_fragment", Context.MODE_PRIVATE)
+        share_pref =
+            requireContext().getSharedPreferences("share_pref_hotel_fragment", Context.MODE_PRIVATE)
         editor = share_pref.edit()
 
-        val Guest = "$adultc Guests, $roomc Rooms"
-        Allfun
 
-        checklivedata(guestLiveData,dateLiveData)
-        Log.e("testdata", "onCreateView:$guestLiveData,$dateLiveData ", )
+//        var one = 1
+//        var defaultset  = setOf(one.toString(),one.toString())
 
 
-//        searchView = binding.searchView
+        val adult_count = share_pref.getInt("guest_count", 1)
+        val room_count = share_pref.getInt("room_count", 1)
+        val child_ct = share_pref.getInt("childrens", 0)
+        childc = child_ct
 
+        var data_date_picker = share_pref.getString("selected_date", Allfun.freshdate())
+
+        binding.rangeDAteTextView.setText(data_date_picker)
+//        var m_guest = data_guest?.forEachIndexed { index, s ->
+//
+//            var g:Int = 0
+//            var r:Int = 0
+//            when(index){
+//                0->{ g = s.toInt()}
+//                1->{ r = s.toInt() }
+//                else->{
+//                    Log.e("testcase", "onCreateView: wrong index", )}
+//            }
+        val Guest = "$adult_count Guests, $room_count Rooms"
         binding.GuestTextView.setText(Guest)
-//        binding.GuestTextView.setText(guestLiveData.value?.guest)
-        binding.rangeDAteTextView.setText(dateLiveData.value.toString())
-//        val recyclerView = view?.findViewById<RecyclerView>(R.id.searchFrRecycler1)
-//        var myAdapter = RecyclerAdapterSearchFr(hotelData())
-//        recyclerView?.adapter = myAdapter
+        Allfun.dateLiveData.value = data_date_picker
+        Allfun.guestLiveData.value = guestdatacls(adult_count, room_count)
+
+
+//        Allfun.guestLiveData.value = data_guest
+
+
+//        binding.rangeDAteTextView.setText(dateLiveData.value.toString())
+        textView = TextView(requireContext())
+        spinner = Spinner(requireContext())
+
         return binding.root
     }
 
@@ -133,6 +130,7 @@ class HotelsFragment : Fragment(){
         const val AUTHORITY = "com.example.yourapp.YourSearchSuggestionProvider"
         const val MODE = SearchRecentSuggestionsProvider.DATABASE_MODE_QUERIES
     }
+
     @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("NotifyDataSetChanged")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -144,29 +142,24 @@ class HotelsFragment : Fragment(){
 
 //        initView()
 //        Log.e("isApiAuthorized", "onViewCreated: ${isApiAuthorized()}")
+
+
         rc = binding.searchFrRecycler1
         rc.layoutManager = LinearLayoutManager(requireContext())
 
         val adapter = RecyclerAdapterSearchFr(hotelData())
-        rc.adapter = adapter
         adapter.notifyDataSetChanged()
+
+        rc.adapter = adapter
 //        }
 
         GlobalScope.launch {
             bottomTask(binding.linearDate)
             bottomTask(binding.linearGuest)
 
-//            var bottomSelectGuest = BottomSheetDialog(requireContext())
-//            var view1 = layoutInflater.inflate(R.layout.bottom_sheet_gestlist,null,false)
-//            bottomSelectGuest.setContentView(view1)
-//            var item1 = bottomSelectGuest.findViewById<ImageView>(R.id.roomaddbtn)
-//            item1?.setOnClickListener {
-//                guestDataHandler(item1)
-//                Log.e("test24", "bottomTask: clicked", )
-//            }
         }
-        val search = binding.searhhotel
-        var autocm =  binding.AutoCompleteTextView
+        val searhView = binding.searhhotel
+        var autocm = binding.AutoCompleteTextView
 
 
 //        autocm.adapter = ArrayAdapter(requireContext(),android.R.layout.simple_spinner_item,placesClient)
@@ -174,40 +167,25 @@ class HotelsFragment : Fragment(){
             override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
 
             override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-                if (Allfun.isInternetAvailable(requireContext())==true.not()){
+                if (Allfun.isInternetAvailable(requireContext()) == true.not()) {
                     autocm.setError("check Internet connection")
                 }
             }
 
             override fun afterTextChanged(s: Editable?) {
                 val query = s.toString()
+                m_data_show.clear()
                 fetchLocationPredictions(query)
-//                fetchPlacePredictions(query)
-//                getLatLngFromAddress(query)
+
             }
         })
-        autocm.onItemClickListener = AdapterView.OnItemClickListener { parent, _, position, _ ->
-            val selectedPlace = parent.getItemAtPosition(position)
-
-
-            val locationName = "$selectedPlace"
-
-        }
-
-
-
-//        var listcities = listOf("Amritsar","Ajnala","SAS Nagar","SBS Nagar","Chandighar","Pathankot","Himachal","Mohali","Ropar","Kharar","Tarntaran","Gurdaspur")
-
-
-
-
 
         autocm.apply {
             threshold = 0
 //            val fields = listOf(Place.Field.ID, Place.Field.NAME)
 //            val suggestAdapter = ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, fields )
 //            setAdapter(suggestAdapter)
-            this.setOnClickListener{
+            this.setOnClickListener {
                 showDropDown()
             }
             //  performCompletion()
@@ -219,42 +197,40 @@ class HotelsFragment : Fragment(){
 
 
 
-        search.setOnClickListener {
+        searhView.setOnClickListener {
 
             val searchView = autocm
 
 
 
-            if (searchView.text.isNullOrEmpty().not() && guestLiveData.value!=null && dateLiveData.value!=null   ){
+            if (searchView.text.isNullOrEmpty().not() && guestLiveData.value != null && dateLiveData.value != null) {
                 val newFragment = HotelListFragment()
 
-//                if (listcities.contains(searchView.text.toString()).not()){
-////                    Toast.makeText(requireContext(), "Please Enter CorrectData!!", Toast.LENGTH_SHORT).show()
-//                    searchView.text.clear()
-////                    searchView.setError("Please enter correct city ")
-//                    Toast.makeText(requireContext(), "wrong data", Toast.LENGTH_SHORT).show()
-//
-//                }else{
-                val args = Bundle()
+                if (m_data_show.contains(searchView.text.toString()).not()) {
+//                    Toast.makeText(requireContext(), "Please Enter CorrectData!!", Toast.LENGTH_SHORT).show()
+                    searchView.text.clear()
+//                    searchView.setError("Please enter correct city ")
+                    Toast.makeText(requireContext(), "wrong data", Toast.LENGTH_SHORT).show()
+
+                } else {
+                    val args = Bundle()
 //                args.putParcelable("guest", guestLiveData.value)
 //                args.putString("date",dateLiveData.value)
-                args.putString("query",searchView.text.toString())
-                newFragment.arguments = args
+                    args.putString("query", searchView.text.toString())
+                    newFragment.arguments = args
 
 //                Log.e("test311", "onViewCreated: ${binding.searchView.query.toString()}", )
 //            val targetFragment = TargetFragment()
-                val fragmentManager = requireParentFragment().parentFragmentManager
-                val transaction = fragmentManager.beginTransaction()
-                transaction.replace(R.id.nav_host_fragment, newFragment)
-                transaction.addToBackStack(null)
-                transaction.setReorderingAllowed(true)
-                transaction.commit()
-//                }
+                    val fragmentManager = requireParentFragment().parentFragmentManager
+                    val transaction = fragmentManager.beginTransaction()
+                    transaction.replace(R.id.nav_host_fragment, newFragment)
+                    transaction.addToBackStack(null)
+                    transaction.setReorderingAllowed(true)
+                    transaction.commit()
+                }
 
 
-            }
-
-            else{
+            } else {
                 Toast.makeText(requireContext(), "Please search query", Toast.LENGTH_SHORT).show()
             }
             m_data_show.clear()
@@ -282,107 +258,119 @@ class HotelsFragment : Fragment(){
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
-    @SuppressLint("InflateParams", "MissingInflatedId", "SimpleDateFormat", "ResourceAsColor",
-        "RestrictedApi"
+    @SuppressLint(
+        "InflateParams", "MissingInflatedId", "SimpleDateFormat", "ResourceAsColor",
+        "RestrictedApi", "NotifyDataSetChanged"
     )
     private fun bottomTask(view: View) {
 
         var selectdate = binding.linearDate
         var selectGuest = binding.linearGuest
 
-        var dayOfMonth0 = 0
-        var month0 = 0
-        var year0 = 0
+//        var dayOfMonth0 = 0
+//        var month0 = 0
+//        var year0 = 0
         view.setOnClickListener {
+            val room_count = share_pref.getInt("room", 1)
+            val adultv_count = share_pref.getInt("adults", 1)
+            val childrens_count = share_pref.getInt("childrens", 0)
             when (view) {
                 selectdate -> {
 //                    updateDatePicker()
                     val builder = MaterialDatePicker.Builder.dateRangePicker()
                         .setTitleText("Select Date Range")
+                    val fresh = share_pref.getLong("startdate", Date().time)
+                    val fresh1 = share_pref.getLong("endDate", Date().time)
+                    builder.setSelection(androidx.core.util.Pair(fresh, fresh1))
                     val datePicker = builder.build()
+
+//                    if (datePicker.)
+//                    Allfun.freshdate()
 
                     datePicker.addOnPositiveButtonClickListener { selection ->
                         val startDate = selection.first
                         val endDate = selection.second
 
-                        editor.putLong("startdate",startDate)
-                        editor.putLong("endDate",endDate)
+                        editor.putLong("startdate", startDate)
+                        editor.putLong("endDate", endDate)
                         editor.apply()
+                        dateModifier(Pair(startDate, endDate))
 
+                        val calendar = Calendar.getInstance()
 
-
+// Set the start date of the range to 1 week ago
+                        calendar.add(Calendar.DAY_OF_MONTH, -7)
 
 
                         val date = Date(startDate)
                         var date_one_milli = date.time
-                        val dateFormat = SimpleDateFormat("EEE ,dd MMM", Locale.getDefault())
+                        val dateFormat = SimpleDateFormat("EEE, dd MMM", Locale.getDefault())
                         var startdate0 = dateFormat.format(date)
 
                         val date2 = Date(endDate)
                         var date_two_milli = date2.time
-                        val dateFormat2 = SimpleDateFormat("EEE ,dd MMM", Locale.getDefault())
+                        val dateFormat2 = SimpleDateFormat("EEE, dd MMM", Locale.getDefault())
 
                         var enddate0 = dateFormat2.format(date2)
                         var rangestr = "$startdate0 - $enddate0"
                         binding.rangeDAteTextView.setText(rangestr)
 
 
-                        Log.e("millis_date", "bottomTask: $date_one_milli,$date_two_milli", )
+                        Log.e("millis_date", "bottomTask: $date_one_milli,$date_two_milli")
                         dateLiveData.value = rangestr
                     }
 
 //                    datePicker
                     datePicker.show(childFragmentManager, "DateRangePicker")
 
-//                    var dp = DatePickerDialog(requireContext())
-//                    dp.datePicker.minDate
-//                    dp.show()
-
-
-
-
-
                 }
 
 
                 selectGuest -> {
 
+                    Log.e("shref_datya", "bottomTask: $room_count,$adultv_count,$childrens_count")
+
                     var bottomSelectGuest = BottomSheetDialog(requireContext())
+
+
+                    val roomcount = bottomSelectGuest.findViewById<TextView>(R.id.roomcount)
+                    val adultcount = bottomSelectGuest.findViewById<TextView>(R.id.adultcount)
+                    val childcount = bottomSelectGuest.findViewById<TextView>(R.id.childrencount)
+
+
                     var view1 = layoutInflater.inflate(R.layout.bottom_sheet_gestlist, null, false)
                     bottomSelectGuest.setContentView(view1)
+
+                    roomcount?.setText(room_count.toString())
+                    adultcount?.setText(adultv_count.toString())
+                    childcount?.setText(list.size)
+
                     bottomSelectGuest.show()
+                    bottomSelectGuest.setCancelable(false)
                     var closebtn = view1.findViewById<MaterialCardView>(R.id.close_selectGuest)
-                    var spinner1 = view1.findViewById<Spinner>(R.id.spinner)    //spinner 1
-                    var spinner2 = view1.findViewById<Spinner>(R.id.spinner2)     //spinner2
-//                    R.string.chip2
-                    var languages = resources.getStringArray(R.array.Languages)
-                    if (spinner1!=null && spinner2!=null){
-                        var adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item,languages)
-                        spinner1.adapter = adapter
-                        spinner2.adapter  = adapter
-                    }
-//                    spinner1.onItemSelectedListener = object :AdapterView.OnItemSelectedListener{
-//                        override fun onItemSelected(
-//                            parent: AdapterView<*>?,
-//                            view: View?,
-//                            position: Int,
-//                            id: Long
-//                        ) {
-//                            Toast.makeText(requireContext(),
-//                                getString(R.string.selected_item) + " " +
-//                                        "" + languages[position], Toast.LENGTH_SHORT).show()
-//                        }
-//
-//                        override fun onNothingSelected(parent: AdapterView<*>?) {
-//
-//                        }
-//
+                    var rc = view1.findViewById<RecyclerView>(R.id.children_recyclerView_guestList)
+                    adapter = guest_Child_Adapter(list, requireContext())
+                    rc.adapter = adapter
+                    adapter.notifyDataSetChanged()
+
+//                    var spinner1 = view1.findViewById<Spinner>(R.id.spinner)    //spinner 1
+//                    var spinner2 = view1.findViewById<Spinner>(R.id.spinner2)     //spinner2
+////                    R.string.chip2
+//                    var languages = resources.getStringArray(R.array.Languages)
+//                    if (spinner1!=null && spinner2!=null){
+//                        var adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item,languages)
+//                        spinner1.adapter = adapter
+//                        spinner2.adapter  = adapter
 //                    }
+
+
                     closebtn.setOnClickListener {
                         bottomSelectGuest.dismiss()
+                        childc  = final_count
                     }
 
                     guestDataHandler(bottomSelectGuest)
+
 
                 }
                 else -> {
@@ -408,29 +396,59 @@ class HotelsFragment : Fragment(){
         var adultcount = view?.findViewById<TextView>(R.id.adultcount)
         var childcount = view?.findViewById<TextView>(R.id.childrencount)
 
-        var a = roomdata(addroom,roomsub,roomcount )
-        var b = adultdata(addadult,roomadult,adultcount )
-        var c = childdata(addchild,roomchild,childcount )
-        var submit =  view?.findViewById<MaterialButton>(R.id.guestApply)
-        submit?.setOnClickListener{
+
+//        var room_count =share_pref.getInt("room",1)
+//        var adultv_count = share_pref.getInt("adults",1)
+//        var childrens_count = share_pref.getInt("childrens",0)
+//
+//        roomcount?.setText(room_count.toString())
+//        adultcount?.setText(adultv_count.toString())
+//        childcount?.setText(childrens_count.toString())
+
+        roomdata(addroom, roomsub, roomcount)
+        adultdata(addadult, roomadult, adultcount)
+        childdata(addchild, roomchild, childcount)
+        var submit = view?.findViewById<MaterialButton>(R.id.guestApply)
+
+        submit?.setOnClickListener {
 //            Toast.makeText(requireContext(), "  Guest Are  R:$roomc,A:$adultc,C:$childc, ", Toast.LENGTH_SHORT).show()
             view?.dismiss()
 
-            val Guest = "$adultc Guests, $roomc Rooms"
+            val Guest = "${adultc} Guests, ${roomc} Rooms"
+            var m_guest_ = setOf(adultc.toString(), roomc.toString())
+
+            editor.putInt("guest_count", adultc)
+            editor.putInt("room_count", roomc)
+            editor.apply()
+
             binding.GuestTextView.setText(Guest)
 
-            guestLiveData.value = guestdatacls(adultc,roomc)
+            guestLiveData.value = guestdatacls(adultc, roomc)
             Log.e("livedata", " ${guestLiveData.value} ")
 //            liveData
+
+            Log.e("share+phref", "guestDataHandler: $roomc,$adultc,$childc")
+//            editor.remove("room")
+//            editor.remove("adults")
+//            editor.remove("childrens")
+//            editor.apply()
+
+            editor.putInt("room", roomc)
+            editor.putInt("adults", adultc)
+            editor.putInt("childrens", list.size)
+
+//            editor.putInt("childrens",childc)
+            editor.apply()
+            final_count = childc
 
         }
 
 
-
     }
 
-    private fun roomdata(addView: ImageView?,subView: ImageView?,textshowview:TextView?){
-        var totalRoom = 0
+    private fun roomdata(addView: ImageView?, subView: ImageView?, textshowview: TextView?) {
+        var totalRoom = share_pref.getInt("room", 1)
+        textshowview?.setText(totalRoom.toString())
         addView?.setOnClickListener {
 
             totalRoom += 1
@@ -439,10 +457,10 @@ class HotelsFragment : Fragment(){
 
         }
         subView?.setOnClickListener {
-            if (totalRoom==0){
+            if (totalRoom == 0) {
                 textshowview?.setText("0")
-            }else{
-                totalRoom -=1
+            } else {
+                totalRoom -= 1
                 textshowview?.setText(totalRoom.toString())
             }
             roomc = totalRoom
@@ -451,10 +469,10 @@ class HotelsFragment : Fragment(){
 
     }
 
-    private fun adultdata(addView: ImageView?,subView: ImageView?,textshowview:TextView?) {
+    private fun adultdata(addView: ImageView?, subView: ImageView?, textshowview: TextView?) {
 
-        var count1 = 0
-
+        var count1 = share_pref.getInt("adults", 1)
+        textshowview?.setText(count1.toString())
 
         addView?.setOnClickListener {
             count1 += 1
@@ -465,10 +483,10 @@ class HotelsFragment : Fragment(){
         subView?.setOnClickListener {
 
 
-            if (count1==0){
+            if (count1 == 0) {
                 textshowview?.setText("0")
-            }else{
-                count1-=1
+            } else {
+                count1 -= 1
                 textshowview?.setText(count1.toString())
                 adultc = count1
             }
@@ -476,60 +494,112 @@ class HotelsFragment : Fragment(){
 
     }
 
-    private fun childdata(addView: ImageView?,subView: ImageView?,textshowview:TextView?) {
+    @SuppressLint("NotifyDataSetChanged")
+    private fun childdata(addView: ImageView?, subView: ImageView?, textshowview: TextView?) {
 
-        var count1 = 0
 
+        var count1 = final_count
+        if (list.isNullOrEmpty().not() ) {
+
+                if (count1!=list.size){
+                    list.clear()
+                    for (i in 0 until count1){
+                        list.add(guest_Children(textView,spinner))
+
+                    }
+                    adapter.notifyDataSetChanged()
+                }
+            Log.e("list_check", "childdata: listsize${list.size},count : $count1",)
+
+//
+        } else {
+            for (i in 0 until count1){
+                list.add(guest_Children(textView,spinner))
+                Log.e("check_child_data", "childdata: if block executes$i", )
+            }
+        }
+        adapter.notifyDataSetChanged()
+        textshowview?.setText(count1.toString())
 
         addView?.setOnClickListener {
+
             count1 += 1
             textshowview?.setText(count1.toString())
             childc = count1
+//            child_handling()
+
+            list.add(guest_Children(textView, spinner))
+
+            adapter.notifyDataSetChanged()
+
         }
 
         subView?.setOnClickListener {
 
 
-            if (count1==0){
+            if (count1 == 0) {
                 textshowview?.setText("0")
-            }else{
-                count1-=1
+            } else {
+                count1 -= 1
                 textshowview?.setText(count1.toString())
                 childc = count1
 
+//                if (list.contains(guest_Children(textView,spinner))){
+//                    list.removeAt(list.size-1)
+//                    adapter.notifyDataSetChanged()
+//                }else{
+//                    list.removeAt(list.size-1)
+//                    adapter.notifyItemRemoved(list.size-1)
+//                    adapter.notifyDataSetChanged()
+//                }
+
+                if (list.size >= 1) {
+                    list.removeAt(list.size - 1)
+                    adapter.notifyItemRemoved(list.size - 1)
+//                    adapter.notifyDataSetChanged()
+                } else if (list.size == 0) {
+                    list.clear()
+                    adapter.notifyDataSetChanged()
+                } else {
+                    list.clear()
+                    adapter.notifyDataSetChanged()
+                }
+
+
             }
         }
-
+        Log.e("child_data", "childdata: ${list.size},$childc,$count1")
     }
 
     @SuppressLint("SetTextI18n")
-    fun checklivedata(m1:MutableLiveData<guestdatacls>?, m2:MutableLiveData<String>?){
-
-        var TAG = "test31"
-        if (m1?.value != null && m2?.value != null){
-
-            var data = guestLiveData.value
-
-            val adlt = data?.guest
-            val room = data?.rooms
-            binding.GuestTextView.setText("$adlt Guest,$room Rooms")
-            binding.rangeDAteTextView.setText(dateLiveData.value)
-            Log.e(TAG, "checklivedata: !null")
-
-        }
-        else{
-            guestLiveData.value = guestdatacls(1,1)
-            dateLiveData.value = "Sun, 8 jun - Sun, 8 Jun "
-//        binding.GuestTextView.setText("1 Guest,1 Room")
-//        binding.rangeDAteTextView.setText("8 jun - 8 Jun")
-            Log.e(TAG, "checklivedata: null ${guestLiveData.value},${dateLiveData.value}  ")
-        }
-    }
-    @SuppressLint("ResourceType")
+//    fun checklivedata(m1:MutableLiveData<guestdatacls>?, m2:MutableLiveData<String>?){
+//
+//        var TAG = "test31"
+//        if (m1?.value != null && m2?.value != null){
+//
+//            var data = guestLiveData.value
+//
+//            val adlt = data?.guest
+//            val room = data?.rooms
+////            binding.GuestTextView.setText("$adlt Guest,$room Rooms")
+//            binding.rangeDAteTextView.setText(dateLiveData.value)
+//            Log.e(TAG, "checklivedata: !null")
+//
+//        }
+//        else{
+//            guestLiveData.value = guestdatacls(1,1)
+//            dateLiveData.value = "Sun, 8 jun - Sun, 8 Jun "
+////        binding.GuestTextView.setText("1 Guest,1 Room")
+////        binding.rangeDAteTextView.setText("8 jun - 8 Jun")
+//            Log.e(TAG, "checklivedata: null ${guestLiveData.value},${dateLiveData.value}  ")
+//        }
+//    }
+//    @SuppressLint("ResourceType")
     private fun addAddress() {
 
 
     }
+
     private fun initView() {
 
 
@@ -540,7 +610,8 @@ class HotelsFragment : Fragment(){
         }
         placesClient = Places.createClient(requireContext())
     }
-    private fun openlocation(){
+
+    private fun openlocation() {
 
 
 //        val fields = listOf(Place.Field.ID, Place.Field.NAME)
@@ -552,33 +623,35 @@ class HotelsFragment : Fragment(){
 ////
 
 
-
     }
+
     private fun showPredictions(predictions: List<AutocompletePrediction>) {
 
 //        Log.e("predictions", "showPredictions: ${predictions.get(0)},", )
         val colorSpan = ForegroundColorSpan(Color.RED)
         val spannableString = SpannableString("Hello World")
-        spannableString.setSpan(colorSpan, 0, 10, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(colorSpan, 0, 3, Spannable.SPAN_EXCLUSIVE_EXCLUSIVE)
 
 
-        val colorSpans = spannableString.getSpans(0, spannableString.length, ForegroundColorSpan::class.java)
+        val colorSpans =
+            spannableString.getSpans(0, spannableString.length, ForegroundColorSpan::class.java)
         var m_predictions = predictions.forEach {
 //           it.placeId
-            Log.e("m_predictions", "showPredictions: m_predictions", )
+            Log.e("m_predictions", "showPredictions: m_predictions")
 
 
             m_data_show.add(it.getFullText(colorSpan).toString())
         }
 
-        val suggestAdapter = ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, m_data_show )
+        val suggestAdapter =
+            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, m_data_show)
         binding.AutoCompleteTextView.setAdapter(suggestAdapter)
         suggestAdapter.notifyDataSetChanged()
-        Log.e("m_predictions", "showPredictions:$m_data_show ", )
-
+        Log.e("m_predictions", "showPredictions:$m_data_show ")
 
 
     }
+
     @SuppressLint("LongLogTag")
     private fun fetchLocationPredictions(query: String) {
         val token = AutocompleteSessionToken.newInstance()
@@ -602,13 +675,16 @@ class HotelsFragment : Fragment(){
             }
             .addOnFailureListener { exception: Exception ->
                 // Handle API call failure
-                Log.e("fetchLocationPredictions", "fetchLocationPredictions: ${exception.message} ", )
+                Log.e(
+                    "fetchLocationPredictions",
+                    "fetchLocationPredictions: ${exception.message} ",
+                )
             }
     }
 
-    fun getpositionData(list:MutableList<View>){
+    fun getpositionData(list: MutableList<View>) {
 
-        for (item in list){
+        for (item in list) {
 
             item.setOnClickListener { item.id }
 
@@ -649,30 +725,52 @@ class HotelsFragment : Fragment(){
 //            }
 //    }
 
-private fun updateDatePicker(){
+    private fun updateDatePicker() {
 
-    val startDate = share_pref.getLong("startdate",Date().time) // start date in milliseconds
-    val endDate: Long = share_pref.getLong("endDate",Date().time)// end date in milliseconds
-
-
+        val startDate = share_pref.getLong("startdate", Date().time) // start date in milliseconds
+        val endDate: Long = share_pref.getLong("endDate", Date().time)// end date in milliseconds
 
 
 // Get the current calendar instance
-    val calendar = Calendar.getInstance()
+        val calendar = Calendar.getInstance()
 
 // Set the start date of the range to 1 week ago
-    calendar.add(Calendar.DAY_OF_MONTH, -7)
+        calendar.add(Calendar.DAY_OF_MONTH, -7)
 
 
 // Create a MaterialDatePicker with a date range
-    val builder = MaterialDatePicker.Builder.dateRangePicker()
-    builder.setSelection(androidx.core.util.Pair(startDate, endDate))
+        val builder = MaterialDatePicker.Builder.dateRangePicker()
+        builder.setSelection(androidx.core.util.Pair(startDate, endDate))
 
 // Show the MaterialDatePicker
-    val materialDatePicker = builder.build()
-    materialDatePicker.show(childFragmentManager, "DATE_PICKER_TAG")
+        val materialDatePicker = builder.build()
+        materialDatePicker.show(childFragmentManager, "DATE_PICKER_TAG")
 
-}
+    }
+
+    //    private fun child_handling():MutableList<guest_Children>{
+////        val child_count  = share_pref.getInt("childrens",0)
+//
+//
+//
+//        for (item in 1 until child_count){
+////            textView.id = textView.hashCode()
+//            var current_guest_item = guest_Children(textView,spinner)
+//            list.add(current_guest_item)
+//        }
+//        return list
+//    }
+    private fun dateModifier(pair: Pair<Long, Long>) {
+        val date = Date(pair.first)
+        val date1 = Date(pair.second)
+//    var date_one_milli = date.time
+        val dateFormat = SimpleDateFormat("EEE, dd MMM", Locale.getDefault())
+        var startdate0 = dateFormat.format(date)
+        var startdate1 = dateFormat.format(date1)
+        Log.e("detes_setuop", "dateModifier: ")
+        var date_setup = "$startdate0 - $startdate1"
+        editor.putString("selected_date", date_setup)
+    }
 }
 
 //}

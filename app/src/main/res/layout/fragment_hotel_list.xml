@@ -24,24 +24,27 @@
     android:background="@color/yellow"
 
     >
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/backHotelList"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        app:cardCornerRadius="10dp"
-        android:layout_gravity="center"
+<!--    <com.google.android.material.card.MaterialCardView-->
+<!--        android:id="@+id/backHotelList"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:cardCornerRadius="10dp"-->
+<!--        android:layout_gravity="center"-->
 
-        app:cardBackgroundColor="@color/white"
-        >
+<!--        app:cardBackgroundColor="@color/white"-->
+<!--        >-->
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:id="@+id/backHotelList"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
             android:layout_gravity="center"
             android:src="@drawable/back_arrow_ic"
             app:tint="@color/black"
-            android:padding="5dp"
+            android:background="@drawable/button_bg"
+            android:padding="6dp"
+
             />
-    </com.google.android.material.card.MaterialCardView>
+<!--    </com.google.android.material.card.MaterialCardView>-->
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -83,7 +86,6 @@
                 android:textColor="@color/white"
                 />
             <View
-                android:id="@+id/divider"
                 android:layout_width="1dp"
                 android:layout_height="match_parent"
                 android:layout_marginHorizontal="5dp"
@@ -305,7 +307,7 @@
             android:layout_marginHorizontal="130dp"
 
             app:backgroundTint="@color/colorPrimary"
-            app:rippleColor="@color/colorAccent"
+            app:rippleColor="@color/yellow"
             android:src="@drawable/location"
             android:contentDescription=""
             android:text="Map"

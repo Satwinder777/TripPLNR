@@ -17,17 +17,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.5"
-        android:backgroundTint="@android:color/transparent"
+        android:background="@drawable/booking_card_completed"
+        android:backgroundTint="#E6E6EA"
 
-         >
+
+
+        >
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:paddingVertical="60dp"
-            android:background="@color/creame"
-            android:backgroundTintMode="add"
+            android:background="@android:color/transparent"
+
              >
 
             <ImageView
@@ -70,81 +73,7 @@
 
         </LinearLayout>
 
-        <View
-            android:id="@+id/startcorner"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/circle_shape"
-            android:backgroundTint="@color/white"
-            android:backgroundTintMode="add"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="-30dp"
-            android:layout_marginTop="-30dp"/>
 
-        <View
-            android:id="@+id/startcorner1"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:background="@drawable/circle_shape"
-            android:backgroundTint="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginEnd="-30dp"
-            android:layout_marginTop="-30dp"
-            android:backgroundTintMode="add"/>
-
-        <View
-            android:id="@+id/startcorner3"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginTop="-30dp"
-            android:background="@drawable/circle_shape"
-            android:backgroundTint="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:backgroundTintMode="add"/>
-
-        <View
-            android:id="@+id/startcorner4"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="-30dp"
-            android:background="@drawable/circle_shape"
-            android:backgroundTint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="-30dp"
-            android:backgroundTintMode="add"
-            app:layout_constraintBottom_toBottomOf="parent"
-              />
-        <View
-            android:id="@+id/startcorner5"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_marginBottom="-30dp"
-            android:background="@drawable/circle_shape"
-            android:backgroundTint="@color/white"
-            app:layout_constraintStart_toStartOf="parent"
-            android:layout_marginStart="-30dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
-            android:backgroundTintMode="add"
-            />
-
-
-        <View
-            android:id="@+id/startcorner6"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginBottom="-30dp"
-            android:background="@drawable/circle_shape"
-            android:backgroundTint="@color/white"
-            app:layout_constraintEnd_toEndOf="parent"
-            android:layout_marginEnd="-30dp"
-            android:backgroundTintMode="add"
-            app:layout_constraintBottom_toBottomOf="parent"
-            />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

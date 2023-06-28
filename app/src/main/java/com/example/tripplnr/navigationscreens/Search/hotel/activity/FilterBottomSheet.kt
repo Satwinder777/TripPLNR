@@ -1,8 +1,12 @@
 package com.example.tripplnr.navigationscreens.Search.hotel.activity
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
+import android.nfc.Tag
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,24 +23,83 @@ import com.example.tripplnr.navigationscreens.DataCls.sortData
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.RangeSlider
+import io.opencensus.resource.Resource
 
 class FilterBottomSheet: BottomSheetDialogFragment() {
 
     private lateinit var binding: FilterBottomSheetBinding
     val data = mutableListOf<String>()
     var sortingTech = ""
+    private lateinit var sharee_pref :SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+    var selected_tag_demo = setOf("freepark", "paylater", "all", "class2", "threestar")
+    private var range = setOf(10f.toString(),1000f.toString())
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         // Inflate your fragment layout here
         binding = FilterBottomSheetBinding.inflate(layoutInflater)
+        sharee_pref = requireContext().getSharedPreferences("filter_bottom_sheet_selected",Context.MODE_PRIVATE)
+        editor = sharee_pref.edit()
+
+
+        val range_sf = sharee_pref.getStringSet("range_data",range)
+        var range_in_float = mutableListOf<Float>()
+        range_sf?.forEachIndexed { index, s ->
+            when(index){
+                0->{
+                    binding.minRange.setText("$${s}")
+                    range_in_float.add(s.toFloat())
+                }
+                1->{
+                    binding.maxRange.setText("$$s")
+                    range_in_float.add(s.toFloat())
+                }
+            }
+        }
+        binding.rangeSlider.values = range_in_float
+
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        var selected_final =  sharee_pref.getStringSet("filter_data", selected_tag_demo)
+        selected_final?.forEach {
+           val selected_view = requireView().findViewWithTag<View>(it)
+            selected_view.setBackgroundResource(R.drawable.bg_normal2)
+            when(selected_view){
+                is MaterialButton->{
+                    selected_view.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                    selected_view.iconTint = ContextCompat.getColorStateList(requireContext(), R.color.white)
 
+                    val color = ContextCompat.getColor(requireContext(), R.color.yellow)
 
+                    selected_view.backgroundTintList = ColorStateList.valueOf(color)
+                }
+                is TextView->{
+                    selected_view.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+                }
+                is LinearLayout->{
+                    selected_view.forEach {
+
+                        when(it){
+                            is ImageView->{
+//                                    it.imageTintList = ContextCompat.getColorStateList(requireContext(), R.color.white)
+                                it.setImageResource(R.drawable.star_white)
+                            }
+                            else->{
+                                Toast.makeText(requireContext(), "eroor", Toast.LENGTH_SHORT).show()
+                            }
+                        }
+                    }}
+                else->{
+                    Toast.makeText(requireContext(), "unwanted view!!", Toast.LENGTH_SHORT).show()
+                }
+            }
+        }
 //            bottom.setContentView(view)
 //            bottom.show()
 //            bottom.setCancelable(false)
@@ -62,6 +125,8 @@ class FilterBottomSheet: BottomSheetDialogFragment() {
 //                        textView.text = "Min: $min, Max: $max"
                 var m_min =  binding.minRange
                 var m_max = binding.maxRange
+                editor.putStringSet("range_data",setOf(min.toString(),max.toString()))
+                editor.apply()
                 m_min.setText("$$min")
                 m_max.setText("$$max")
             }
@@ -93,6 +158,7 @@ class FilterBottomSheet: BottomSheetDialogFragment() {
             parking_reset.setOnClickListener {
                 onClickResetBtn(parking_reset,parkingTypeList)
             }
+        data.add(freeparking.tag as String)
 
 
             //payment type
@@ -105,6 +171,7 @@ class FilterBottomSheet: BottomSheetDialogFragment() {
                 onClickResetBtn(payment_reset,paymentTypeList)
 
             }
+        data.add(payLater.tag as String)
 
             //property Type
             var allpropertytype  = binding.allPropertyType
@@ -152,8 +219,14 @@ class FilterBottomSheet: BottomSheetDialogFragment() {
             val apply = binding.applyBtn
             apply.setOnClickListener {
                 Log.e("data filter", "doTask: data is :  $data", )
+                editor.putStringSet("filter_data",data.toSet())
+                editor.apply()
+
                 this.dismissNow()
+
             }
+
+//        dsjhvkjhvjkehkew
 
 
     }

@@ -1,31 +1,18 @@
 package com.example.tripplnr
 
-import android.annotation.SuppressLint
 import android.app.ProgressDialog
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.util.Log
-import android.view.MenuItem
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavController
-import androidx.navigation.Navigation
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.NavigationUI
 import com.example.tripplnr.databinding.ActivityMainBinding
 import com.example.tripplnr.navigationscreens.Home.NetworkConnectivityListener
-import com.example.tripplnr.navigationscreens.objectfun.Allfun
-import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.*
 
 class MainActivity : AppCompatActivity(),
@@ -50,11 +37,11 @@ class MainActivity : AppCompatActivity(),
 
 
 
-
+        supportActionBar?.setBackgroundDrawable(null)
 
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
 
-        var navController = navHostFragment.navController
+       navController = navHostFragment.navController
 
         val bottomNavigationView = binding.bottomNavigation
         bottomNavigationView.setBackgroundResource(R.drawable.bg_botton_nav)
@@ -64,9 +51,9 @@ class MainActivity : AppCompatActivity(),
 
          // Replace with the ID of your button
         var btn  = bottomNavigationView.findViewById<View>(R.id.homeFragment)
-        btn.setOnClickListener {
-            navController.navigate(R.id.homeFragment)
-        }
+        var btn1  = bottomNavigationView.findViewById<View>(R.id.searchFragment)
+        navigateScreen(btn,R.id.homeFragment)
+        navigateScreen(btn1, R.id.searchFragment)
 
 //        bottomNavigationView.setOnClickListener {
 
@@ -83,5 +70,10 @@ class MainActivity : AppCompatActivity(),
     }
     override fun onNetworkDisconnected() {
         Toast.makeText(this@MainActivity, "internet disconnected!!", Toast.LENGTH_SHORT).show()
+    }
+    private fun navigateScreen(view: View, fragment: Int){
+        view.setOnClickListener {
+            navController.navigate(fragment)
+        }
     }
 }

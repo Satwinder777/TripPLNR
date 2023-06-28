@@ -1,11 +1,15 @@
 package com.example.tripplnr.navigationscreens.hotelListFragment
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -15,8 +19,10 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.view.forEach
+import androidx.core.view.forEachIndexed
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
@@ -39,17 +45,24 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     private lateinit var rc: RecyclerView
     private lateinit var query :String
     val data = mutableListOf<String>()
-    var sortingTech = ""
+    var sortingTech = 0
+    var final_sort_technique = 0
+    private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var editor : SharedPreferences.Editor
+//    private lateinit var selected_m_view : TextView
+
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+                              savedInstanceState: Bundle?): View {
         binding = FragmentHotelListBinding.inflate(layoutInflater)
 //        var data = arguments?.getParcelable("guest", ) ?: ""
 
 //        var myParcelable = arguments?.getParcelable("myParcelable") as MyParcelable
 //        val data  = arguments?.getParcelable<guestdatacls>("guest")
 //            ?: throw IllegalArgumentException("myParcelable not found in arguments bundle")
+        sharedPreferences = requireContext().getSharedPreferences("sorting the data",Context.MODE_PRIVATE)
+        editor = sharedPreferences.edit()
         val data = Allfun.guestLiveData.value
         binding.roomtextviewHotelList.setText("${data?.rooms}")
         binding.guestTexthotelList.setText("${ data?.guest }")
@@ -58,6 +71,14 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
 //        Log.e("data12", "onCreateView: $data,$date", )
         binding.dateTextviewHotelList.setText(Allfun.dateLiveData.value)
         binding.queryTextViewHotelList.setText(query)
+       var default_sort =  sharedPreferences.getInt("sorting_type",0)
+        final_sort_technique = default_sort
+
+
+//        Log.e("sattadatta", "onCreateView: $data_m", )
+//        view_sorting.text.setTextColor(ContextCompat.getColor(requireContext(),R.color.yellow))
+//        item.image.visibility = View.VISIBLE
+//        sortingTech = item.text.tag.toString()
 
         return binding.root
     }
@@ -66,6 +87,24 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+//        var view_sorting =  requireView().findViewWithTag<ConstraintLayout>(sorting_tech)
+
+
+
+
+//        view_sorting?.forEachIndexed { index, view0 ->
+//            when(view0){
+//                is ImageView->{
+//                    view0.visibility = View.VISIBLE
+//                }
+//                is TextView->{
+//                    view0.setTextColor(ContextCompat.getColor(requireContext(),R.color.white))
+//                }
+//                else->{
+//                    Toast.makeText(requireContext(), "not get require view!!", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//        }
         rc = binding.hotelListFragmentRecyclerView
         GlobalScope.launch {
             var adapter  = Hotel_list_recyclerAdapter(postData(),this@HotelListFragment)
@@ -120,7 +159,12 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
                 }
                 sort->{
 
+                    val data_m = sharedPreferences.getString("index","0")
+                    Log.e("testdata", "doTask: $data_m", )
+
                     var view = layoutInflater.inflate(R.layout.sort_dialog,null,false)
+//                    selected_m_view = view.requireViewById(m)
+
                     bottom.setContentView(view)
                     bottom.show()
 
@@ -128,6 +172,7 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
                     closebtn.setOnClickListener{
                         bottom.dismiss()
                     }
+
 
 
                     var recommended = bottom.findViewById<TextView>(R.id.recommended)
@@ -150,7 +195,11 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
 
                     val applyBtn = bottom.findViewById<MaterialButton>(R.id.sortApplyBtn)
                     applyBtn?.setOnClickListener{
-                        Toast.makeText(requireContext(), sortingTech, Toast.LENGTH_SHORT).show()
+//                        Toast.makeText(requireContext(), sortingTech, Toast.LENGTH_SHORT).show()
+                        editor.putInt("sorting_type",sortingTech)
+                        editor.apply()
+                        final_sort_technique = sortingTech
+
 
                         bottom.dismiss()
                     }
@@ -161,13 +210,30 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
                     val listSortType = listOf(sortData(recommended!!,imgpos1!!),sortData(prizeLtoH!!,imgpos2!!),sortData(prizeHtoL!!,imgpos3!!)
                         ,sortData(reviews!!,imgpos4!!),sortData(starRatingHtoL!!,imgpos5!!),sortData(distanceNtoF!!,imgpos6!!),
                     )
+//                    data_m?.toInt()?.let { it1 -> listSortType.get(it1) }
+                    m_selected_item(final_sort_technique,listSortType)
                     mSortData(listSortType as List<sortData>)
+
+
                 bottom.setCancelable(false)
                 }
             }
         }
     }
+    private fun m_selected_item(item:Int, list: List<sortData>){
+        list.forEachIndexed { index, sortData ->
+            if (index==item==true){
+                sortData.text.setTextColor(ContextCompat.getColor(requireContext(),R.color.yellow))
+                sortData.image.visibility = View.VISIBLE
+            }else{
+                sortData.text.setTextColor(ContextCompat.getColor(requireContext(),R.color.black))
+                sortData.image.visibility = View.GONE
 
+            }
+
+
+        }
+    }
     @SuppressLint("ResourceAsColor", "ResourceType")
     private fun dotask(list: List<View>) {
 
@@ -248,39 +314,33 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
                     list.get(0) -> {
                         // Actions for button1
 //                        it.setBackgroundResource(R.drawable.card_shape)
-                        Toast.makeText(requireContext(), "btn1", Toast.LENGTH_SHORT).show()
                     }
                     list.get(1) -> {
                         // Actions for button2
 //                        it.setBackgroundResource(R.drawable.card_shape)
-                        Toast.makeText(requireContext(), "btn2", Toast.LENGTH_SHORT).show()
 
                     }
                     list.get(2) -> {
                         // Actions for button3
 //                        it.setBackgroundResource(R.drawable.card_shape)
-                        Toast.makeText(requireContext(), "btn3", Toast.LENGTH_SHORT).show()
 
                     }
                     list.get(3) -> {
                         // Actions for button3
 //                        it.setBackgroundResource(R.drawable.card_shape)
-                        Toast.makeText(requireContext(), "btn4", Toast.LENGTH_SHORT).show()
 
                     }
                     list.get(4) -> {
                         // Actions for button3
 //                        it.setBackgroundResource(R.drawable.card_shape)
-                        Toast.makeText(requireContext(), "btn5", Toast.LENGTH_SHORT).show()
 
                     }list.get(5) -> {
                         // Actions for button3
 //                        it.setBackgroundResource(R.drawable.card_shape)
-                        Toast.makeText(requireContext(), "btn", Toast.LENGTH_SHORT).show()
 
                     }
                     else->{
-                        Toast.makeText(requireContext(), "error", Toast.LENGTH_SHORT).show()
+                        Log.e("errorblk", "dotask: error_block", )
                     }
 
                 }
@@ -299,7 +359,10 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
                 }
                 item.text.setTextColor(ContextCompat.getColor(requireContext(),R.color.yellow))
                 item.image.visibility = View.VISIBLE
-                sortingTech = item.text.tag.toString()
+                sortingTech = list.indexOf(item)
+                editor.putString("index",sortingTech.toString())
+                editor.apply()
+                Log.e("testdassa", "mSortData: $sortingTech", )
 
             }
 

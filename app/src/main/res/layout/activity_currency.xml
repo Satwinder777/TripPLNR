@@ -31,12 +31,11 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 android:layout_marginStart="30dp"
-                android:layout_marginTop="40sp"
-                android:layout_marginBottom="7dp"
+                android:layout_marginTop="39sp"
+                android:layout_marginBottom="16dp"
                 />
 
             <TextView
-                android:id="@+id/textView9"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Currency"
@@ -74,12 +73,7 @@
 
 <!--        </com.google.android.material.card.MaterialCardView>-->
 
-<!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/currencyRecyclerView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            tools:listitem="@layout/currency_item"-->
-<!--            android:layout_marginHorizontal="30dp"/>-->
+
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
@@ -105,7 +99,16 @@
             android:drawablePadding="10dp"
 
             />
+
         </com.google.android.material.card.MaterialCardView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/currencyRecyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/currency_item"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="30dp"/>
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

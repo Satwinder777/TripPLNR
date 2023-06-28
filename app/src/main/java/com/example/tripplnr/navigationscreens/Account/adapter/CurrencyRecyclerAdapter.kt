@@ -35,6 +35,7 @@ class CurrencyRecyclerAdapter(var list: MutableList<currencyData> ,var callfun0:
                 itemView.setOnClickListener {
                     Toast.makeText(itemView.context, list[position].currency, Toast.LENGTH_SHORT).show()
                     Allfun.currencyData.value = list[position].currency
+                    callfun0.showcurrency(list[position].currency)
                 }
             }
             }

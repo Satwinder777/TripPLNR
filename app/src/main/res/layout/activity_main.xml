@@ -20,13 +20,14 @@
             app:navGraph="@navigation/nav_graph" />
 
         <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottom_navigation"
+            android:id="@+id/bottomNavigation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_botton_nav"
             app:itemIconTint="@drawable/selected_item"
             app:itemTextColor="@drawable/selected_item"
             app:menu="@menu/bottom_navigation_menu"
+            android:backgroundTint="@color/white"
             tools:ignore="MissingConstraints" />
 
 

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/creame"
+    android:orientation="vertical"
     tools:context=".navigationscreens.Account.AccountFragment">
 
     <!-- TODO: Update blank fragment layout -->
@@ -44,8 +45,8 @@
             android:id="@+id/logintxt"
             android:layout_width="match_parent"
             android:layout_height="90dp"
-            android:layout_marginTop="20dp"
             android:background="@color/white"
+            android:layout_marginTop="10dp"
             android:padding="20dp">
 
             <TextView
@@ -75,6 +76,7 @@
                 android:layout_marginStart="10dp"
                 android:fontFamily="@font/poppin_regular"
 
+
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@id/alphaText"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -91,6 +93,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/aboutUs"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
@@ -272,11 +275,12 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginVertical="10dp"
             android:background="@color/white"
             android:padding="20dp"
             android:orientation="vertical">
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/becomeAffiliate"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
 
@@ -421,7 +425,10 @@
             app:iconTint="@color/yellow"
             app:iconGravity="textStart"
             android:textAllCaps="false"
+             android:insetTop="0dp"
+            android:insetBottom="0dp"
+            app:cornerRadius="0dp"
             android:text="Log out" />
     </LinearLayout>
 
-</FrameLayout>
+</androidx.core.widget.NestedScrollView>

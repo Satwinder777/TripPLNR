@@ -30,6 +30,7 @@ import com.google.android.material.chip.Chip
 import com.google.android.material.chip.ChipDrawable
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.*
+import java.lang.reflect.Constructor
 
 class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     private lateinit var binding: FragmentHomeBinding
@@ -92,8 +93,9 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 
 //        SearchFragment()
         binding.viewHotelCard.setOnClickListener {
-            findNavController().navigate(R.id.searchFragment)
-
+            var a = SearchFragment(1)
+            a.apply { index=1 }
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
         }
 
 
@@ -125,12 +127,12 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 //            var tl =  sF?.requireActivity()?.findViewById<TabLayout>(R.id.tabLayout1)
 
 
-            val newFragment = SearchFragment()
+            val newFragment = SearchFragment(1)
 //            val targetFragment = TargetFragment()
             val fragmentManager = requireParentFragment().parentFragmentManager
             val transaction = fragmentManager.beginTransaction()
             transaction.replace(R.id.nav_host_fragment, newFragment)
-            transaction.addToBackStack(null)
+            transaction.addToBackStack("home_to_search")
             transaction.commit()
 
 
@@ -160,19 +162,19 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     }
 
     override fun onclickItem(position: Int, placetext: String?) {
-        val bundle = Bundle()
-//                args.putParcelable("guest", guestLiveData.value)
-//                args.putString("date",dateLiveData.value)
-        bundle.putString("place", placetext)
-
-        val newFragment = HotelFragment()
-        newFragment.arguments = bundle
-//            val targetFragment = TargetFragment()
-        val fragmentManager = requireParentFragment().parentFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_host_fragment, newFragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
+//        val bundle = Bundle()
+////                args.putParcelable("guest", guestLiveData.value)
+////                args.putString("date",dateLiveData.value)
+//        bundle.putString("place", placetext)
+//
+//        val newFragment = HotelFragment()
+//        newFragment.arguments = bundle
+////            val targetFragment = TargetFragment()
+//        val fragmentManager = requireParentFragment().parentFragmentManager
+//        val transaction = fragmentManager.beginTransaction()
+//        transaction.replace(R.id.nav_host_fragment, newFragment)
+//        transaction.addToBackStack(null)
+//        transaction.commit()
 
 
     }

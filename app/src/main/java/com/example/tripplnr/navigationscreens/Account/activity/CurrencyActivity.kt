@@ -24,15 +24,19 @@ import com.example.tripplnr.navigationscreens.Home.dataclass.currencyData
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import java.util.*
 
-class CurrencyActivity : AppCompatActivity(),CurrencyRecyclerAdapter.callfun {
+class CurrencyActivity : AppCompatActivity(), CurrencyRecyclerAdapter.callfun {
     private lateinit var binding :ActivityCurrencyBinding
-    private lateinit var suggestAdapter : ArrayAdapter<*>
-//    private lateinit var rcCurr :RecyclerView
-//    private lateinit var adapter :CurrencyRecyclerAdapter
+//    private lateinit var suggestAdapter : ArrayAdapter<*>
+    private lateinit var rc :RecyclerView
+    private lateinit var adapter0 :CurrencyRecyclerAdapter
+    private lateinit var currencyPicker : AutoCompleteTextView
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityCurrencyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+
+            rc = binding.currencyRecyclerView
 
 
 //        rcCurr = binding.currencyRecyclerView
@@ -56,29 +60,53 @@ class CurrencyActivity : AppCompatActivity(),CurrencyRecyclerAdapter.callfun {
 //                return false
 //            }
 //        })
-        var currencyPicker =  binding.currencyPicker
+      currencyPicker =  binding.currencyPicker
         currencyPicker.apply {
             threshold = 0
 
-              suggestAdapter = ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, resources.getStringArray(R.array.currency) )
-            setAdapter(suggestAdapter)
-            this.setOnItemClickListener { parent, view, position, id ->
-                Allfun.currencyData.value = currencyPicker.text.toString()
 
-                var value = currencyPicker.text.toString()
-                val resultIntent = intent
-                resultIntent.putExtra("key", value) // Replace "key" with your desired key and value with the actual data
-                setResult(Activity.RESULT_OK, resultIntent)
-                finish()
-//                Log.e("checkcurrency", "onCreate: ${view.transitionName},${parent.get(position).transitionName} ", )
-            }
-            this.setOnClickListener{
-                showDropDown()
-            }
+//              suggestAdapter = ArrayAdapter(context, android.R.layout.simple_dropdown_item_1line, resources.getStringArray(R.array.currency) )
+            adapter0 = CurrencyRecyclerAdapter(list_currency(),this@CurrencyActivity )
+
+            rc.adapter = adapter0
+
+//
             //  performCompletion()
 
 
         }
+        currencyPicker.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+                // This method is called before the text changes
+                // You can perform any necessary actions here
+            }
+
+            @SuppressLint("NotifyDataSetChanged")
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                // This method is called when the text changes
+                // You can implement your filtering logic here
+
+                val newText = s.toString().trim() // Get the new text entered
+
+                // Filter the data based on the new text
+                val filteredData = filterData(newText)
+
+                // Update the adapter with the filtered data
+                adapter0.list = filteredData
+//          adapter0 = autoCompleteTextView.adapter as ArrayAdapter<String>
+//                adapter.clear()
+//                adapter.addAll(filteredData)
+                adapter0.notifyDataSetChanged()
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // This method is called after the text changes
+                // You can perform any necessary actions here
+            }
+        })
+
+        // Function to filter data based on the text entered
+
 
 
         binding.backbtncurrencyActivity.setOnClickListener { onBackPressed() }
@@ -124,9 +152,51 @@ class CurrencyActivity : AppCompatActivity(),CurrencyRecyclerAdapter.callfun {
 
     override fun showcurrency(currency: String) {
         Allfun.currencyData.value = currency
-        var activity = AccountFragment()
-        activity.onCreate(null)
+
+
+
+
+        val value = currency
+        Log.e("value_currency", "showcurrency: $value", )
+        val resultIntent = intent
+        resultIntent.putExtra("key", value) // Replace "key" with your desired key and value with the actual data
+        setResult(Activity.RESULT_OK, resultIntent)
+        finish()
+
     }
 
+    private fun list_currency():MutableList <currencyData>{
+
+
+
+
+       var list = mutableListOf(
+            currencyData("INR"),
+            currencyData("USD"),
+            currencyData("US Dollar (USD)"),
+            currencyData("Euro (EUR)"),
+            currencyData("British Pound (GBP)"),
+            currencyData("Japanese Yen (JPY)"),
+            currencyData("Swiss Franc (CHF)"),
+            currencyData("Canadian Dollar (CAD)"),
+            currencyData("Australian Dollar (AUD)"),
+            currencyData("New Zealand Dollar (NZD)"),
+            currencyData("Chinese Yuan (CNY)"),
+            currencyData("Indian Rupee (INR)"),
+            currencyData("Russian Ruble (RUB)"),
+            currencyData("Brazilian Real (BRL)"),
+            currencyData("South African Rand (ZAR)"),
+
+        )
+        return list
+    }
+    private fun filterData(text: String): MutableList<currencyData> {
+        // Implement your filtering logic here
+        // Return the filtered data as a List<String>
+        // You can query from a data source or manipulate an existing list of data
+
+       var filterlist =  list_currency().filter { it.currency.toLowerCase().contains(text) }.toMutableList()
+        return filterlist
+    }
 
 }

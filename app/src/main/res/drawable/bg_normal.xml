@@ -9,6 +9,13 @@
         android:width="1dp"
         android:color="@color/brown" />
 
+<!--    <padding-->
+<!--        android:right="8dp"-->
+<!--        android:bottom="8dp"-->
+<!--        android:top="8dp"-->
+<!--        android:left="8dp"-->
+<!--        />-->
+
     <corners android:radius="25dp" />  <!-- Set the corner radius of the card -->
 
 

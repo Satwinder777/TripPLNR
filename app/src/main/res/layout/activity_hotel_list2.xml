@@ -75,7 +75,6 @@
                         android:textColor="#95806B" />
 
                     <View
-                        android:id="@+id/divider"
                         android:layout_width="1dp"
                         android:layout_height="match_parent"
                         android:layout_marginHorizontal="5dp"

@@ -58,7 +58,7 @@ class ReviewFragment : Fragment() {
         }
 
         reviewrc = binding.reviewRecyclerView
-        GlobalScope.launch {
+
 
             // Assuming you have a larger list of items
 
@@ -70,7 +70,7 @@ class ReviewFragment : Fragment() {
             reviewAdapter = ReviewAdapter(lessitem,requireContext())
             reviewrc.adapter = reviewAdapter
             reviewAdapter.notifyDataSetChanged()
-        }
+
 
         similarrc = binding.similarHotelRecyclerview
         GlobalScope.launch {
