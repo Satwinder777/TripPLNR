@@ -35,7 +35,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
  * Use the [SearchFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SearchFragment(var index :Int?=0) : Fragment() {
+class SearchFragment : Fragment() {
     private lateinit var binding :FragmentSearchBinding
     private lateinit var tabLayout :TabLayout
     private lateinit var viewPager :ViewPager
@@ -58,9 +58,10 @@ class SearchFragment(var index :Int?=0) : Fragment() {
         Log.e("cretedata", "onCreateView: create vall ", )
 
 //        index = 1
+       val index =  arguments?.getInt("index",0)?:0
 
         tabLayout.post {
-            val tab = tabLayout.getTabAt(index!!)
+            val tab = tabLayout.getTabAt(index)
             tab?.select()
         }
 
@@ -85,6 +86,8 @@ class SearchFragment(var index :Int?=0) : Fragment() {
         binding.backButtonSearchFragment.setOnClickListener {
 //                    requireParentFragment().requireActivity().onBackPressed()
             try {
+                requireFragmentManager()
+                    .popBackStack()
                 findNavController().navigate(R.id.action_searchFragment_to_homeFragment)
             }
             catch (e:Exception){

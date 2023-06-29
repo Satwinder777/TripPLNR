@@ -2,8 +2,13 @@ package com.example.tripplnr.navigationscreens.Home
 
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
+import android.content.SharedPreferences.Editor
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -12,6 +17,7 @@ import android.widget.TextView
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.ui.NavigationUI
@@ -31,6 +37,7 @@ import com.google.android.material.chip.ChipDrawable
 import com.google.firebase.FirebaseApp
 import kotlinx.coroutines.*
 import java.lang.reflect.Constructor
+import java.util.*
 
 class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     private lateinit var binding: FragmentHomeBinding
@@ -38,6 +45,10 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     private lateinit var popularHotelRc: RecyclerView
     private lateinit var adapter: TravelBlogAdapter
     private lateinit var viewmodelhome: HomeViewModel
+    private lateinit var share_phref :SharedPreferences
+    private lateinit var editor: SharedPreferences.Editor
+    var m_count:Boolean = true
+//    var m_count = share_phref.getInt("m_count",0)
 
 
 //    private val viewModelFavorate by viewModels<FavorateViewModel>()
@@ -58,6 +69,12 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater)
         Log.e("testqwer", "  test oncreate ",)
+        share_phref = requireContext().getSharedPreferences("home_share_phref",Context.MODE_PRIVATE)
+        editor = share_phref.edit()
+
+
+
+
 
 
         return binding.root
@@ -93,8 +110,6 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 
 //        SearchFragment()
         binding.viewHotelCard.setOnClickListener {
-            var a = SearchFragment(1)
-            a.apply { index=1 }
             findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
         }
 
@@ -127,13 +142,18 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 //            var tl =  sF?.requireActivity()?.findViewById<TabLayout>(R.id.tabLayout1)
 
 
-            val newFragment = SearchFragment(1)
-//            val targetFragment = TargetFragment()
-            val fragmentManager = requireParentFragment().parentFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            transaction.replace(R.id.nav_host_fragment, newFragment)
-            transaction.addToBackStack("home_to_search")
-            transaction.commit()
+
+            val bundle = Bundle()
+
+            bundle.putInt("index", 1)
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment,bundle)
+
+////            val targetFragment = TargetFragment()
+//            val fragmentManager = requireParentFragment().parentFragmentManager
+//            val transaction = fragmentManager.beginTransaction()
+//            transaction.replace(R.id.nav_host_fragment, newFragment)
+//            transaction.addToBackStack("home_to_search")
+//            transaction.commit()
 
 
 
@@ -148,18 +168,59 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 
 
         }
-        GlobalScope.launch(Dispatchers.Main){
+//        myViewModel.data.observe(this, Observer { newData ->
+
+viewmodelhome.m_state.observe(viewLifecycleOwner, Observer {
+    m_count=it
+    Log.e("test_xase", "onViewCreated: $m_count", )
+})
+    if (m_count==true){
+        Handler().postDelayed({
             binding.shimmerFrameLayout.startShimmer()
-            delay(4000)
+//                          delay(1500)
+//            delay(3000)
             binding.shimmerFrameLayout.stopShimmer()
             binding.rcTravelBlog.visibility = View.VISIBLE
             binding.shimmerFrameLayout.visibility = View.GONE
             binding.popularHotelRc.visibility = View.VISIBLE
 
 
-        }
+            viewmodelhome.update_state()
+
+            Log.e("else_block", "onViewCreated: if block",)
+        }, 3000)
 
     }
+    else{
+        binding.shimmerFrameLayout.visibility = View.GONE
+
+        binding.rcTravelBlog.visibility = View.VISIBLE
+        binding.popularHotelRc.visibility = View.VISIBLE
+        Log.e("else_block", "onViewCreated: else block",)
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+//        viewmodelhome.update_state()
+
+    }
+
 
     override fun onclickItem(position: Int, placetext: String?) {
 //        val bundle = Bundle()
@@ -202,6 +263,11 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     private fun isDarkModeEnabled(): Boolean {
         val nightModeFlags = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
         return nightModeFlags == android.content.res.Configuration.UI_MODE_NIGHT_YES
+    }
+
+
+    interface m_index{
+        fun setIndexing()
     }
 
 }

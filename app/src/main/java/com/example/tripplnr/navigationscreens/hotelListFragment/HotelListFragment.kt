@@ -106,11 +106,11 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
 //            }
 //        }
         rc = binding.hotelListFragmentRecyclerView
-        GlobalScope.launch {
+
             var adapter  = Hotel_list_recyclerAdapter(postData(),this@HotelListFragment)
             rc.adapter = adapter
             adapter.notifyDataSetChanged()
-        }
+
 
         var backBtn = binding.backHotelList
         backBtn.setOnClickListener {

@@ -47,3 +47,8 @@ data class userData(var first :String,var second:String)
 data class User1(val username: String? = null, val email: String? = null)
 data class sortData(val text:TextView,val image:ImageView)
 data class locationItem(val name: String?, val latitude: Double?, val longitude: Double?)
+
+
+object db_firebase{
+    data class UserData(val email: String?,val name: String?,val signInWithGoogle:Boolean?=false)
+}

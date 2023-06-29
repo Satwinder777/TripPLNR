@@ -44,6 +44,7 @@
                 android:layout_width="wrap_content"
                 android:maxWidth="380dp"
                 android:layout_height="wrap_content"
+                android:maxHeight="25dp"
                 android:layout_marginTop="10dp"
                 android:text="The Grandson Villa Hotel"
                 android:textColor="@color/black"
@@ -73,50 +74,96 @@
             android:paddingStart="10dp"
 
             android:orientation="vertical">
-            <com.google.android.material.button.MaterialButton
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:maxWidth="350dp"
-                android:layout_height="25dp"
-                android:text="Amritsar,punjab"
-                android:textColor="@color/black"
-                android:padding="0dp"
-                app:iconSize="15dp"
-                android:textSize="10sp"
-                app:icon="@drawable/location"
-                app:iconTint="@color/yellow"
-                app:iconPadding="0dp"
-
-                android:clickable="false"
-                android:fontFamily="@font/poppins_medium"
-
-
-                android:background="@android:color/transparent"
-                android:lines="1"
-                android:ellipsize="end"/>
-            <com.google.android.material.button.MaterialButton
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:src="@drawable/location"
+                    app:tint="@color/yellow"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="Amritsar,Punjab"
+                    android:textColor="@color/black"
+                    android:gravity="bottom"
+                    android:textAllCaps="true"
+                    android:textSize="11sp"/>
+            </LinearLayout>
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:maxWidth="250dp"
-                android:layout_height="25dp"
-                android:text="0.8 km  from centre"
-                android:textColor="@color/black"
-                android:textAllCaps="false"
-                android:fontFamily="@font/poppin_regular"
-                android:padding="0dp"
-                app:iconSize="8dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <ImageView
+                    android:layout_width="10dp"
+                    android:layout_height="10dp"
+                    android:src="@drawable/dote_yellow_ic"
+                    android:layout_gravity="center"
+                    android:layout_margin="6dp"
+                    app:tint="@color/yellow"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:text="0.8 km from centre"
+                    android:textSize="10sp"
+                    android:gravity="center"
+                     />
+            </LinearLayout>
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:maxWidth="350dp"-->
+<!--                android:layout_height="25dp"-->
+<!--                android:maxHeight="25dp"-->
+<!--                android:text="Amritsar,punjab"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:padding="0dp"-->
+<!--                app:iconSize="15dp"-->
+<!--                android:textSize="10sp"-->
+<!--                app:icon="@drawable/location"-->
+<!--                app:iconTint="@color/yellow"-->
+<!--                app:iconPadding="0dp"-->
+<!--                android:insetBottom="0dp"-->
+<!--                android:insetTop="0dp"-->
+<!--                android:insetLeft="-3dp"-->
+<!--                android:insetRight="0dp"-->
+<!--                style="@style/Widget.AppCompat.Button"-->
+
+
+<!--                android:clickable="false"-->
+<!--                android:fontFamily="@font/poppins_medium"-->
+
+
+<!--                android:background="@android:color/transparent"-->
+<!--                android:lines="1"-->
+<!--                android:ellipsize="end"/>-->
+<!--            <com.google.android.material.button.MaterialButton-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:maxWidth="250dp"-->
+<!--                android:layout_height="25dp"-->
+<!--                android:maxHeight="25dp"-->
+<!--                android:text="0.8 km  from centre"-->
+<!--                android:textColor="@color/black"-->
+<!--                android:textAllCaps="false"-->
+<!--                android:fontFamily="@font/poppin_regular"-->
+<!--                android:padding="0dp"-->
+<!--                app:iconSize="8dp"-->
+<!--                style="@style/Widget.AppCompat.Button"-->
 
 
 
-                android:textSize="10sp"
-                android:layout_margin="0dp"
-                app:icon="@drawable/dote_yellow_ic"
+<!--                android:textSize="10sp"-->
+<!--                android:layout_margin="0dp"-->
+<!--                app:icon="@drawable/dote_yellow_ic"-->
 
-                app:iconTint="@color/yellow"
-                app:iconPadding="5dp"
-                android:clickable="false"
-                android:lines="1"
-                android:ellipsize="end"
+<!--                app:iconTint="@color/yellow"-->
+<!--                app:iconPadding="5dp"-->
+<!--                android:clickable="false"-->
+<!--                android:lines="1"-->
+<!--                android:ellipsize="end"-->
 
-                android:background="@android:color/transparent"/>
+<!--                android:background="@android:color/transparent"/>-->
 
 
         </LinearLayout>
@@ -163,7 +210,6 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:maxWidth="32dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:text="9.8"
@@ -176,7 +222,6 @@
 
                 <TextView
                     android:layout_width="wrap_content"
-                    android:maxWidth="120dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginTop="3dp"

@@ -428,7 +428,8 @@
              android:insetTop="0dp"
             android:insetBottom="0dp"
             app:cornerRadius="0dp"
-            android:text="Log out" />
+            android:text="Log out"
+            android:layout_marginBottom="10dp"/>
     </LinearLayout>
 
 </androidx.core.widget.NestedScrollView>

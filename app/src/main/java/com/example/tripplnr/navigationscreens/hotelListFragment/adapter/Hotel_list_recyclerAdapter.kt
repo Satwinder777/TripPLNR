@@ -30,18 +30,27 @@ class Hotel_list_recyclerAdapter(var list : List<hotelListClass>,private val det
 
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
+
         GlobalScope.launch {
             holder.bind(list)
+
         }
         holder.apply {
-            itemView.setOnClickListener {
-                val m_item =  list.get(position)
-                details.onCardClicks(it,position, Pair(m_item.hotelname1,m_item.locationhotel),m_item.rate!!)
+            try {
+                itemView.setOnClickListener {
+
+                    val m_item = list.get(holder.adapterPosition)
+                    details.onCardClicks(it,position, Pair(m_item.hotelname1,m_item.locationhotel),m_item.rate)
+                }
+
+            }catch (e:Exception){
+                Log.e("exp_occur", "onBindViewHolder: ${e.message}", )
             }
             viewdtl.setOnClickListener {
                 details.checkDetails(it,position)
             }
         }
+
 
     }
     class InnerClass(view: View):RecyclerView.ViewHolder(view) {

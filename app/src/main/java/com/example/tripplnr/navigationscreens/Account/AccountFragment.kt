@@ -5,35 +5,22 @@ import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.webkit.WebSettings
 import android.widget.*
 import androidx.core.content.ContextCompat
-import androidx.core.view.marginRight
-import androidx.lifecycle.Lifecycle
+import androidx.fragment.app.Fragment
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentAccountBinding
 import com.example.tripplnr.navigationscreens.Account.activity.*
-import com.example.tripplnr.navigationscreens.DataCls.User1
-import com.example.tripplnr.navigationscreens.DataCls.userData
-import com.example.tripplnr.navigationscreens.objectfun.Allfun
-import com.example.tripplnr.navigationscreens.objectfun.FirebaseUtils.firebaseAuth
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
-import com.firebase.ui.auth.data.model.User
-import com.google.android.gms.auth.api.Auth
-import com.google.android.gms.auth.api.identity.BeginSignInRequest
+import com.example.tripplnr.navigationscreens.DataCls.db_firebase
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.auth.api.signin.GoogleSignInResult
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.RuntimeExecutionException
 import com.google.android.material.button.MaterialButton
@@ -42,16 +29,10 @@ import com.google.firebase.FirebaseApp
 import com.google.firebase.FirebaseOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
-
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-import java.lang.Character.toUpperCase
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -74,6 +55,8 @@ class AccountFragment : Fragment() {
     private lateinit var email:EditText
     private lateinit var password0:EditText
 
+    private lateinit var dbRef: DatabaseReference                                                       //db_reference
+    private lateinit var db_data_list : MutableList<Any>
 
 
 
@@ -85,7 +68,9 @@ class AccountFragment : Fragment() {
 
 //    val RC_SIGN_IN = 13
 
-
+init {
+    db_data_list = mutableListOf()
+}
 
 //    val user = FirebaseAuth.getInstance().currentUser
 
@@ -97,6 +82,8 @@ class AccountFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = FragmentAccountBinding.inflate(layoutInflater)
         important_init()
+        dbRef = FirebaseDatabase.getInstance().getReference("Users")
+
 
 
         sharedPreferences =  requireContext().getSharedPreferences("AccountFragment_pref", Context.MODE_PRIVATE)
@@ -135,6 +122,7 @@ class AccountFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         important_init()
+        retrieveUserData()
         binding.legalTxt.setOnClickListener {
             val intent = Intent(requireContext(), LegalinformatinActivity::class.java)
             startActivity(intent)
@@ -268,6 +256,8 @@ class AccountFragment : Fragment() {
                                         editor.apply()
                                     }
                                     pop.dismiss()
+                                    saveUserData(Pair(user?.email.toString(),user?.displayName.toString()),)
+
 
                                 }else{
 
@@ -568,6 +558,7 @@ class AccountFragment : Fragment() {
 
                         binding.userText.setText("loginxx")
                         binding.alphaText.visibility = View.GONE
+
                     }
                     else{
                         user?.displayName?.let { WordStartchar(it) }
@@ -575,6 +566,8 @@ class AccountFragment : Fragment() {
                         binding.alphaText.visibility = View.VISIBLE
                         Log.e("tttttt", "firebaseAuthWithGoogle: ${user?.displayName}", )
                         var loggedUser = user?.displayName
+
+                        saveUserData(Pair(user?.email.toString(),user?.displayName.toString()),true)
 
                     }
                     // ...
@@ -740,4 +733,50 @@ fun isemailExist(email0:String){
 
 
 }
+    private fun saveUserData(data :Pair<String,String>,signInWithGoogle:Boolean?=false){
+        val TAG = "data_base_tag"
+
+        var l_email = data.first
+        var l_username = data.second
+        val key = dbRef.push().key!!
+
+        var userData_m = db_firebase.UserData(l_email, l_username,signInWithGoogle)
+        dbRef.child(key).setValue(userData_m).addOnCompleteListener {
+            task->
+            if (task.isSuccessful){
+                Toast.makeText(requireContext(), "added to db", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                Toast.makeText(requireContext(), "error to load data to db", Toast.LENGTH_SHORT).show()
+                Log.e(TAG, "saveUserData: ${task.exception?.message} ", )
+            }
+        }
+
+
+    }
+    private fun retrieveUserData(){
+        val TAG = "retrieveUserData"
+
+        dbRef.addValueEventListener(object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                db_data_list.clear()
+                if (snapshot.exists()){
+                    Log.e(TAG, "onDataChange: ${snapshot.children.count()}", )
+
+                    for (data in snapshot.children){
+                        data.value
+                        db_data_list.add(data.value!!)
+
+                    }
+                }
+                Log.e(TAG, "onDataChange: $db_data_list", )
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+
+                Log.e(TAG, "onCancelled: ${error.message}", )
+            }
+
+        })
+    }
 }

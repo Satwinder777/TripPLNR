@@ -37,6 +37,8 @@ object Allfun {
 
      val guestLiveData =  MutableLiveData<guestdatacls>(guestdatacls(1,1))
 
+    var state = MutableLiveData<Boolean>(true)
+
 
 
     fun task1(){

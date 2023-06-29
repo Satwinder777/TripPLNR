@@ -18,6 +18,16 @@ class HomeViewModel : ViewModel() {
     }
    val rc2: MutableLiveData<MutableList<hotelTitle>> = MutableLiveData()
 
+    private var state:MutableLiveData<Boolean> = MutableLiveData(true)
+    val m_state: LiveData<Boolean> get() = state
+
+    fun update_state(){
+        state.value = false
+    }
+//    fun init_state(){
+//        state.value = true
+//    }
+
 
      val itemList: MutableLiveData<MutableList<travelBlogItem>> = MutableLiveData( )
 

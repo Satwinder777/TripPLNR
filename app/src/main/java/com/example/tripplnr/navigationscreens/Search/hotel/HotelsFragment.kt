@@ -231,7 +231,8 @@ class HotelsFragment : Fragment() {
 
 
             } else {
-                Toast.makeText(requireContext(), "Please search query", Toast.LENGTH_SHORT).show()
+                autocm.setError("Please your hotel")
+//                Toast.makeText(requireContext(), "Please search query", Toast.LENGTH_SHORT).show()
             }
             m_data_show.clear()
         }
@@ -644,9 +645,9 @@ class HotelsFragment : Fragment() {
         }
 
         val suggestAdapter =
-            ArrayAdapter(requireContext(), android.R.layout.simple_dropdown_item_1line, m_data_show)
+            context?.let { ArrayAdapter(it, android.R.layout.simple_dropdown_item_1line, m_data_show) }
         binding.AutoCompleteTextView.setAdapter(suggestAdapter)
-        suggestAdapter.notifyDataSetChanged()
+        suggestAdapter?.notifyDataSetChanged()
         Log.e("m_predictions", "showPredictions:$m_data_show ")
 
 
