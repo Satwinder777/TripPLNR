@@ -187,18 +187,18 @@
                         android:layout_height="match_parent"
                         android:orientation="vertical"
                         >
-                <include
-                    layout="@layout/simmerhome"
-                    android:visibility="visible"
-                    />
-                    <include
-                        layout="@layout/simmerhome"
-                        android:visibility="visible"
-                        tools:ignore="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="12dp"
-                        />
+                        <include
+                            layout="@layout/simmerhome"
+                            android:visibility="visible"
+                            />
+                        <include
+                            layout="@layout/simmerhome"
+                            android:visibility="visible"
+                            tools:ignore="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="12dp"
+                            />
                     </LinearLayout>
                 </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -222,6 +222,7 @@
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     tools:listitem="@layout/userrecycleritem_2"
                      />
+
             </androidx.appcompat.widget.LinearLayoutCompat>
 
 

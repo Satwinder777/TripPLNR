@@ -36,16 +36,17 @@ class Hotel_list_recyclerAdapter(var list : List<hotelListClass>,private val det
 
         }
         holder.apply {
-            try {
-                itemView.setOnClickListener {
-
-                    val m_item = list.get(holder.adapterPosition)
+            itemView.setOnClickListener {
+                try {
+                    val m_item = list.get(position)
                     details.onCardClicks(it,position, Pair(m_item.hotelname1,m_item.locationhotel),m_item.rate)
+                }catch (e:Exception){
+                    Log.e("exp_occur", "onBindViewHolder: ${e.message}", )
                 }
 
-            }catch (e:Exception){
-                Log.e("exp_occur", "onBindViewHolder: ${e.message}", )
+
             }
+
             viewdtl.setOnClickListener {
                 details.checkDetails(it,position)
             }

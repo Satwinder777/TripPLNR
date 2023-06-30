@@ -216,6 +216,7 @@
             tools:listitem="@layout/hotel_list_recycler_item"
             android:paddingHorizontal="20dp"
             android:orientation="vertical"
+
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             />
 

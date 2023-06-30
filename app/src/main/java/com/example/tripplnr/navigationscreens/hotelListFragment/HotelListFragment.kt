@@ -428,23 +428,29 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
         placetxt: Pair<String, String>,
         rating: Float
     ) {
-        val bundle = Bundle()
+        try {
+            val bundle = Bundle()
 //                args.putParcelable("guest", guestLiveData.value)
 //                args.putString("date",dateLiveData.value)
-        bundle.putString("place", placetxt.first)
-        bundle.putString("city", placetxt.second)
-        bundle.putFloat("rate", rating)
+            bundle.putString("place", placetxt.first)
+            bundle.putString("city", placetxt.second)
+            bundle.putFloat("rate", rating)
 
 
 //
-        val newFragment = HotelFragment()
+            val newFragment = HotelFragment()
 //       var HotelFragment_id =  newFragment.id
-        newFragment.arguments = bundle
-        val fragmentManager = requireParentFragment().parentFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_host_fragment, newFragment)
-        transaction.addToBackStack("hotel_fragment")
-        transaction.commit()
+            newFragment.arguments = bundle
+            val fragmentManager = requireParentFragment().parentFragmentManager
+            val transaction = fragmentManager.beginTransaction()
+            transaction.replace(R.id.nav_host_fragment, newFragment)
+            transaction.addToBackStack("hotel_fragment")
+            transaction.commit()
+        }
+        catch (e:Exception){
+            Log.e("error_occurs", "onCardClicks: error is := ${e.message}", )
+        }
+
 //        findNavController().navigate(HotelFragment_id,bundle)
     }
 

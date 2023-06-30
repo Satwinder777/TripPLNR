@@ -87,6 +87,7 @@
                 android:paddingEnd="8dp"
                 android:textIsSelectable="false"
                 android:background="@android:color/transparent"
+                android:selectAllOnFocus="true"
 
                 />
 <!--            <EditText-->
@@ -125,7 +126,8 @@
                 android:inputType="text|textWebPassword"
 
                 android:paddingEnd="8dp"
-                tools:ignore="TextFields" />
+                tools:ignore="TextFields"
+                android:selectAllOnFocus="true" />
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

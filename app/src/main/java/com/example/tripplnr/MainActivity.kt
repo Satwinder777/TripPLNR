@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity(),
         var btn  = bottomNavigationView.findViewById<View>(R.id.homeFragment)
         var btn1  = bottomNavigationView.findViewById<View>(R.id.searchFragment)
         navigateScreen(btn,R.id.homeFragment)
-        navigateScreen(btn1, R.id.searchFragment)
+//        navigateScreen(btn1, R.id.searchFragment)
 
 //        bottomNavigationView.setOnClickListener {
 
@@ -73,7 +73,8 @@ class MainActivity : AppCompatActivity(),
     }
     private fun navigateScreen(view: View, fragment: Int){
         view.setOnClickListener {
-            navController.navigate(fragment)
+            navController.navigateUp()
+//            navController.navigate(fragment)
         }
     }
 }

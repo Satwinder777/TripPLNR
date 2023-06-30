@@ -57,6 +57,7 @@ class AccountFragment : Fragment() {
 
     private lateinit var dbRef: DatabaseReference                                                       //db_reference
     private lateinit var db_data_list : MutableList<Any>
+    var current_login_Email = ""
 
 
 
@@ -237,16 +238,9 @@ init {
 
 
                                     user?.email?.let { it1 -> WordStartchar(it1) }
-//                                    Log.e(TAG, "onViewCreated: ${auth.currentUser?.displayName},${auth.currentUser?.email}}")
-
-//                                    var alphabetfirst = user?.get(0)?.toUpperCase().toString()
-//                                    Log.e(TAG, "onViewCreated: $user", )
-//                                    binding.alphaText.setText(alphabetfirst)
-//                                binding.alphaText.visibility = View.VISIBLE
+ 
                                     binding.logoutBtn.visibility = View.VISIBLE
                                     binding.logoutBtn.setText("Logout")
-
-
 
                                     var em =  task.result.user?.email
 
@@ -257,6 +251,7 @@ init {
                                     }
                                     pop.dismiss()
                                     saveUserData(Pair(user?.email.toString(),user?.displayName.toString()),)
+                                    current_login_Email = user?.email.toString()
 
 
                                 }else{
@@ -568,6 +563,7 @@ init {
                         var loggedUser = user?.displayName
 
                         saveUserData(Pair(user?.email.toString(),user?.displayName.toString()),true)
+                        current_login_Email = user?.email.toString()
 
                     }
                     // ...
@@ -743,8 +739,29 @@ fun isemailExist(email0:String){
         var userData_m = db_firebase.UserData(l_email, l_username,signInWithGoogle)
         dbRef.child(key).setValue(userData_m).addOnCompleteListener {
             task->
+            var count_same_user = 0
             if (task.isSuccessful){
                 Toast.makeText(requireContext(), "added to db", Toast.LENGTH_SHORT).show()
+                db_data_list.forEach {
+//                    l_email.matches(it.toString())
+
+
+                    if (it.toString().contains(l_email)){
+                        Log.e(TAG, "saveUserData: Already in db => $l_email", )
+                        count_same_user+=1
+//                        dbRef.child(key).removeValue()
+                       if (count_same_user>1){
+                           dbRef.child(key).removeValue()
+                       }
+
+                    }
+                    else{
+                        Log.e(TAG, "saveUserData: not found :> $db_data_list", )
+
+                    }
+                    Log.e(TAG, "saveUserData: $count_same_user", )
+                }
+
             }
             else{
                 Toast.makeText(requireContext(), "error to load data to db", Toast.LENGTH_SHORT).show()
@@ -775,6 +792,38 @@ fun isemailExist(email0:String){
             override fun onCancelled(error: DatabaseError) {
 
                 Log.e(TAG, "onCancelled: ${error.message}", )
+            }
+
+        })
+        var count = 0
+        dbRef.addChildEventListener(object :ChildEventListener{
+            override fun onChildAdded(snapshot: DataSnapshot, previousChildName: String?) {
+
+                if (snapshot.value.toString().contains(current_login_Email)){
+                    count+=1
+//                    if (count>1){
+//                        dbRef.child(snapshot.key!!).removeValue()
+//                    }
+                }
+                Log.e(TAG, "onChildAdded: $snapshot", )
+            }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {
+                Log.e(TAG, "onChildChanged: $snapshot", )
+            }
+
+            override fun onChildRemoved(snapshot: DataSnapshot) {
+
+                Log.e(TAG, "onChildRemoved: child removed :> $snapshot", )
+            }
+
+            override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {
+
+                Log.e(TAG, "onChildMoved: $snapshot", )
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Log.e(TAG, "onCancelled: $error", )
             }
 
         })

@@ -14,9 +14,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -47,19 +50,10 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     private lateinit var viewmodelhome: HomeViewModel
     private lateinit var share_phref :SharedPreferences
     private lateinit var editor: SharedPreferences.Editor
-    var m_count:Boolean = true
-//    var m_count = share_phref.getInt("m_count",0)
 
 
-//    private val viewModelFavorate by viewModels<FavorateViewModel>()
 
 
-//    private var viewModel : MyViewModel by viewModels()
-//    private val viewModel: MyViewModel by viewModels()
-//    val viewModelFactory = MyViewModelFactory(myParameter)
-//    viewModel = ViewModelProvider(this, viewModelFactory).get(MyViewModel::class.java)
-//    val viewmodelfactory = ViewModelFactory(TripRepository(Massage("satwinderSherGillk")),null)
-//    val favorateFactory = ViewModelFactory(null,favorateList)
 
 
     override fun onCreateView(
@@ -68,13 +62,9 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
     ): View? {
         // Inflate the layout for this fragment
         binding = FragmentHomeBinding.inflate(layoutInflater)
-        Log.e("testqwer", "  test oncreate ",)
+
         share_phref = requireContext().getSharedPreferences("home_share_phref",Context.MODE_PRIVATE)
         editor = share_phref.edit()
-
-
-
-
 
 
         return binding.root
@@ -168,58 +158,59 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 
 
         }
-//        myViewModel.data.observe(this, Observer { newData ->
+//        if (viewmodelhome.showShimmer==true){
+//            binding.shimmerFrameLayout.startShimmer()
+//            viewmodelhome.showShimmer = false
+//        }
+//        else{
+//            Toast.makeText(requireContext(), "shimmering offfff", Toast.LENGTH_SHORT).show()
+//            binding.shimmerFrameLayout.stopShimmer()
+//            binding.shimmerFrameLayout.visibility = View.GONE
+//        }
 
-viewmodelhome.m_state.observe(viewLifecycleOwner, Observer {
-    m_count=it
-    Log.e("test_xase", "onViewCreated: $m_count", )
-})
-    if (m_count==true){
-        Handler().postDelayed({
-            binding.shimmerFrameLayout.startShimmer()
-//                          delay(1500)
-//            delay(3000)
-            binding.shimmerFrameLayout.stopShimmer()
-            binding.rcTravelBlog.visibility = View.VISIBLE
-            binding.shimmerFrameLayout.visibility = View.GONE
-            binding.popularHotelRc.visibility = View.VISIBLE
+        binding.apply {
 
+            viewmodelhome.apply {
 
-            viewmodelhome.update_state()
+                when(shimmering.value){
+                    true->{
+                        GlobalScope.launch(Dispatchers.Main) { simmering() }
+                        Log.e("s_simmer", "onViewCreated: true ", )
+                    }
+                    false->{
+                        notshimmer()
+                        Log.e("s_simmer", "onViewCreated: false ", )
 
-            Log.e("else_block", "onViewCreated: if block",)
-        }, 3000)
+                    }
 
-    }
-    else{
-        binding.shimmerFrameLayout.visibility = View.GONE
+                    else -> {
+                        Log.e("s_simmer", "onViewCreated else: ${shimmering.value}", )
+                    }
+                }
 
-        binding.rcTravelBlog.visibility = View.VISIBLE
-        binding.popularHotelRc.visibility = View.VISIBLE
-        Log.e("else_block", "onViewCreated: else block",)
+            }
 
-    }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-//        viewmodelhome.update_state()
+        }
 
     }
+
+    override fun onPause() {
+        super.onPause()
+        viewmodelhome.stopShimmer()
+        Log.e("s_simmer", "onPause: pause${viewmodelhome.shimmering.value}", )
+
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        viewmodelhome.stopShimmer()
+
+        Log.e("s_simmer", "onResume: resume := ${viewmodelhome.shimmering.value}", )
+
+
+    }
+
 
 
     override fun onclickItem(position: Int, placetext: String?) {
@@ -239,6 +230,9 @@ viewmodelhome.m_state.observe(viewLifecycleOwner, Observer {
 
 
     }
+
+
+
 
 //    override fun onfavoratebtnClicks(position: Int) {
 ////        val bottomNavigationView = requireActivity().findViewById<BottomNavigationView>(R.id.bottom_navigation)
@@ -260,14 +254,37 @@ viewmodelhome.m_state.observe(viewLifecycleOwner, Observer {
 
 
 
+
     private fun isDarkModeEnabled(): Boolean {
         val nightModeFlags = resources.configuration.uiMode and android.content.res.Configuration.UI_MODE_NIGHT_MASK
         return nightModeFlags == android.content.res.Configuration.UI_MODE_NIGHT_YES
     }
 
 
-    interface m_index{
-        fun setIndexing()
+//    interface m_index{
+//        fun setIndexing()
+//    }
+
+    @OptIn(DelicateCoroutinesApi::class)
+    fun notshimmer() {
+
+
+            binding.shimmerFrameLayout.stopShimmer()
+            binding.rcTravelBlog.visibility = View.VISIBLE
+            binding.shimmerFrameLayout.visibility = View.GONE
+            binding.popularHotelRc.visibility = View.VISIBLE
+
+    }
+    suspend fun simmering() {
+        // Simulating a long-running task
+        binding.shimmerFrameLayout.startShimmer()
+        delay(1500)
+        binding.shimmerFrameLayout.stopShimmer()
+        binding.rcTravelBlog.visibility = View.VISIBLE
+        binding.shimmerFrameLayout.visibility = View.GONE
+        binding.popularHotelRc.visibility = View.VISIBLE
+
+
     }
 
 }
