@@ -15,15 +15,14 @@
         android:layout_height="match_parent"
         android:orientation="vertical">
 
+        <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="80dp"
+                    android:orientation="horizontal"
+                    android:paddingHorizontal="20dp"
+                    android:background="@color/yellow"
 
-                <LinearLayout
-    android:layout_width="match_parent"
-    android:layout_height="80dp"
-    android:orientation="horizontal"
-    android:paddingHorizontal="20dp"
-    android:background="@color/yellow"
-
-    >
+                 >
 <!--    <com.google.android.material.card.MaterialCardView-->
 <!--        android:id="@+id/backHotelList"-->
 <!--        android:layout_width="wrap_content"-->
@@ -224,80 +223,7 @@
 
     </LinearLayout>
 
-<!--    <androidx.constraintlayout.widget.ConstraintLayout-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="match_parent">-->
 
-<!--        <RelativeLayout-->
-
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent"-->
-<!--            app:layout_constraintBottom_toBottomOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.5"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintVertical_bias="0.5">-->
-
-<!--            &lt;!&ndash; Your other layout views here &ndash;&gt;-->
-
-<!--&lt;!&ndash;            <com.google.android.material.floatingactionbutton.FloatingActionButton&ndash;&gt;-->
-<!--&lt;!&ndash;                android:id="@+id/fab"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_alignParentEnd="true"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_alignParentBottom="true"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_alignParentStart="true"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginHorizontal="150dp"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:layout_marginBottom="15dp"&ndash;&gt;-->
-<!--&lt;!&ndash;               &ndash;&gt;-->
-<!--&lt;!&ndash;                app:backgroundTint="@color/colorPrimary"&ndash;&gt;-->
-<!--&lt;!&ndash;                app:rippleColor="@color/colorAccent"&ndash;&gt;-->
-<!--&lt;!&ndash;                android:src="@drawable/location" &ndash;&gt;-->
-<!--&lt;!&ndash;                &ndash;&gt;-->
-<!--&lt;!&ndash;                />&ndash;&gt;-->
-
-<!--        </RelativeLayout>-->
-
-<!--        &lt;!&ndash;        <com.google.android.material.card.MaterialCardView&ndash;&gt;-->
-<!--        &lt;!&ndash;            android:id="@+id/mapChip"&ndash;&gt;-->
-<!--        &lt;!&ndash;            android:layout_width="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;            android:layout_height="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;            app:cardCornerRadius="20dp"&ndash;&gt;-->
-<!--        &lt;!&ndash;            app:layout_constraintEnd_toEndOf="parent"&ndash;&gt;-->
-<!--        &lt;!&ndash;            app:layout_constraintHorizontal_bias="0.5"&ndash;&gt;-->
-<!--        &lt;!&ndash;            app:layout_constraintStart_toStartOf="parent"&ndash;&gt;-->
-<!--        &lt;!&ndash;            app:layout_constraintBottom_toBottomOf="parent"&ndash;&gt;-->
-<!--        &lt;!&ndash;            app:cardBackgroundColor="@color/black"&ndash;&gt;-->
-<!--        &lt;!&ndash;            android:layout_marginBottom="10dp"&ndash;&gt;-->
-<!--        &lt;!&ndash;            app:strokeWidth="3dp"&ndash;&gt;-->
-<!--        &lt;!&ndash;            app:strokeColor="@color/yellow"&ndash;&gt;-->
-
-<!--        &lt;!&ndash;            >&ndash;&gt;-->
-<!--        &lt;!&ndash;            <LinearLayout&ndash;&gt;-->
-<!--        &lt;!&ndash;                android:layout_width="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;                android:layout_height="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;                android:orientation="horizontal"&ndash;&gt;-->
-<!--        &lt;!&ndash;                android:paddingVertical="10dp"&ndash;&gt;-->
-<!--        &lt;!&ndash;                android:paddingHorizontal="20dp"&ndash;&gt;-->
-
-<!--        &lt;!&ndash;                >&ndash;&gt;-->
-<!--        &lt;!&ndash;                <ImageView&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:src="@drawable/location"&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:layout_gravity="center"&ndash;&gt;-->
-<!--        &lt;!&ndash;                    app:tint="@color/yellow" />&ndash;&gt;-->
-<!--        &lt;!&ndash;                <TextView&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:layout_width="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:layout_height="wrap_content"&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:textColor="@color/white"&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:layout_gravity="center"&ndash;&gt;-->
-<!--        &lt;!&ndash;                    android:text="Map"/>&ndash;&gt;-->
-<!--        &lt;!&ndash;            </LinearLayout>&ndash;&gt;-->
-<!--        &lt;!&ndash;        </com.google.android.material.card.MaterialCardView>&ndash;&gt;-->
-
-<!--    </androidx.constraintlayout.widget.ConstraintLayout>-->
 
 
         <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
@@ -305,7 +231,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/black"
-            android:layout_marginHorizontal="130dp"
+
 
             app:backgroundTint="@color/colorPrimary"
             app:rippleColor="@color/yellow"
@@ -322,7 +248,7 @@
             app:strokeWidth="4dp"
             app:iconPadding="0dp"
             app:iconTint="@color/yellow"
-            android:layout_gravity="bottom"
+            android:layout_gravity="bottom|center"
             android:layout_marginBottom="11dp"
 
             app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"

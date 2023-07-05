@@ -131,9 +131,9 @@ init {
         binding.shareapp.setOnClickListener {
             val shareIntent = Intent(Intent.ACTION_SEND)
             shareIntent.type = "text/plain" // Set the MIME type of the content you want to share
-            shareIntent.putExtra(Intent.EXTRA_TEXT, "www.shergill_production.com") // Set the text you want to share
+            shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.shareLink)) // Set the text you want to share
 
-            startActivity(Intent.createChooser(shareIntent, "Share via")) // Display the share dialog to choose an app
+            startActivity(Intent.createChooser(shareIntent, "Share via ")) // Display the share dialog to choose an app  // 3 jul
 
         }
         binding.aboutUs.setOnClickListener {

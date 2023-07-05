@@ -116,19 +116,19 @@ class DealsFragment : Fragment(),bookingCardAdapter.onclickCard {
     }
     private fun imanitiesData():List<ImanitiesData>{
         var list = listOf<ImanitiesData>(
-            ImanitiesData(R.drawable.gym,"Free gym"),
-            ImanitiesData(R.drawable.restau,"Room Service"),
-            ImanitiesData(R.drawable.bar,"Bar"),
-            ImanitiesData(R.drawable.swim,"Swimming Pool"),
-            ImanitiesData(R.drawable.park,"Free Parking"),
-            ImanitiesData(R.drawable.internet,"Internet"),
-            ImanitiesData(R.drawable.time,"24 Hour Available"),
-            ImanitiesData(R.drawable.gym,"Gym"),
-            ImanitiesData(R.drawable.restau,"Restaurant"),
-            ImanitiesData(R.drawable.bar,"Bar"),
-            ImanitiesData(R.drawable.swim,"Swimming pool"),
-            ImanitiesData(R.drawable.park, "free internet"),
-            ImanitiesData(R.drawable.time,"enjoy time"),
+            ImanitiesData(R.drawable.gym_svg,"Free gym"),
+            ImanitiesData(R.drawable.restaurant_svg,"Room Service"),
+            ImanitiesData(R.drawable.bar_svg,"Bar"),
+            ImanitiesData(R.drawable.swimming_pool_svg,"Swimming Pool"),
+            ImanitiesData(R.drawable.parking_svg,"Free Parking"),
+            ImanitiesData(R.drawable.wifi_svg,"Internet"),
+            ImanitiesData(R.drawable.frontdesk_svg,"24 Hour Available"),
+            ImanitiesData(R.drawable.gym_svg,"Gym"),
+            ImanitiesData(R.drawable.restaurant_svg,"Restaurant"),
+            ImanitiesData(R.drawable.bar_svg,"Bar"),
+            ImanitiesData(R.drawable.swimming_pool_svg,"Swimming pool"),
+            ImanitiesData(R.drawable.parking_svg, "free internet"),
+            ImanitiesData(R.drawable.frontdesk_svg,"enjoy time"),
 
 
         )

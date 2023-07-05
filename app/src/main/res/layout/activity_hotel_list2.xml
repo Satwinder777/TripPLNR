@@ -225,8 +225,21 @@
             android:orientation="horizontal"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             android:paddingHorizontal="8dp"
-
+            android:visibility="gone"
             tools:listitem="@layout/hotel_list_2_item" />
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_hotelPrediction"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+            <include
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent"
+                layout="@layout/shimmer_hotellocation"
+                android:layout_marginHorizontal="8dp"
+                />
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

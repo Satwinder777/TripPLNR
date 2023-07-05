@@ -2,6 +2,10 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
 
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+//    id 'kotlin-parcelize'
+
 
 }
 
@@ -11,12 +15,16 @@ android {
 
     defaultConfig {
         applicationId "com.example.tripplnr"
+//        applicationId "com.example.tripplnr"
         minSdk 21
         targetSdk 33
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+//        buildConfigField("String", 'MODE', '"FREE"')
+//        buildConfig = true
     }
 
     buildTypes {
@@ -35,6 +43,7 @@ android {
     buildFeatures {
         viewBinding  = true
     }
+
 
 }
 
@@ -89,11 +98,18 @@ dependencies {
     implementation 'com.google.firebase:firebase-database-ktx:20.2.2'
     implementation 'com.google.maps:google-maps-services:0.17.0'
     implementation 'com.google.android.libraries.places:places:3.1.0'
-    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
+//    implementation 'com.squareup.okhttp3:okhttp:5.0.0-alpha.3'
 
         // Other dependencies...
         implementation 'com.google.android.libraries.places:places:3.1.0'
- 
+    implementation 'com.squareup.retrofit2:retrofit:2.9.0'
+    implementation 'com.squareup.retrofit2:converter-gson:2.9.0'
+//    implementation 'org.jetbrains.kotlinx:kotlinx-parcelize:1.5.0'     //parcelize
+//    implementation 'org.greenrobot:eventbus:3.2.0'              //eventbus
+
+
+
+
 
 
 
@@ -111,6 +127,9 @@ dependencies {
         // Google Maps
         implementation 'com.google.android.gms:play-services-maps:18.1.0.'
         implementation 'com.github.denzcoskun:ImageSlideshow:0.1.0'
+        implementation 'com.github.bumptech.glide:glide:4.12.0'   //Glide
+//        implementation 'com.google.maps:google-maps-services:0.23.0'
+
 
     }
 

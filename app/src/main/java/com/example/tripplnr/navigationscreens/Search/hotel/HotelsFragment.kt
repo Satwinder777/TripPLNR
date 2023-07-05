@@ -158,7 +158,7 @@ class HotelsFragment : Fragment() {
             bottomTask(binding.linearGuest)
 
         }
-        val searhView = binding.searhhotel
+        val searhhotel = binding.searhhotelButton
         var autocm = binding.AutoCompleteTextView
 
 
@@ -197,7 +197,7 @@ class HotelsFragment : Fragment() {
 
 
 
-        searhView.setOnClickListener {
+        searhhotel.setOnClickListener {
 
             val searchView = autocm
 
@@ -209,8 +209,8 @@ class HotelsFragment : Fragment() {
                 if (m_data_show.contains(searchView.text.toString()).not()) {
 //                    Toast.makeText(requireContext(), "Please Enter CorrectData!!", Toast.LENGTH_SHORT).show()
                     searchView.text.clear()
-//                    searchView.setError("Please enter correct city ")
-                    Toast.makeText(requireContext(), "wrong data", Toast.LENGTH_SHORT).show()
+                    searchView.setError("Please enter correct Address")
+//                    Toast.makeText(requireContext(), "wrong data", Toast.LENGTH_SHORT).show()
 
                 } else {
                     val args = Bundle()

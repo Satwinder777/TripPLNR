@@ -83,7 +83,7 @@ class HotelFragment : Fragment() {
 
 
         binding.shareBtn.setOnClickListener {
-            val textToShare = "WWW.shergillProductons.com"
+            val textToShare = "https://drive.google.com/file/d/14j3rPhsRFvsK4S0OXlez-Ansl3b7KTsz/view?usp=drive_link"    // 3 jul
             val subject = "Shared Content"
 
             shareContent(textToShare, subject, requireContext())

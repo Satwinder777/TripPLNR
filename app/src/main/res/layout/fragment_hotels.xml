@@ -100,7 +100,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginVertical="5dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingTop="4dp">
 
                 <LinearLayout
                     android:layout_width="wrap_content"
@@ -195,7 +196,7 @@
                 android:background="?android:attr/listDivider" />
 
             <com.google.android.material.button.MaterialButton
-                android:id="@+id/searhhotel"
+                android:id="@+id/searhhotel_button"
                 android:layout_width="match_parent"
                 android:layout_height="65dp"
                 android:layout_marginBottom="7dp"

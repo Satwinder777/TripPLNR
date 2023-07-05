@@ -37,8 +37,9 @@
 
                 >
                 <ImageView
+                    android:id="@+id/hotel_Image"
                     android:layout_width="140dp"
-                    android:layout_height="wrap_content"
+                    android:layout_height="140dp"
                     android:scaleType="fitXY"
 
                     android:src="@drawable/explore2" />
@@ -57,7 +58,7 @@
 
 
                 <TextView
-                    android:id="@+id/hotelname1"
+                    android:id="@+id/hotel_name_place"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="10dp"
@@ -77,7 +78,7 @@
                     >
 
                     <TextView
-                        android:id="@+id/locationhotel"
+                        android:id="@+id/locationhotel2"
                         android:layout_width="120dp"
                         android:layout_height="wrap_content"
                         android:text="Mohali,Chandighar"
@@ -111,6 +112,7 @@
                     >
 
                     <TextView
+                        android:id="@+id/hotel_rating"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
@@ -119,12 +121,16 @@
                         android:textColor="@color/black" />
 
                     <TextView
-                        android:layout_width="50dp"
+                        android:id="@+id/rating_condition"
+                        android:layout_width="wrap_content"
+                        android:maxWidth="50dp"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:layout_marginHorizontal="3dp"
 
                         android:text="Good"
                         android:maxLines="1"
+
                         android:ellipsize="end"/>
 
                     <!--                    <RatingBar-->
@@ -143,6 +149,7 @@
                     <!--                       />-->
 
                     <RatingBar
+                        android:id="@+id/rating_star"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="-70dp"
@@ -174,6 +181,7 @@
                         tools:ignore="RtlSymmetry">
 
                         <TextView
+                            android:id="@+id/charges"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="USD 84"

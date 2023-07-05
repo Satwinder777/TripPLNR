@@ -7,8 +7,11 @@ import android.content.SharedPreferences
 import android.content.SharedPreferences.Editor
 import android.content.res.ColorStateList
 import android.graphics.PorterDuff
+import android.location.Address
+import android.location.Geocoder
 import android.net.Uri
 import android.os.Bundle
+import android.os.Parcelable
 import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -34,8 +37,15 @@ import com.example.tripplnr.navigationscreens.Search.hotel.activity.FilterBottom
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.HotelList2Activity
 import com.example.tripplnr.navigationscreens.hotelListFragment.adapter.Hotel_list_recyclerAdapter
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.libraries.places.api.model.Place
+import com.google.android.libraries.places.api.net.FindCurrentPlaceRequest
 import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
+import com.google.maps.GeoApiContext
+import com.google.maps.PlacesApi
+import com.google.maps.model.PlaceType
+import com.google.maps.model.PlacesSearchResult
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -48,7 +58,11 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     var sortingTech = 0
     var final_sort_technique = 0
     private lateinit var sharedPreferences : SharedPreferences
+    private lateinit var adapter : Hotel_list_recyclerAdapter
     private lateinit var editor : SharedPreferences.Editor
+//    var p_list = arrayListOf<PlacesSearchResult>()
+    var p_list = ArrayList<PlacesSearchResult>()
+
 //    private lateinit var selected_m_view : TextView
 
 
@@ -56,19 +70,15 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View {
         binding = FragmentHotelListBinding.inflate(layoutInflater)
-//        var data = arguments?.getParcelable("guest", ) ?: ""
 
-//        var myParcelable = arguments?.getParcelable("myParcelable") as MyParcelable
-//        val data  = arguments?.getParcelable<guestdatacls>("guest")
-//            ?: throw IllegalArgumentException("myParcelable not found in arguments bundle")
         sharedPreferences = requireContext().getSharedPreferences("sorting the data",Context.MODE_PRIVATE)
         editor = sharedPreferences.edit()
         val data = Allfun.guestLiveData.value
         binding.roomtextviewHotelList.setText("${data?.rooms}")
         binding.guestTexthotelList.setText("${ data?.guest }")
-//        var date = arguments?.getString("date","default" ) ?: ""
+
          query = arguments?.getString("query","default" ) ?: ""
-//        Log.e("data12", "onCreateView: $data,$date", )
+
         binding.dateTextviewHotelList.setText(Allfun.dateLiveData.value)
         binding.queryTextViewHotelList.setText(query)
        var default_sort =  sharedPreferences.getInt("sorting_type",0)
@@ -88,8 +98,9 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 //        var view_sorting =  requireView().findViewWithTag<ConstraintLayout>(sorting_tech)
+        rc = binding.hotelListFragmentRecyclerView
 
-
+        getPlaceRelatedLatLng(query)
 
 
 //        view_sorting?.forEachIndexed { index, view0 ->
@@ -105,11 +116,10 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
 //                }
 //            }
 //        }
-        rc = binding.hotelListFragmentRecyclerView
 
-            var adapter  = Hotel_list_recyclerAdapter(postData(),this@HotelListFragment)
-            rc.adapter = adapter
-            adapter.notifyDataSetChanged()
+
+
+//            adapter.notifyDataSetChanged()
 
 
         var backBtn = binding.backHotelList
@@ -435,6 +445,16 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
             bundle.putString("place", placetxt.first)
             bundle.putString("city", placetxt.second)
             bundle.putFloat("rate", rating)
+//            bundle.putParcelableArrayList("places_api",adapter.list)
+
+
+            bundle.apply {
+
+
+//                bundle.putParcelableArrayList("placeList", ArrayList(p_list) as Parcelable)
+//                parcel.writeStringList(this.mTest)
+
+            }
 
 
 //
@@ -457,6 +477,48 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
 
 
 
+    @SuppressLint("LongLogTag")
+    fun getPlaceRelatedLatLng(searchquery:String){
+
+        val apiKey = getString(R.string.google_maps_key3)
+        var addressList: List<Address>? = null
+        val geoApiContext = GeoApiContext.Builder()
+            .apiKey(apiKey)
+            .build()
+
+        if(searchquery!=null || searchquery !=""){
+            try {
+                val geocoder = Geocoder(requireContext())
+                addressList = geocoder.getFromLocationName(searchquery,1)
+            }
+            catch (e:Exception){
+                Log.e("hotelListfragment_exception", "getPlaceRelatedLatLng: ${e.message}", )
+            }
+
+        }else{
+
+            Log.e("null quesy", "getPlaceRelatedLatLng: query nulll", )
+        }
+        val address = addressList!![0]
+        var latLng = com.google.maps.model.LatLng(address.latitude,address.longitude)
+        val radius = getString(R.string.nearby_search_radius)
+
+
+       val response =  PlacesApi.nearbySearchQuery(geoApiContext,latLng).location(latLng).type(PlaceType.LODGING,PlaceType.BAR).radius(radius.toInt()).await()
+        if (response.results!=null){
+            var final_list = response.results.distinctBy { it.geometry.location }
+            final_list.forEach {
+                p_list.add(it)
+            }
+         adapter  = Hotel_list_recyclerAdapter(emptyList(),this@HotelListFragment)
+            adapter.list = final_list
+            rc.adapter = adapter
+
+//            fjsk
+        }else{
+            Log.e("responce_data", "getPlaceRelatedLatLng: check responce code hotel_list_fragmnet ", )
+        }
+    }
 
 
 }
