@@ -173,8 +173,9 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
             viewmodelhome.apply {
 
                 when(shimmering.value){
+                    null->{GlobalScope.launch(Dispatchers.Main) { simmering() }}
                     true->{
-                        GlobalScope.launch(Dispatchers.Main) { simmering() }
+
                         Log.e("s_simmer", "onViewCreated: true ", )
                     }
                     false->{
@@ -196,17 +197,19 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
 
     override fun onPause() {
         super.onPause()
+
         viewmodelhome.stopShimmer()
         Log.e("s_simmer", "onPause: pause${viewmodelhome.shimmering.value}", )
+
 
 
     }
 
     override fun onResume() {
         super.onResume()
-        viewmodelhome.stopShimmer()
 
-        Log.e("s_simmer", "onResume: resume := ${viewmodelhome.shimmering.value}", )
+        viewmodelhome.startShimmer()
+
 
 
     }
@@ -260,7 +263,11 @@ class HomeFragment : Fragment(), TravelBlogAdapter.onItemClick  {
         return nightModeFlags == android.content.res.Configuration.UI_MODE_NIGHT_YES
     }
 
-
+private fun testcheck(){
+//    if( ){
+//
+//    }
+}
 //    interface m_index{
 //        fun setIndexing()
 //    }

@@ -57,7 +57,20 @@ class MainActivity : AppCompatActivity(),
 
 //        bottomNavigationView.setOnClickListener {
 
-            }
+
+
+//        val destinationChangedListener = NavController.OnDestinationChangedListener{
+//            navcontrolller,navDestination,bundle->
+//
+//           val id = navDestination.
+//
+//            Log.e("navDestination", "onCreate: $id", )
+//        }
+
+//        navController.addOnDestinationChangedListener(destinationChangedListener)
+
+
+    }
 //        }
 
 
@@ -73,7 +86,7 @@ class MainActivity : AppCompatActivity(),
     }
     private fun navigateScreen(view: View, fragment: Int){
         view.setOnClickListener {
-            navController.navigateUp()
+            navController.popBackStack()
 //            navController.navigate(fragment)
         }
     }

@@ -30,6 +30,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHotelListBinding
+import com.example.tripplnr.navigationscreens.DataCls.MyDataHandle
+import com.example.tripplnr.navigationscreens.DataCls.my_latlng
 import com.example.tripplnr.navigationscreens.DataCls.sortData
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelListClass
 import com.example.tripplnr.navigationscreens.Home.hotel.HotelFragment
@@ -60,8 +62,12 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
     private lateinit var sharedPreferences : SharedPreferences
     private lateinit var adapter : Hotel_list_recyclerAdapter
     private lateinit var editor : SharedPreferences.Editor
-//    var p_list = arrayListOf<PlacesSearchResult>()
-    var p_list = ArrayList<PlacesSearchResult>()
+    private lateinit var g_latLng: LatLng
+    private lateinit var f_latLng: com.google.maps.model.LatLng
+
+    var p_list = ArrayList< PlacesSearchResult>()
+    var arr =  ArrayList<MyDataHandle>()
+
 
 //    private lateinit var selected_m_view : TextView
 
@@ -101,6 +107,17 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
         rc = binding.hotelListFragmentRecyclerView
 
         getPlaceRelatedLatLng(query)
+        if (arr.isNullOrEmpty()){
+//            Toast.makeText(requireContext(), "nullnempty", Toast.LENGTH_SHORT).show()
+            arr.add(MyDataHandle(p_list))
+        }
+        else{
+            Toast.makeText(requireContext(), "data found", Toast.LENGTH_SHORT).show()
+            arr.toList().forEach {
+                Log.e("TAG", "testpart: ${it.data}", )
+            }
+
+        }
 
 
 //        view_sorting?.forEachIndexed { index, view0 ->
@@ -132,15 +149,26 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
         binding.mapChip.setOnClickListener {
             val intent = Intent(requireContext(),HotelList2Activity::class.java)
             intent.putExtra("query",query)
+            intent.putExtra("latLngKey",my_latlng(g_latLng))
+
+
+
+            intent.putParcelableArrayListExtra("PlaceSearchResult",arr)
+
+
             startActivity(intent)
         }
+
+
+        Log.d("checkAarr12", "onViewCreated: sjsdufh ", )
+
         doTask(binding.filterList)
         doTask(binding.sortList)
         binding.editDAtaIV.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
-
+        testpart()
     }
     private fun postData():List<hotelListClass>{
         var list = listOf<hotelListClass>(
@@ -442,19 +470,14 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
             val bundle = Bundle()
 //                args.putParcelable("guest", guestLiveData.value)
 //                args.putString("date",dateLiveData.value)
+
+
+
             bundle.putString("place", placetxt.first)
             bundle.putString("city", placetxt.second)
             bundle.putFloat("rate", rating)
-//            bundle.putParcelableArrayList("places_api",adapter.list)
+            bundle.putParcelableArrayList("PlacesSearchResult", arr )
 
-
-            bundle.apply {
-
-
-//                bundle.putParcelableArrayList("placeList", ArrayList(p_list) as Parcelable)
-//                parcel.writeStringList(this.mTest)
-
-            }
 
 
 //
@@ -500,17 +523,21 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
             Log.e("null quesy", "getPlaceRelatedLatLng: query nulll", )
         }
         val address = addressList!![0]
-        var latLng = com.google.maps.model.LatLng(address.latitude,address.longitude)
+         g_latLng = LatLng(address.latitude,address.longitude)
+         f_latLng = com.google.maps.model.LatLng(address.latitude,address.longitude)
         val radius = getString(R.string.nearby_search_radius)
+        Log.e("lat_lng", "onCreate: $g_latLng,$f_latLng", )
 
 
-       val response =  PlacesApi.nearbySearchQuery(geoApiContext,latLng).location(latLng).type(PlaceType.LODGING,PlaceType.BAR).radius(radius.toInt()).await()
+//        ,PlaceType.BAR
+        val response =  PlacesApi.nearbySearchQuery(geoApiContext,f_latLng).location(f_latLng).type(PlaceType.LODGING).radius(radius.toInt()).await()
         if (response.results!=null){
             var final_list = response.results.distinctBy { it.geometry.location }
             final_list.forEach {
                 p_list.add(it)
             }
-         adapter  = Hotel_list_recyclerAdapter(emptyList(),this@HotelListFragment)
+            val gms_latlng = LatLng(f_latLng.lat,f_latLng.lng)
+         adapter  = Hotel_list_recyclerAdapter(emptyList(),this@HotelListFragment,gms_latlng)
             adapter.list = final_list
             rc.adapter = adapter
 
@@ -518,6 +545,15 @@ class HotelListFragment : Fragment(), Hotel_list_recyclerAdapter.viewdetail {
         }else{
             Log.e("responce_data", "getPlaceRelatedLatLng: check responce code hotel_list_fragmnet ", )
         }
+    }
+    fun testpart(){
+        try {
+
+        }
+        catch (e:Exception){
+            Log.e("checkAarr1", "testpart: ${e.message}", )
+        }
+
     }
 
 

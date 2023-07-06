@@ -2,6 +2,7 @@ package com.example.tripplnr.navigationscreens.Search.hotel.activity.adapter
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,8 +15,10 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.tripplnr.R
+import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.CircleOptions
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import com.google.android.material.button.MaterialButton
@@ -25,7 +28,8 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 class HotelList2Adapter(
     var list: List<PlacesSearchResult>,
     var m_onclickViewDeal: onclickViewDeal,
-    val mMap: GoogleMap
+    val mMap: GoogleMap,
+    var l_latlng :LatLng
 ):RecyclerView.Adapter<HotelList2Adapter.InnerClass>() {
 
 
@@ -45,7 +49,7 @@ class HotelList2Adapter(
 
         try {
 
-            holder.bind(list,holder.itemView.context,m_onclickViewDeal,mMap)
+            holder.bind(list,holder.itemView.context,m_onclickViewDeal,mMap,l_latlng)
 
         }catch (e:Exception){
             Log.e("exception_test", "onBindViewHolder: ${e.message},${e.cause}", )
@@ -71,18 +75,21 @@ class HotelList2Adapter(
         var rating_condition = view.findViewById<TextView>(R.id.rating_condition)
         var hotel_rate = view.findViewById<TextView>(R.id.hotel_rating)
         var charges = view.findViewById<TextView>(R.id.charges)
+        var distanceFar = view.findViewById<TextView>(R.id.distanceFar)
         var rating_in_star = view.findViewById<RatingBar>(R.id.rating_star)
         var hotel_image = view.findViewById<ImageView>(R.id.hotel_Image)
 
 //        var popularhoteltxt = view.findViewById<TextView>(R.id.popularhoteltxt)
 //        var itemRecyclerView = view.findViewById<RecyclerView>(R.id.popularhotelInsideRc)
 
+@SuppressLint("SetTextI18n")
 @OptIn(DelicateCoroutinesApi::class)
 fun bind (
     list: List<PlacesSearchResult>,
     context: Context,
     m_onclickViewDeal: onclickViewDeal,
-    mMap: GoogleMap
+    mMap: GoogleMap,
+    l_latlng: LatLng
 ){
             var item = list[position]
             var attr = ""
@@ -90,21 +97,34 @@ fun bind (
             address.setText(item.vicinity)
             rating_in_star.rating = item.rating
 
+    val distance = Allfun.distanceLatLng(l_latlng, item.geometry.location)
+    var d = distance.toString()
 
+
+    var newval = ""
+
+    for (i in 0..2) {
+        newval += d[i]
+    }
+    distanceFar.setText("$newval Km")
 
 
     when(item.rating){
       in 1.0..2.5->{
           rating_condition.setText("Average")
+          charges.setText("50 USD")
       }
       in 2.6..3.8->{
           rating_condition.setText("Good")
+          charges.setText("80 USD")
       }
       in 3.9..4.6->{
           rating_condition.setText("Exelent")
+          charges.setText("150 USD")
       }
       else->{
           rating_condition.setText("Best")
+          charges.setText("200 USD")
       }
     }
     var temp_list  = mutableListOf<PlacesSearchResult>()
@@ -134,17 +154,16 @@ fun bind (
              var name  = it.name
              mMap.addMarker(MarkerOptions().position(com.google.android.gms.maps.model.LatLng(location.lat,location.lng)).title(name))
              mMap.animateCamera(CameraUpdateFactory.newLatLng(com.google.android.gms.maps.model.LatLng(location.lat,location.lng)))
-             Log.e("final_List", "bind: ${it.geometry.location},${it.name},${final_List.size}", )
+//             Log.e("final_List", "bind: ${it.geometry.location},${it.name},${final_List.size}", )
          }
+
 //
 //
 //    }
 
              rating_in_star.setIsIndicator(true)
              hotel_rate.setText(item.rating.toString())
-             charges.setText("$dollar $")
-//             hotel_image.setImageURI(Uri.parse(item.icon.toString()))
-              dollar+=1
+
 
 //    Glide.with(context).load(item.icon).into(hotel_image)
 
@@ -167,11 +186,21 @@ fun bind (
          .apply(RequestOptions.diskCacheStrategyOf(DiskCacheStrategy.NONE))
          .into(hotel_image)
 
+//    setcircle(latLn)
 
 
 
 
-
+        }
+        private fun setcircle(map: GoogleMap,latLng: com.google.maps.model.LatLng){
+            val radius = 5000
+            val circleOptions = CircleOptions().center(com.google.android.gms.maps.model.LatLng(latLng.lat, latLng.lng)).radius(radius.toDouble())
+                .strokeWidth(4f).strokeColor(Color.RED).fillColor(Color.argb(50, 255, 0, 0))
+            map.addCircle(circleOptions)
+            val minZoomLevel = 10.0f // Adjust the minimum zoom level as desired
+            val maxZoomLevel = 18.0f // Adjust the maximum zoom level as desired
+            map.setMinZoomPreference(minZoomLevel)
+            map.setMaxZoomPreference(maxZoomLevel)
         }
 
     }

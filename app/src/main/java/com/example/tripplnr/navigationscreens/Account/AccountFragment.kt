@@ -176,6 +176,7 @@ init {
                 Toast.makeText(requireContext(), "login require!", Toast.LENGTH_SHORT).show()
 
                 var view = layoutInflater.inflate(R.layout.login_display, null, false)
+                val forgot_password_button = view.findViewById<TextView>(R.id.forgot_password)
 
                 var pop = PopupWindow(
                     view,
@@ -211,6 +212,16 @@ init {
                     googleloginintent()
                     
                     pop.dismiss()
+                }
+                forgot_password_button.setOnClickListener {
+                    if (email.text.isNullOrEmpty().not()){
+                        isemailExist(email.text.toString())
+                        resetPassword(email.text.toString())
+                    }
+                    else{
+                        email.setError("empty email")
+                    }
+
                 }
 
                 loginbtn.setOnClickListener {
@@ -827,5 +838,21 @@ fun isemailExist(email0:String){
             }
 
         })
+    }
+    fun resetPassword(email: String) {
+
+
+        auth.sendPasswordResetEmail(email)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    // Password reset email sent successfully
+                    // You can show a success message to the user
+                    Toast.makeText(requireContext(), "reset success", Toast.LENGTH_SHORT).show()
+                } else {
+                    // Failed to send password reset email
+                    // You can show an error message to the user
+                    Log.e(TAG, "resetPassword: ${task.exception} ", )
+                }
+            }
     }
 }

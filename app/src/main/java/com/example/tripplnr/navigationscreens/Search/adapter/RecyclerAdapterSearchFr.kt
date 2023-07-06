@@ -1,10 +1,12 @@
 package com.example.tripplnr.navigationscreens.Search.adapter
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.adapter.hotelsInsideRcAdapter
@@ -31,24 +33,26 @@ class RecyclerAdapterSearchFr(var list : List<hotelTitle>):RecyclerView.Adapter<
     @OptIn(DelicateCoroutinesApi::class)
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
         GlobalScope.launch {
-            holder.bind(list)
+            holder.bind(list,holder.itemView.context)
         }
 
         holder.apply {
             var listhotelchild = list.get(0).list
             var adapter = hotelsInsideRcAdapter(listhotelchild as MutableList<hotelchild>)
             itemRecyclerView.adapter = adapter
-            adapter?.notifyDataSetChanged()
+            adapter.notifyDataSetChanged()
 
         }
     }
     class InnerClass(view: View):RecyclerView.ViewHolder(view) {
 
         var popularhoteltxt = view.findViewById<TextView>(R.id.popularhoteltxt)
+        var seeAllPopularHotel = view.findViewById<TextView>(R.id.seeAllPopularHotel)
         var itemRecyclerView = view.findViewById<RecyclerView>(R.id.popularhotelInsideRc)
-       suspend fun bind (list: List<hotelTitle>){
+       suspend fun bind (list: List<hotelTitle>,context:Context){
             var item = list[position]
            popularhoteltxt.setText(item.popularhoteltxt)
+           seeAllPopularHotel.setOnClickListener { Toast.makeText(context, "under Development", Toast.LENGTH_SHORT).show() }
 
 
         }

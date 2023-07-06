@@ -6,14 +6,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.location.Address
-import android.location.Geocoder
-import android.location.LocationManager
+import android.location.*
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ImageView
 import android.widget.Toast
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,8 +26,9 @@ import com.google.maps.model.LatLng
 import com.example.tripplnr.databinding.ActivityHotelList2Binding
 import com.example.tripplnr.navigationscreens.ApiHandling.MyApiService
 import com.example.tripplnr.navigationscreens.ApiHandling.Near_Location
+import com.example.tripplnr.navigationscreens.DataCls.MyDataHandle
 import com.example.tripplnr.navigationscreens.DataCls.lat_data
-import com.example.tripplnr.navigationscreens.DataCls.myList
+import com.example.tripplnr.navigationscreens.DataCls.my_latlng
 import com.example.tripplnr.navigationscreens.Search.hotel.activity.adapter.HotelList2Adapter
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -58,6 +59,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 import java.io.IOException
+import java.util.ArrayList
 
 
 class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal,OnMapReadyCallback {
@@ -66,10 +68,12 @@ class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal
     private lateinit var mMap :GoogleMap
     private lateinit var placesClient : PlacesClient
     private lateinit var fusedLocationClient :FusedLocationProviderClient
-    private lateinit var latLng : LatLng
+    private lateinit var latLng : com.google.android.gms.maps.model.LatLng
     private lateinit var rc : RecyclerView
     private lateinit var adapter : HotelList2Adapter
     private val PERMISSION_REQUEST_CODE = 123
+    private var parcelableList = java.util.ArrayList<MyDataHandle>()
+
 
 
     var list_loc = mutableListOf<lat_data>()
@@ -79,11 +83,56 @@ class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal
 
     @SuppressLint("MissingInflatedId", "InflateParams")
     private lateinit var searchquery:String
-    @SuppressLint("NotifyDataSetChanged")
+    @RequiresApi(Build.VERSION_CODES.TIRAMISU)
+    @SuppressLint("NotifyDataSetChanged", "SuspiciousIndentation")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityHotelList2Binding.inflate(layoutInflater)
         setContentView(binding.root)
+//        var arr =  ArrayList<MyDataHandle>()
+
+        locationlistner()
+
+      parcelableList = intent.getParcelableArrayListExtra<MyDataHandle>("PlaceSearchResult") as ArrayList<MyDataHandle>
+       var lt = intent.getParcelableExtra<my_latlng>("latLngKey")
+//        intent .getextra
+
+        Log.e("lat_lng", "onCreate: $lt", )
+
+    if (lt != null) {
+        if (lt.data!=null){
+        latLng = com.google.android.gms.maps.model.LatLng(lt.data!!.latitude,lt.data!!.longitude)
+    }
+
+}
+
+
+        if (  parcelableList.isNullOrEmpty().not()){
+            parcelableList.forEach {
+
+
+                if (it.data!=null){
+                    rclist = it.data.toMutableList()
+                }
+                else{
+                    Log.e("my_dataparcel", "onCreate: nulllllllllll", )
+
+                }
+
+
+
+            }
+            Log.e("my_dataparcel", "onCreate000: data found!1", )
+
+        }
+        else{
+            Log.e("my_dataparcel", "onCreate000: nulllllllllll", )
+
+        }
+
+
+
+
 
 
         binding.shimmerHotelPrediction.startShimmer()
@@ -161,19 +210,27 @@ class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal
 
 
 
-    override fun onMapReady(p0: GoogleMap) {
-        mMap = p0
+    @SuppressLint("NotifyDataSetChanged")
+    override fun onMapReady(map: GoogleMap) {
+        mMap = map
+
 
 
         if (isLocationEnabled(this)){
-            adapter = HotelList2Adapter(dummydata(),this,mMap)
+
+            adapter = HotelList2Adapter(rclist,this,mMap,latLng)
             rc.adapter = adapter
+            adapter.notifyDataSetChanged()
+
+
 //            Toast.makeText(this , "already granted!", Toast.LENGTH_SHORT).show()
-            searchLocation(searchquery)
-            findNearestHotel( )
+//            searchLocation(searchquery)
+//            findNearestHotel( )
+//            getHotels()
 
             binding.shimmerHotelPrediction.visibility = View.GONE
             binding.hotelListRecyclerview2.visibility = View.VISIBLE
+            buildCircle()
 
         }
         else{
@@ -182,179 +239,178 @@ class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal
     }
 
 
-    fun searchLocation(location:String) {
-
-        var addressList: List<Address>? = null
-        if (location != null || location != "") {
-            val geocoder = Geocoder(this)
-            try {
-                addressList = geocoder.getFromLocationName(location, 1)
-                Log.e("lat_lng_data", "searchLocationlist: $addressList")
-            } catch (e: IOException) {
-                e.printStackTrace()
-            }
-            val address = addressList!![0]
-            latLng = LatLng(address.latitude, address.longitude)
-
-
-        }
-
-    }
-
-
-    @SuppressLint("NotifyDataSetChanged")
-    private fun findNearestHotel( ) {
-        var tag = "findNearestHotel"
-
-        val placeFields = listOf(Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.TYPES)
-        val request = FindCurrentPlaceRequest.builder(placeFields)
-
-            .build()
-
-
-       if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && isLocationEnabled(this)) {
-           var count =0
-            placesClient.findCurrentPlace(request)
-                .addOnCompleteListener { task ->
-                    if (task.isSuccessful) {
-                        val placesResponse = task.result
-
-                        val filteredPlaces = placesResponse?.placeLikelihoods?.filter {
-                            it.place.types?.contains(Place.Type.ESTABLISHMENT) == true
-                        }
-                        Log.e(tag, "findNearestHotel0: $filteredPlaces ")
-
-
-
-                    filteredPlaces?.forEach {
-                         var lg = it.place.latLng
-                         var lt = it.place.name
-                        if (lg!=null||lt.isNullOrEmpty()){
-                            var data = lat_data(lg!!,lt!!)
-                            list_loc.add(data)
-                            mMap.isMyLocationEnabled = true
-
-                        }
-                    }
-
-                        val location_m = isLocationEnabled(this)
-                        if (location_m){
-                            getHotels()
-                            adapter.list = rclist
-                            adapter.notifyDataSetChanged()
-                        }else{
-                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-                        }
-
-                    } else {
-                        // Handle the task exception
-                        val exception = task.exception
-                        Log.e(tag, "findNearestHotel_exp: ${exception?.message} ")
-
-                    }
-                }
-
-           Log.e(tag, "findNearestHotel: $count")
-        }
-        else{
-            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
-        }
-
-
-    }
-
-
-    private fun funcall(){
-
-        val apiKey = "AIzaSyBq16ekrXE3LHeDIwu3KDk0O9s-rMjZpqc"
-        var location = latLng // e.g., "37.7749,-122.4194"
-        val radius = 5000 // in meters
-
-
-        val baseurl = "https://maps.googleapis.com/"
-//        json?location=$location&radius=$radius&key=$apiKey
-    val retrofit = Retrofit.Builder()
-        .baseUrl(baseurl) // Replace with your base URL
-        .addConverterFactory(GsonConverterFactory.create())
-        .build()
-
-    val myApiService = retrofit.create(MyApiService::class.java)
-    
-
-    var TAG = "funcall"
-    myApiService.getResult(location,radius,apiKey)?.enqueue(object : Callback<Near_Location> {
-
-
-        //            Log.e(TAG, "onFailure: ${t.message},${t.cause}", )
-        override fun onResponse(
-            call: Call<Near_Location>,
-            response: retrofit2.Response<Near_Location>
-        ) {
-            Log.e(TAG, "onResponse: ${response.body()},${response.raw()},${response.errorBody()}", )
-            if (response.isSuccessful){
-                response.body()?.results?.forEach {
-                    Log.e(TAG, "onResponse: $it", )
-                }
-            }
-        }
-
-        override fun onFailure(call: Call<Near_Location>, t: Throwable) {
-            Log.e(TAG, "onFailure: ${t.cause},${t.message}", )
-        }
-
-
-    })
-}
-
+//    fun searchLocation(location:String) {
+//
+//        var addressList: List<Address>? = null
+//        if (location != null || location != "") {
+//            val geocoder = Geocoder(this)
+//            try {
+//                addressList = geocoder.getFromLocationName(location, 1)
+//                Log.e("lat_lng_data", "searchLocationlist: $addressList")
+//            } catch (e: IOException) {
+//                e.printStackTrace()
+//            }
+//            val address = addressList!![0]
+//            latLng = LatLng(address.latitude, address.longitude)
+//
+//
+//        }
+//
+//    }
 
 
     @SuppressLint("NotifyDataSetChanged")
-    fun getHotels(){
+//    private fun findNearestHotel( ) {
+//        var tag = "findNearestHotel"
+//
+//        val placeFields = listOf(Place.Field.LAT_LNG, Place.Field.NAME, Place.Field.TYPES)
+//        val request = FindCurrentPlaceRequest.builder(placeFields)
+//
+//            .build()
+//
+//
+//       if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && isLocationEnabled(this)) {
+//           var count =0
+//            placesClient.findCurrentPlace(request)
+//                .addOnCompleteListener { task ->
+//                    if (task.isSuccessful) {
+//                        val placesResponse = task.result
+//
+//                        val filteredPlaces = placesResponse?.placeLikelihoods?.filter {
+//                            it.place.types?.contains(Place.Type.ESTABLISHMENT) == true
+//                        }
+//                        Log.e(tag, "findNearestHotel0: $filteredPlaces ")
+//
+//
+//
+//                    filteredPlaces?.forEach {
+//                         var lg = it.place.latLng
+//                         var lt = it.place.name
+//                        if (lg!=null||lt.isNullOrEmpty()){
+//                            var data = lat_data(lg!!,lt!!)
+//                            list_loc.add(data)
+//                            mMap.isMyLocationEnabled = true
+//
+//                        }
+//                    }
+//
+//                        val location_m = isLocationEnabled(this)
+//                        if (location_m){
+//                            getHotels()
+//
+//                        }else{
+//                            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
+//                        }
+//
+//                    } else {
+//                        // Handle the task exception
+//                        val exception = task.exception
+//                        Log.e(tag, "findNearestHotel_exp: ${exception?.message} ")
+//
+//                    }
+//                }
+//
+//           Log.e(tag, "findNearestHotel: $count")
+//        }
+//        else{
+//            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PERMISSION_REQUEST_CODE)
+//        }
+//
+//
+//    }
 
-        var radius = 5000
-        val response = PlacesApi.nearbySearchQuery(geoApiContext, latLng).location(latLng)
-            .type(PlaceType.LODGING,PlaceType.CAFE,PlaceType.BAR)// Specify the type of place you're looking for (e.g., restaurant, cafe, etc.)
-            .radius(radius)
-            .await()
+
+//    private fun funcall(){
+//
+//        val apiKey = "AIzaSyBq16ekrXE3LHeDIwu3KDk0O9s-rMjZpqc"
+//        var location = latLng // e.g., "37.7749,-122.4194"
+//        val radius = 5000 // in meters
+//
+//
+//        val baseurl = "https://maps.googleapis.com/"
+////        json?location=$location&radius=$radius&key=$apiKey
+//    val retrofit = Retrofit.Builder()
+//        .baseUrl(baseurl) // Replace with your base URL
+//        .addConverterFactory(GsonConverterFactory.create())
+//        .build()
+//
+//    val myApiService = retrofit.create(MyApiService::class.java)
+//
+//
+//    var TAG = "funcall"
+//    myApiService.getResult(location,radius,apiKey)?.enqueue(object : Callback<Near_Location> {
+//
+//
+//        //            Log.e(TAG, "onFailure: ${t.message},${t.cause}", )
+//        override fun onResponse(
+//            call: Call<Near_Location>,
+//            response: retrofit2.Response<Near_Location>
+//        ) {
+//            Log.e(TAG, "onResponse: ${response.body()},${response.raw()},${response.errorBody()}", )
+//            if (response.isSuccessful){
+//                response.body()?.results?.forEach {
+//                    Log.e(TAG, "onResponse: $it", )
+//                }
+//            }
+//        }
+//
+//        override fun onFailure(call: Call<Near_Location>, t: Throwable) {
+//            Log.e(TAG, "onFailure: ${t.cause},${t.message}", )
+//        }
+//
+//
+//    })
+//}
 
 
-        var demo_rad = 3000
 
-        val circleOptions = CircleOptions().center(com.google.android.gms.maps.model.LatLng(latLng.lat, latLng.lng)).radius(radius.toDouble())
-            .strokeWidth(4f).strokeColor(Color.RED).fillColor(Color.argb(50, 255, 0, 0))
-        mMap.addCircle(circleOptions)
-
-        var result = response.results
-
-
-
-
-        if (result!=null){
-
-            val minZoomLevel = 10.0f // Adjust the minimum zoom level as desired
-            val maxZoomLevel = 18.0f // Adjust the maximum zoom level as desired
-            mMap.setMinZoomPreference(minZoomLevel)
-            mMap.setMaxZoomPreference(maxZoomLevel)
-
-
-            for ( data in result){
-                var lt = com.google.android.gms.maps.model.LatLng(data.geometry.location.lat,data.geometry.location.lng)
-
-                if (lt.longitude!=null||lt.longitude!=null){
-
-                    rclist.add(data)
-                    Log.e("markdeta", "getHotels: ${data} ", )
-                }
-
-                getphotos(data)
-            }
-
-            Log.e("result_size", "getHotels: size result :> ${result.size}" , )
-
-        }
-
-
-    }
+//    @SuppressLint("NotifyDataSetChanged")
+//    fun getHotels(){
+//        try {
+//            var radius = 5000
+//            val response = PlacesApi.nearbySearchQuery(geoApiContext, latLng).location(latLng)
+//                .type(PlaceType.LODGING,PlaceType.CAFE,PlaceType.BAR)// Specify the type of place you're looking for (e.g., restaurant, cafe, etc.)
+//                .radius(radius)
+//                .await()
+//
+//
+//            var demo_rad = 3000
+//
+//            var result  = response.results
+//
+//
+//            if (result!=null) {
+////
+////
+////
+////
+//                for (data in result) {
+//                    var lt = com.google.android.gms.maps.model.LatLng(
+//                        data.geometry.location.lat,
+//                        data.geometry.location.lng
+//                    )
+//
+//                    if (lt.longitude != null || lt.longitude != null) {
+//
+////                    rclist.add(data)
+//                        Log.e("markdeta", "getHotels: ${data} ",)
+//                    }
+//
+//                    getphotos(data)
+//                }
+//
+//                Log.e("result_size", "getHotels: size result :> ${result.size}",)
+//
+//            }
+//        }
+//        catch (e:Exception){
+//            Log.e("exception_occurs", "getHotels: ${e.message},${e.cause}", )
+//        }
+//
+//
+//
+//
+//    }
     private fun dummydata():MutableList<PlacesSearchResult>{
         var list  = mutableListOf<PlacesSearchResult>()
         var a = PlacesSearchResult()
@@ -404,6 +460,112 @@ class HotelList2Activity : AppCompatActivity(),HotelList2Adapter.onclickViewDeal
     }
 
     }
+fun buildCircle(){
+    try {
 
+        val location_m = isLocationEnabled(this)
+        if (location_m){
+            val radius = 5000
+            val circleOptions = CircleOptions().center(com.google.android.gms.maps.model.LatLng(latLng.latitude, latLng.longitude)).radius(radius.toDouble())
+                .strokeWidth(4f).strokeColor(Color.RED).fillColor(Color.argb(50, 255, 0, 0))
+            val circle = mMap.addCircle(circleOptions)
+            val minZoomLevel = 10.0f // Adjust the minimum zoom level as desired
+            val maxZoomLevel = 30.0f // Adjust the maximum zoom level as desired
+            mMap.setMinZoomPreference(minZoomLevel)
+            mMap.setMaxZoomPreference(maxZoomLevel)
+//        if (circle.isVisible.not()){
+//            Log.e("check_circle", "buildCircle: circle not visible", )
+//            circle.isVisible = true
+//            circle.setVisible(true)
+//
+//// Make the circle transparen
+//        }
+//        else{
+//            Log.e("check_circle", "buildCircle: circle visible", )
+//            circle.radius = 5000.0
+//
+//        }
+        }
+    }
+    catch (e:Exception){
+        Log.e("exception_occurs", "buildCircle: ${e.cause}${e.message}", )
+    }
+
+}
+    private fun locationlistner(){
+        val locationManager = getSystemService(Context.LOCATION_SERVICE) as LocationManager
+
+        val locationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                // Handle location updates
+            }
+
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {
+                // Handle location status changes
+                when (status) {
+                    LocationProvider.AVAILABLE -> {
+                        // Location provider is available
+                        // Perform necessary actions
+                        Toast.makeText(applicationContext, "$status", Toast.LENGTH_SHORT).show()
+
+                        Log.e("status_check", "onStatusChanged: a$status", )
+                    }
+                    LocationProvider.OUT_OF_SERVICE -> {
+                        // Location provider is no longer available
+                        // Perform necessary actions
+                        Toast.makeText(applicationContext, "$status", Toast.LENGTH_SHORT).show()
+
+                        Log.e("status_check", "onStatusChanged: o$status", )
+
+                    }
+                    LocationProvider.TEMPORARILY_UNAVAILABLE -> {
+                        // Location provider is temporarily unavailable
+                        // Perform necessary actions
+                        Toast.makeText(applicationContext, "$status", Toast.LENGTH_SHORT).show()
+
+                        Log.e("status_check", "onStatusChanged: t$status", )
+
+                    }
+                }
+            }
+
+            override fun onProviderEnabled(provider: String) {
+                // Handle location provider enabled
+//                Toast.makeText(applicationContext, "location enabled ${provider.toString()}", Toast.LENGTH_SHORT).show()
+                binding.shimmerHotelPrediction.visibility = View.GONE
+                binding.shimmerHotelPrediction.startShimmer()
+                binding.hotelListRecyclerview2.visibility = View.VISIBLE
+            }
+
+            override fun onProviderDisabled(provider: String) {
+                // Handle location provider disabled
+                binding.shimmerHotelPrediction.visibility = View.VISIBLE
+                binding.shimmerHotelPrediction.startShimmer()
+                binding.hotelListRecyclerview2.visibility = View.GONE
+//                Toast.makeText(applicationContext, "location disabled", Toast.LENGTH_SHORT).show()
+
+            }
+        }
+
+// Register the location listener with appropriate provider and minTime and minDistance values
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            // Permission is granted, proceed with location-related operations
+            locationManager.requestLocationUpdates(
+                LocationManager.GPS_PROVIDER,
+                1000L,
+                10f,
+                locationListener
+            )
+        } else {
+            // Permission is not granted, request it
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(Manifest.permission.ACCESS_FINE_LOCATION),
+                PERMISSION_REQUEST_CODE
+            )
+        }
+
+
+    }
 
 }

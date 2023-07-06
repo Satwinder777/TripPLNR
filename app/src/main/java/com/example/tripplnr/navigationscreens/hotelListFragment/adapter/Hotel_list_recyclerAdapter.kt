@@ -1,6 +1,7 @@
 package com.example.tripplnr.navigationscreens.hotelListFragment.adapter
 
 import android.content.Context
+import android.location.Location
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +15,9 @@ import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestOptions
 import com.example.tripplnr.R
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelListClass
+import com.example.tripplnr.navigationscreens.objectfun.Allfun
+import com.example.tripplnr.navigationscreens.objectfun.Allfun.distanceLatLng
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.button.MaterialButton
 import com.google.maps.model.PlacesSearchResult
 import kotlinx.coroutines.DelicateCoroutinesApi
@@ -21,7 +25,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class Hotel_list_recyclerAdapter(var list : List<PlacesSearchResult>, private val details:viewdetail):RecyclerView.Adapter<Hotel_list_recyclerAdapter.InnerClass>() {
+class Hotel_list_recyclerAdapter(var list : List<PlacesSearchResult>, private val details:viewdetail,var p_latlng: LatLng):RecyclerView.Adapter<Hotel_list_recyclerAdapter.InnerClass>() {
 
 
 
@@ -38,7 +42,7 @@ class Hotel_list_recyclerAdapter(var list : List<PlacesSearchResult>, private va
     override fun onBindViewHolder(holder: InnerClass, position: Int) {
 
         GlobalScope.launch {
-            holder.bind(list,holder.itemView.context)
+            holder.bind(list,holder.itemView.context,p_latlng)
 
         }
         holder.apply {
@@ -68,15 +72,31 @@ class Hotel_list_recyclerAdapter(var list : List<PlacesSearchResult>, private va
         var rating_float = view.findViewById<TextView>(R.id.rating_float)
         var ratingInText = view.findViewById<TextView>(R.id.ratingInText)
         var currencytextView1 = view.findViewById<TextView>(R.id.currencytextView1)
+        var distancebwlatlng = view.findViewById<TextView>(R.id.distancefromcurrentlocation)
         var viewdtl = view.findViewById<MaterialButton>(R.id.viewDetails)
         var ratingBar = view.findViewById<RatingBar>(R.id.ratingBar3)
 
 
 
         @OptIn(DelicateCoroutinesApi::class)
-        fun bind (list: List<PlacesSearchResult>, context:Context){
+        fun bind (list: List<PlacesSearchResult>, context:Context,p_latlng :LatLng){
             val item = list[position]
+           val distance = distanceLatLng(p_latlng,item.geometry.location)
+            var d = distance.toString()
             var attr = ""
+
+            var newval = ""
+
+            for (i in 0..2) {
+                newval += d[i]
+            }
+            distancebwlatlng.setText("$newval km from the Origin")
+
+
+
+
+
+//            distancebwlatlng.setText()
 
 
 //           item.hotelListItemImg.let { hotelListItemImg.setImageResource(it) }
@@ -103,6 +123,8 @@ class Hotel_list_recyclerAdapter(var list : List<PlacesSearchResult>, private va
                 }
             }
 
+
+
 //           locationhotel.setText(item.vicinity)
 
             ratingBar.rating = item.rating
@@ -127,7 +149,14 @@ class Hotel_list_recyclerAdapter(var list : List<PlacesSearchResult>, private va
             }
 
 
+
+
+
         }
+
+
+
+
 
     }
     interface viewdetail{

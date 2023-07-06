@@ -28,11 +28,13 @@
             android:textStyle="bold" />
 
         <TextView
+            android:id="@+id/seeAllPopularHotel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:layout_marginEnd="5dp"
             android:text="See All"
+
             android:textColor="@color/yellow" />
 
         <ImageView

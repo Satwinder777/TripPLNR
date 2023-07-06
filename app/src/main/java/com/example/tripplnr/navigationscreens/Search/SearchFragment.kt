@@ -12,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager.widget.ViewPager
 import com.example.tripplnr.R
@@ -21,6 +22,7 @@ import com.example.tripplnr.navigationscreens.Home.HomeFragment
 import com.example.tripplnr.navigationscreens.Search.adapter.ViewPagerAdapter
 import com.example.tripplnr.navigationscreens.Search.blog.BlogsFragment
 import com.example.tripplnr.navigationscreens.Search.hotel.HotelsFragment
+import com.example.tripplnr.navigationscreens.ViewModel.HomeViewModel
 import com.example.tripplnr.navigationscreens.favorateFragment.FavorateFragment
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.chip.Chip
@@ -39,6 +41,7 @@ class SearchFragment : Fragment() {
     private lateinit var binding :FragmentSearchBinding
     private lateinit var tabLayout :TabLayout
     private lateinit var viewPager :ViewPager
+    private lateinit var viewmodelhome: HomeViewModel
 
     var create :Boolean?=false
 
@@ -54,6 +57,7 @@ class SearchFragment : Fragment() {
         viewPager.adapter = ViewPagerAdapter(requireContext(), childFragmentManager, lifecycle)
 
         create = true
+        viewmodelhome = ViewModelProvider(this).get(HomeViewModel::class.java)
 
         Log.e("cretedata", "onCreateView: create vall ", )
 
@@ -86,9 +90,11 @@ class SearchFragment : Fragment() {
         binding.backButtonSearchFragment.setOnClickListener {
 //                    requireParentFragment().requireActivity().onBackPressed()
             try {
-                requireFragmentManager()
-                    .popBackStack()
-                findNavController().navigate(R.id.action_searchFragment_to_homeFragment)
+//                requireFragmentManager()
+//                    .popBackStack()
+//                findNavController().navigate(R.id.action_searchFragment_to_homeFragment)
+//                viewmodelhome.stopShimmer()
+                requireParentFragment().requireActivity().onBackPressed()
             }
             catch (e:Exception){
                 Log.e("exp_msg", "onViewCreated: ${e.message}", )

@@ -96,6 +96,7 @@
                         android:src="@drawable/dote_yellow_ic" />
 
                     <TextView
+                        android:id="@+id/distanceFar"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="4Km"

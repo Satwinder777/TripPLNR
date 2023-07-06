@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.tripplnr.R
 import com.example.tripplnr.databinding.FragmentHotelsBinding
 import com.example.tripplnr.navigationscreens.DataCls.guestdatacls
+import com.example.tripplnr.navigationscreens.DataCls.namePlace
 import com.example.tripplnr.navigationscreens.Home.dataclass.guest_Children
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelTitle
 import com.example.tripplnr.navigationscreens.Home.dataclass.hotelchild
@@ -34,6 +35,7 @@ import com.example.tripplnr.navigationscreens.hotelListFragment.HotelListFragmen
 import com.example.tripplnr.navigationscreens.objectfun.Allfun
 import com.example.tripplnr.navigationscreens.objectfun.Allfun.dateLiveData
 import com.example.tripplnr.navigationscreens.objectfun.Allfun.guestLiveData
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.libraries.places.api.Places
 import com.google.android.libraries.places.api.model.*
 import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest
@@ -43,6 +45,11 @@ import com.google.android.material.bottomsheet.BottomSheetDialog
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.datepicker.MaterialDatePicker
+import com.google.maps.GeoApiContext
+import com.google.maps.PlacesApi
+import com.google.maps.model.PlaceType
+import com.google.maps.model.PriceLevel
+import com.google.maps.model.RankBy
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -143,7 +150,7 @@ class HotelsFragment : Fragment() {
 //        initView()
 //        Log.e("isApiAuthorized", "onViewCreated: ${isApiAuthorized()}")
 
-
+        getTopHotels()
         rc = binding.searchFrRecycler1
         rc.layoutManager = LinearLayoutManager(requireContext())
 
@@ -205,8 +212,10 @@ class HotelsFragment : Fragment() {
 
             if (searchView.text.isNullOrEmpty().not() && guestLiveData.value != null && dateLiveData.value != null) {
                 val newFragment = HotelListFragment()
+                var testitem = Pair(searchView.text.toString(),null)
+//                contains(namePlace(testitem).item.first.trim()).not()
 
-                if (m_data_show.contains(searchView.text.toString()).not()) {
+                if (m_data_show.contains(searchView.text.toString()).not() ){
 //                    Toast.makeText(requireContext(), "Please Enter CorrectData!!", Toast.LENGTH_SHORT).show()
                     searchView.text.clear()
                     searchView.setError("Please enter correct Address")
@@ -641,6 +650,9 @@ class HotelsFragment : Fragment() {
             Log.e("m_predictions", "showPredictions: m_predictions")
 
 
+           val curr_item =  Pair(it.getFullText(colorSpan).toString(),it.placeId)
+
+//            m_data_show.add(namePlace(curr_item))
             m_data_show.add(it.getFullText(colorSpan).toString())
         }
 
@@ -771,6 +783,30 @@ class HotelsFragment : Fragment() {
         Log.e("detes_setuop", "dateModifier: ")
         var date_setup = "$startdate0 - $startdate1"
         editor.putString("selected_date", date_setup)
+    }
+    fun getTopHotels() {
+
+        Log.e("TAG", "getTopHotels: $", )
+        try {
+
+            val geo = GeoApiContext.Builder()
+                .apiKey(getString(R.string.google_maps_key3))
+                .build()
+
+
+//        31.1471° N latitude and 75.3412° E longitude.
+            var demolat = com.google.maps.model.LatLng(31.1471,75.3412)   //india
+            val topHotel = PlacesApi.nearbySearchQuery(geo,demolat).keyword("top hotel,best Hotel" ).location(demolat).rankby(RankBy.PROMINENCE).maxPrice(PriceLevel.VERY_EXPENSIVE).type(PlaceType.LODGING).await()
+
+            var a =  topHotel.results
+            a.forEach {
+                Log.e("topHotell", "getTopHotels: $it", )
+            }
+        }
+        catch (e:Exception){
+            Log.e("exception_occurs", "getTopHotels:${e.message},${e.cause}", )
+        }
+
     }
 }
 

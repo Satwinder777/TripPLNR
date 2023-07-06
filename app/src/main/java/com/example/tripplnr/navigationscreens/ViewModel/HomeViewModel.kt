@@ -180,7 +180,7 @@ fun initData(){
 
 
 
-    private val _shimmering = MutableLiveData<Boolean>(true)
+    private val _shimmering = MutableLiveData<Boolean>()
     val shimmering: LiveData<Boolean>
         get() = _shimmering
     val mlist = MutableLiveData <MutableList<Boolean>>()

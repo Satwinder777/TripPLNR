@@ -3,6 +3,7 @@ package com.example.tripplnr.navigationscreens.objectfun
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
+import android.location.Location
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.Uri
@@ -38,6 +39,28 @@ object Allfun {
      val guestLiveData =  MutableLiveData<guestdatacls>(guestdatacls(1,1))
 
     var state = MutableLiveData<Boolean>(true)
+
+      fun distanceLatLng(latLng: com.google.android.gms.maps.model.LatLng, latLng2: com.google.maps.model.LatLng):Float{
+        val location1 = Location("")
+        location1.latitude = latLng.latitude
+        location1.longitude = latLng.longitude
+
+        val location2 = Location("")
+        location2.latitude = latLng2.lat
+        location2.longitude = latLng2.lng
+
+
+        val distInMetr = location1.distanceTo(location2)
+        val km =  metertoKm(distInMetr)
+        return  km
+
+
+    }
+    private fun metertoKm(float: Float):Float{
+        val meter  = float/1000
+        return meter
+
+    }
 
 
 
